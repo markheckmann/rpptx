@@ -228,6 +228,7 @@ SlidePlaceholders <- R6::R6Class(
     .spTree = NULL,
 
     .ph_shapes = function() {
+      if (is.null(private$.spTree)) return(list())
       all_shapes <- lapply(private$.spTree$iter_shape_elms(),
                            function(e) shape_factory(e, self$parent))
       Filter(function(s) isTRUE(s$is_placeholder), all_shapes)
@@ -242,6 +243,41 @@ length.SlidePlaceholders <- function(x) {
 
 #' @export
 `[[.SlidePlaceholders` <- function(x, i) x$get_at(i)
+
+
+# ============================================================================
+# SlideMasterPlaceholders — placeholder collection for a slide master
+# ============================================================================
+
+#' Placeholder collection for a slide master
+#'
+#' Like SlidePlaceholders but `get()` accepts a placeholder type string
+#' (e.g. "title", "body") rather than an integer idx.
+#'
+#' @keywords internal
+#' @export
+SlideMasterPlaceholders <- R6::R6Class(
+  "SlideMasterPlaceholders",
+  inherit = SlidePlaceholders,
+
+  public = list(
+    # Return master placeholder by ph_type string, or NULL if not found.
+    get = function(ph_type) {
+      ph_shapes <- private$.ph_shapes()
+      for (shape in ph_shapes) {
+        type <- tryCatch(shape$placeholder_format$type, error = function(e) NULL)
+        if (!is.null(type) && type == ph_type) return(shape)
+      }
+      NULL
+    }
+  )
+)
+
+#' @export
+length.SlideMasterPlaceholders <- function(x) length(x$to_list())
+
+#' @export
+`[[.SlideMasterPlaceholders` <- function(x, i) x$get_at(i)
 
 
 # ============================================================================
@@ -275,10 +311,12 @@ SlideLayout <- R6::R6Class(
       NULL
     },
 
-    # Placeholder collection (stub)
+    # SlidePlaceholders collection for this layout
     placeholders = function(value) {
       if (!missing(value)) stop("Read-only", call. = FALSE)
-      NULL
+      spTree <- self$element$spTree
+      if (is.null(spTree)) return(SlidePlaceholders$new(NULL, self))
+      SlidePlaceholders$new(spTree, self)
     },
 
     # SlideMaster this layout inherits from
@@ -326,6 +364,14 @@ SlideMaster <- R6::R6Class(
     shapes = function(value) {
       if (!missing(value)) stop("Read-only", call. = FALSE)
       NULL
+    },
+
+    # SlideMasterPlaceholders collection for this master
+    placeholders = function(value) {
+      if (!missing(value)) stop("Read-only", call. = FALSE)
+      spTree <- self$element$spTree
+      if (is.null(spTree)) return(SlideMasterPlaceholders$new(NULL, self))
+      SlideMasterPlaceholders$new(spTree, self)
     }
   ),
 

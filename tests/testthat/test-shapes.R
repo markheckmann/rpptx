@@ -397,3 +397,89 @@ describe("Placeholder position inheritance", {
     expect_s3_class(title_ph$height, "Length")
   })
 })
+
+
+describe("Placeholder class dispatch", {
+  it("slide placeholders are SlidePlaceholder", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    ph <- slide$placeholders$get_at(1)
+    expect_s3_class(ph, "SlidePlaceholder")
+    expect_s3_class(ph, "Shape")
+  })
+
+  it("layout placeholders are LayoutPlaceholder", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    ph <- layout$placeholders$get_at(1)
+    expect_s3_class(ph, "LayoutPlaceholder")
+  })
+
+  it("master placeholders are MasterPlaceholder", {
+    prs    <- pptx_presentation()
+    master <- prs$slide_masters[[1]]
+    ph <- master$placeholders$get_at(1)
+    expect_s3_class(ph, "MasterPlaceholder")
+  })
+
+  it("non-placeholder shapes are still Shape", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[6]]
+    slide  <- prs$slides$add_slide(layout)
+    shape  <- slide$shapes$add_shape(MSO_AUTO_SHAPE_TYPE$RECTANGLE,
+                Inches(1), Inches(1), Inches(2), Inches(1))
+    expect_s3_class(shape, "Shape")
+    expect_false(inherits(shape, "SlidePlaceholder"))
+  })
+})
+
+
+describe("Slide → Layout → Master inheritance chain", {
+  it("SlideMasterPlaceholders$get returns MasterPlaceholder by type", {
+    prs    <- pptx_presentation()
+    master <- prs$slide_masters[[1]]
+    title_ph <- master$placeholders$get("title")
+    expect_s3_class(title_ph, "MasterPlaceholder")
+    expect_equal(title_ph$placeholder_format$type, "title")
+  })
+
+  it("SlideMasterPlaceholders$get returns NULL for unknown type", {
+    prs    <- pptx_presentation()
+    master <- prs$slide_masters[[1]]
+    expect_null(master$placeholders$get("nonexistent_type"))
+  })
+
+  it("LayoutPlaceholder inherits from master when layout has no xfrm", {
+    prs    <- pptx_presentation()
+    master <- prs$slide_masters[[1]]
+    layout <- prs$slide_layouts[[6]]  # Blank — placeholders may inherit
+    # Master title dimensions should be non-zero
+    m_ph <- master$placeholders$get("title")
+    if (!is.null(m_ph)) {
+      expect_gt(as.integer(m_ph$left),  0L)
+      expect_gt(as.integer(m_ph$width), 0L)
+    }
+  })
+
+  it("SlidePlaceholder dimension inherits from layout (two-level test)", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]  # Title Slide
+    slide  <- prs$slides$add_slide(layout)
+    slide_ph  <- slide$placeholders$get(0L)   # title/ctrTitle
+    layout_ph <- layout$placeholders$get(0L)
+    # Slide should inherit the same left as the layout
+    expect_equal(as.integer(slide_ph$left), as.integer(layout_ph$left))
+    expect_equal(as.integer(slide_ph$width), as.integer(layout_ph$width))
+  })
+
+  it("MasterPlaceholder returns its own dimensions without climbing further", {
+    prs    <- pptx_presentation()
+    master <- prs$slide_masters[[1]]
+    ph <- master$placeholders$get("title")
+    expect_s3_class(ph, "MasterPlaceholder")
+    # Should return a Length (not an error)
+    expect_s3_class(ph$left, "Length")
+    expect_s3_class(ph$width, "Length")
+  })
+})

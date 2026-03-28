@@ -8,8 +8,10 @@
 
 #' Return appropriate shape proxy for a shape XML element
 #'
-#' Dispatches on element tag: p:sp → Shape, p:pic → Picture, p:cxnSp → Connector,
-#' p:grpSp → GroupShape, p:graphicFrame → GraphicFrame. Falls back to BaseShape.
+#' Dispatches on element tag and placeholder context.
+#' p:sp with p:ph → SlidePlaceholder / LayoutPlaceholder / MasterPlaceholder;
+#' p:sp without p:ph → Shape; p:pic → Picture; p:cxnSp → Connector;
+#' p:grpSp → GroupShape; p:graphicFrame → GraphicFrame.
 #'
 #' @param shape_elm A BaseShapeElement (or subclass) R6 wrapper.
 #' @param parent The parent ProvidesPart object (e.g. a Slide).
@@ -18,14 +20,45 @@
 #' @keywords internal
 #' @export
 shape_factory <- function(shape_elm, parent) {
-  # Dispatch on registered element class (set by wrap_element / .onLoad_oxml_shapes)
   if (inherits(shape_elm, "CT_Picture"))              return(Picture$new(shape_elm, parent))
   if (inherits(shape_elm, "CT_Connector"))            return(Connector$new(shape_elm, parent))
   if (inherits(shape_elm, "CT_GroupShape"))           return(GroupShape$new(shape_elm, parent))
-  if (inherits(shape_elm, "CT_Shape"))                return(Shape$new(shape_elm, parent))
   if (inherits(shape_elm, "CT_GraphicalObjectFrame")) return(GraphicFrame$new(shape_elm, parent))
+  if (inherits(shape_elm, "CT_Shape")) {
+    if (isTRUE(shape_elm$has_ph_elm)) {
+      if (inherits(parent, "SlideLayout"))  return(LayoutPlaceholder$new(shape_elm, parent))
+      if (inherits(parent, "SlideMaster")) return(MasterPlaceholder$new(shape_elm, parent))
+      return(SlidePlaceholder$new(shape_elm, parent))
+    }
+    return(Shape$new(shape_elm, parent))
+  }
   BaseShape$new(shape_elm, parent)
 }
+
+
+# ============================================================================
+# Layout → master placeholder type mapping
+# ============================================================================
+
+# Maps a layout placeholder type string to the corresponding master type.
+# Used by LayoutPlaceholder to climb one level higher.
+.ph_type_to_master_type <- list(
+  body      = "body",
+  chart     = "body",
+  ctrTitle  = "title",
+  dt        = "dt",
+  ftr       = "ftr",
+  hdr       = "hdr",
+  media     = "body",
+  obj       = "body",
+  dgm       = "body",
+  pic       = "body",
+  sldImg    = "body",
+  sldNum    = "sldNum",
+  subTitle  = "body",
+  tbl       = "body",
+  title     = "title"
+)
 
 
 # ============================================================================
@@ -272,8 +305,8 @@ Shape <- R6::R6Class(
   ),
 
   private = list(
-    # Return the layout (or master) placeholder corresponding to this one,
-    # or NULL if none can be found.
+    # Return the layout placeholder corresponding to this slide placeholder,
+    # matched by OOXML idx. Returns NULL if not found.
     .base_placeholder = function() {
       if (!self$is_placeholder) return(NULL)
       idx <- private$.element$ph_idx
@@ -281,20 +314,90 @@ Shape <- R6::R6Class(
       if (is.null(slide_part)) return(NULL)
       layout <- tryCatch(slide_part$slide_layout, error = function(e) NULL)
       if (is.null(layout)) return(NULL)
-      layout_phs <- tryCatch(
-        SlidePlaceholders$new(layout$element$spTree, layout),
-        error = function(e) NULL
-      )
-      if (is.null(layout_phs)) return(NULL)
-      tryCatch(layout_phs$get(idx), error = function(e) NULL)
+      tryCatch(layout$placeholders$get(idx), error = function(e) NULL)
     },
 
-    # Return inherited dimension from layout placeholder, or Emu(0L) if none.
+    # Return inherited dimension from base placeholder, or Emu(0L) if none.
     .inherit_dimension = function(dim_name) {
       base <- private$.base_placeholder()
       if (!is.null(base)) return(base[[dim_name]])
       Emu(0L)
     }
+  )
+)
+
+
+# ============================================================================
+# SlidePlaceholder — placeholder shape on a slide
+# ============================================================================
+
+#' Placeholder shape on a slide
+#'
+#' Inherits dimensions from the corresponding layout placeholder when not
+#' explicitly set on the slide element.
+#'
+#' @keywords internal
+#' @export
+SlidePlaceholder <- R6::R6Class(
+  "SlidePlaceholder",
+  inherit = Shape
+  # All behaviour inherited from Shape: dimension inheritance from layout,
+  # text_frame, text, shape_type == PLACEHOLDER.
+)
+
+
+# ============================================================================
+# LayoutPlaceholder — placeholder shape on a slide layout
+# ============================================================================
+
+#' Placeholder shape on a slide layout
+#'
+#' Inherits dimensions from the corresponding master placeholder when not
+#' explicitly set on the layout element.
+#'
+#' @keywords internal
+#' @export
+LayoutPlaceholder <- R6::R6Class(
+  "LayoutPlaceholder",
+  inherit = Shape,
+
+  private = list(
+    # Return the master placeholder corresponding to this layout placeholder.
+    # Maps layout ph_type → master ph_type, then looks up in slide master.
+    .base_placeholder = function() {
+      if (!self$is_placeholder) return(NULL)
+      ph_type <- tryCatch(private$.element$ph_type, error = function(e) NULL)
+      if (is.null(ph_type)) return(NULL)
+      master_type <- .ph_type_to_master_type[[ph_type]]
+      if (is.null(master_type)) return(NULL)
+      layout_part <- tryCatch(private$.parent$part, error = function(e) NULL)
+      if (is.null(layout_part)) return(NULL)
+      master <- tryCatch(layout_part$slide_master, error = function(e) NULL)
+      if (is.null(master)) return(NULL)
+      tryCatch(master$placeholders$get(master_type), error = function(e) NULL)
+    }
+  )
+)
+
+
+# ============================================================================
+# MasterPlaceholder — placeholder shape on a slide master
+# ============================================================================
+
+#' Placeholder shape on a slide master
+#'
+#' Top of the inheritance chain — dimensions are taken directly from the
+#' element; no further inheritance.
+#'
+#' @keywords internal
+#' @export
+MasterPlaceholder <- R6::R6Class(
+  "MasterPlaceholder",
+  inherit = Shape,
+
+  private = list(
+    # Master is the top of the chain — no base placeholder.
+    .base_placeholder = function() NULL
   )
 )
 
