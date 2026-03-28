@@ -201,9 +201,9 @@ describe("Picture$shape_type", {
 })
 
 describe("Connector$shape_type", {
-  it("returns CONNECTOR", {
+  it("returns LINE (matches python-pptx behaviour)", {
     shapes <- shapes_slide1()
-    expect_equal(shapes[[8]]$shape_type, MSO_SHAPE_TYPE$CONNECTOR)
+    expect_equal(shapes[[8]]$shape_type, MSO_SHAPE_TYPE$LINE)
   })
 })
 

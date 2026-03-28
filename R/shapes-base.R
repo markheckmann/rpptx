@@ -312,7 +312,7 @@ Connector <- R6::R6Class(
   inherit = BaseShape,
 
   active = list(
-    shape_type = function() MSO_SHAPE_TYPE$CONNECTOR
+    shape_type = function() MSO_SHAPE_TYPE$LINE
   )
 )
 
