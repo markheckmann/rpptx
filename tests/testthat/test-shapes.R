@@ -319,3 +319,56 @@ describe("CT_GroupShape", {
     expect_equal(next_id, max_id + 1L)
   })
 })
+
+
+# ============================================================================
+# SlidePlaceholders
+# ============================================================================
+
+describe("SlidePlaceholders", {
+  it("returns all placeholder shapes on a slide", {
+    prs    <- pptx_presentation(test_file_path("../templates/default.pptx"))
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    phs    <- slide$placeholders
+    expect_s3_class(phs, "SlidePlaceholders")
+    expect_gte(length(phs), 1L)
+  })
+
+  it("supports [[ for 1-based position access", {
+    prs    <- pptx_presentation(test_file_path("../templates/default.pptx"))
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    phs    <- slide$placeholders
+    ph1 <- phs[[1]]
+    expect_true(ph1$is_placeholder)
+  })
+
+  it("supports get(idx) for OOXML idx access", {
+    prs    <- pptx_presentation(test_file_path("../templates/default.pptx"))
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    phs    <- slide$placeholders
+    # idx=0 is title placeholder in most layouts
+    title_ph <- phs$get(0L)
+    expect_true(title_ph$is_placeholder)
+    expect_equal(title_ph$placeholder_format$idx, 0L)
+  })
+
+  it("errors when OOXML idx not found", {
+    prs    <- pptx_presentation(test_file_path("../templates/default.pptx"))
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    phs    <- slide$placeholders
+    expect_error(phs$get(9999L), regexp = "no placeholder")
+  })
+
+  it("placeholder has text_frame", {
+    prs    <- pptx_presentation(test_file_path("../templates/default.pptx"))
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    title_ph <- slide$placeholders$get(0L)
+    expect_true(title_ph$has_text_frame)
+    expect_s3_class(title_ph$text_frame, "TextFrame")
+  })
+})

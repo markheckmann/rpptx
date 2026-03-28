@@ -77,10 +77,10 @@ Slide <- R6::R6Class(
       private$.shapes
     },
 
-    # Placeholder collection (stub)
+    # Placeholder collection
     placeholders = function(value) {
       if (!missing(value)) stop("Read-only", call. = FALSE)
-      NULL
+      SlidePlaceholders$new(self$element$spTree, self)
     }
   ),
 
@@ -88,6 +88,68 @@ Slide <- R6::R6Class(
     .shapes = NULL
   )
 )
+
+
+# ============================================================================
+# SlidePlaceholders — placeholder collection for a slide
+# ============================================================================
+
+#' Placeholder collection for a slide
+#'
+#' Provides access to placeholder shapes on a slide. Supports indexed access
+#' by placeholder `idx` via `[[`, `length()`, and `to_list()`.
+#'
+#' @keywords internal
+#' @export
+SlidePlaceholders <- R6::R6Class(
+  "SlidePlaceholders",
+  inherit = ParentedElementProxy,
+
+  public = list(
+    initialize = function(spTree, parent) {
+      super$initialize(spTree, parent)
+      private$.spTree <- spTree
+    },
+
+    # Return placeholder shape by OOXML idx (0-based integer).
+    # Use this to access a placeholder by its OOXML placeholder index.
+    get = function(idx) {
+      ph_shapes <- private$.ph_shapes()
+      for (shape in ph_shapes) {
+        if (shape$placeholder_format$idx == idx) return(shape)
+      }
+      stop(sprintf("no placeholder with idx %d", idx), call. = FALSE)
+    },
+
+    # Return placeholder shape at 1-based list position n.
+    get_at = function(n) {
+      ph_shapes <- private$.ph_shapes()
+      if (n < 1L || n > length(ph_shapes)) stop("placeholder position out of range", call. = FALSE)
+      ph_shapes[[n]]
+    },
+
+    # Return all placeholder shapes as a list
+    to_list = function() private$.ph_shapes()
+  ),
+
+  private = list(
+    .spTree = NULL,
+
+    .ph_shapes = function() {
+      all_shapes <- lapply(private$.spTree$iter_shape_elms(),
+                           function(e) shape_factory(e, self$parent))
+      Filter(function(s) isTRUE(s$is_placeholder), all_shapes)
+    }
+  )
+)
+
+#' @export
+length.SlidePlaceholders <- function(x) {
+  length(x$to_list())
+}
+
+#' @export
+`[[.SlidePlaceholders` <- function(x, i) x$get_at(i)
 
 
 # ============================================================================
