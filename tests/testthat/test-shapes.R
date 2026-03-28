@@ -372,3 +372,28 @@ describe("SlidePlaceholders", {
     expect_s3_class(title_ph$text_frame, "TextFrame")
   })
 })
+
+
+describe("Placeholder position inheritance", {
+  it("inherits left/top/width/height from layout when shape has no xfrm", {
+    prs    <- pptx_presentation(test_file_path("../templates/default.pptx"))
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    title_ph <- slide$placeholders$get(0L)
+
+    # Inherited values should be non-zero (from layout)
+    expect_gt(as.integer(title_ph$left),   0L)
+    expect_gt(as.integer(title_ph$width),  0L)
+    expect_gt(as.integer(title_ph$height), 0L)
+  })
+
+  it("position values are Length objects (EMU)", {
+    prs    <- pptx_presentation(test_file_path("../templates/default.pptx"))
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    title_ph <- slide$placeholders$get(0L)
+    expect_s3_class(title_ph$left,   "Length")
+    expect_s3_class(title_ph$width,  "Length")
+    expect_s3_class(title_ph$height, "Length")
+  })
+})

@@ -195,6 +195,34 @@ Shape <- R6::R6Class(
   active = list(
     has_text_frame = function() TRUE,
 
+    # Distance from slide left edge in EMU; inherits from layout placeholder if absent.
+    left = function(value) {
+      if (!missing(value)) { private$.element$x <- value; return(invisible(value)) }
+      if (!is.null(private$.element$xfrm)) return(private$.element$x)
+      private$.inherit_dimension("left")
+    },
+
+    # Distance from slide top edge in EMU; inherits from layout placeholder if absent.
+    top = function(value) {
+      if (!missing(value)) { private$.element$y <- value; return(invisible(value)) }
+      if (!is.null(private$.element$xfrm)) return(private$.element$y)
+      private$.inherit_dimension("top")
+    },
+
+    # Shape width in EMU; inherits from layout placeholder if absent.
+    width = function(value) {
+      if (!missing(value)) { private$.element$cx <- value; return(invisible(value)) }
+      if (!is.null(private$.element$xfrm)) return(private$.element$cx)
+      private$.inherit_dimension("width")
+    },
+
+    # Shape height in EMU; inherits from layout placeholder if absent.
+    height = function(value) {
+      if (!missing(value)) { private$.element$cy <- value; return(invisible(value)) }
+      if (!is.null(private$.element$xfrm)) return(private$.element$cy)
+      private$.inherit_dimension("height")
+    },
+
     # TextFrame wrapping the shape's p:txBody (created on demand).
     # No-op setter accepts the R6 write-back from x$text_frame$prop <- val.
     text_frame = function(value) {
@@ -222,6 +250,32 @@ Shape <- R6::R6Class(
         if (!is.na(txBox) && txBox == "1") return(MSO_SHAPE_TYPE$TEXT_BOX)
       }
       MSO_SHAPE_TYPE$AUTO_SHAPE
+    }
+  ),
+
+  private = list(
+    # Return the layout (or master) placeholder corresponding to this one,
+    # or NULL if none can be found.
+    .base_placeholder = function() {
+      if (!self$is_placeholder) return(NULL)
+      idx <- private$.element$ph_idx
+      slide_part <- tryCatch(private$.parent$part, error = function(e) NULL)
+      if (is.null(slide_part)) return(NULL)
+      layout <- tryCatch(slide_part$slide_layout, error = function(e) NULL)
+      if (is.null(layout)) return(NULL)
+      layout_phs <- tryCatch(
+        SlidePlaceholders$new(layout$element$spTree, layout),
+        error = function(e) NULL
+      )
+      if (is.null(layout_phs)) return(NULL)
+      tryCatch(layout_phs$get(idx), error = function(e) NULL)
+    },
+
+    # Return inherited dimension from layout placeholder, or Emu(0L) if none.
+    .inherit_dimension = function(dim_name) {
+      base <- private$.base_placeholder()
+      if (!is.null(base)) return(base[[dim_name]])
+      Emu(0L)
     }
   )
 )
