@@ -10,12 +10,7 @@
 # CT_OfficeStyleSheet — <a:theme>
 # ============================================================================
 
-#' CT_OfficeStyleSheet XML element
-#'
-#' Wraps the `<a:theme>` element, root of a theme part.
-#'
 #' @keywords internal
-#' @export
 CT_OfficeStyleSheet <- R6::R6Class(
   "CT_OfficeStyleSheet",
   inherit = BaseOxmlElement,

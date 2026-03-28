@@ -21,7 +21,6 @@ PP_PARAGRAPH_ALIGNMENT <- list(
 )
 
 #' @keywords internal
-#' @export
 PP_ALIGN <- PP_PARAGRAPH_ALIGNMENT
 
 
