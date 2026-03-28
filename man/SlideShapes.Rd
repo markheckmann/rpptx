@@ -18,6 +18,7 @@ Supports indexed access (1-based), \code{length()}, and iteration via \code{to_l
 \item \href{#method-SlideShapes-to_list}{\code{SlideShapes$to_list()}}
 \item \href{#method-SlideShapes-add_textbox}{\code{SlideShapes$add_textbox()}}
 \item \href{#method-SlideShapes-add_shape}{\code{SlideShapes$add_shape()}}
+\item \href{#method-SlideShapes-add_table}{\code{SlideShapes$add_table()}}
 \item \href{#method-SlideShapes-clone_layout_placeholders}{\code{SlideShapes$clone_layout_placeholders()}}
 \item \href{#method-SlideShapes-clone}{\code{SlideShapes$clone()}}
 }
@@ -64,6 +65,15 @@ Supports indexed access (1-based), \code{length()}, and iteration via \code{to_l
 \subsection{Method \code{add_shape()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SlideShapes$add_shape(auto_shape_type, left, top, width, height)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-SlideShapes-add_table"></a>}}
+\if{latex}{\out{\hypertarget{method-SlideShapes-add_table}{}}}
+\subsection{Method \code{add_table()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SlideShapes$add_table(rows, cols, left, top, width, height)}\if{html}{\out{</div>}}
 }
 
 }

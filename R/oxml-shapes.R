@@ -508,6 +508,15 @@ CT_GroupShape <- R6::R6Class(
       sp <- CT_Shape_new_placeholder_sp(id, name, ph_type, orient, sz, idx)
       self$insert_element_before(sp, "p:extLst")
       sp
+    },
+
+    # Append a graphicFrame containing a table before p:extLst
+    add_table = function(id, name, rows, cols, x, y, cx, cy) {
+      gf <- CT_GraphicalObjectFrame_new_table_graphicFrame(
+        id, name, rows, cols, x, y, cx, cy
+      )
+      self$insert_element_before(gf, "p:extLst")
+      gf
     }
   ),
 

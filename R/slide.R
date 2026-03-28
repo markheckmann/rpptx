@@ -440,6 +440,15 @@ SlideShapes <- R6::R6Class(
       shape_factory(sp, self)
     },
 
+    # Add a table at the specified position/size; returns GraphicFrame
+    add_table = function(rows, cols, left, top, width, height) {
+      id   <- private$.spTree$next_shape_id()
+      name <- sprintf("Table %d", id - 1L)
+      gf   <- private$.spTree$add_table(id, name, rows, cols,
+                                         left, top, width, height)
+      shape_factory(gf, self)
+    },
+
     # Clone layout placeholders onto this slide.
     # Excluded: date (dt), footer (ftr), slide number (sldNum) — latent placeholders.
     clone_layout_placeholders = function(slide_layout) {

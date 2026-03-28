@@ -22,6 +22,7 @@ Custom element class for p:spTree and p:grpSp elements
 \item \href{#method-CT_GroupShape-add_textbox}{\code{CT_GroupShape$add_textbox()}}
 \item \href{#method-CT_GroupShape-add_autoshape}{\code{CT_GroupShape$add_autoshape()}}
 \item \href{#method-CT_GroupShape-add_placeholder}{\code{CT_GroupShape$add_placeholder()}}
+\item \href{#method-CT_GroupShape-add_table}{\code{CT_GroupShape$add_table()}}
 \item \href{#method-CT_GroupShape-clone}{\code{CT_GroupShape$clone()}}
 }
 }
@@ -108,6 +109,15 @@ Custom element class for p:spTree and p:grpSp elements
 \subsection{Method \code{add_placeholder()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CT_GroupShape$add_placeholder(id, name, ph_type, orient, sz, idx)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CT_GroupShape-add_table"></a>}}
+\if{latex}{\out{\hypertarget{method-CT_GroupShape-add_table}{}}}
+\subsection{Method \code{add_table()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CT_GroupShape$add_table(id, name, rows, cols, x, y, cx, cy)}\if{html}{\out{</div>}}
 }
 
 }

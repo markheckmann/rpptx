@@ -314,6 +314,15 @@ GraphicFrame <- R6::R6Class(
       grepl("table", self$.graphic_data_uri, ignore.case = TRUE)
     },
 
+    # Table object for table-containing graphic frames.
+    # No-op setter handles write-back from chaining.
+    table = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      tbl_elm <- private$.element$tbl
+      if (is.null(tbl_elm)) stop("this shape does not contain a table", call. = FALSE)
+      Table$new(tbl_elm, self)
+    },
+
     shape_type = function() {
       if (self$has_chart) return(MSO_SHAPE_TYPE$CHART)
       if (self$has_table) return(MSO_SHAPE_TYPE$TABLE)
