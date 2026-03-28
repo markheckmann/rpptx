@@ -177,6 +177,24 @@ Shape <- R6::R6Class(
   active = list(
     has_text_frame = function() TRUE,
 
+    # TextFrame wrapping the shape's p:txBody (created on demand).
+    # No-op setter accepts the R6 write-back from x$text_frame$prop <- val.
+    text_frame = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      txBody <- private$.element$get_or_add_txBody()
+      TextFrame$new(txBody, self)
+    },
+
+    # Convenience shortcut for all text in this shape (read/write).
+    text = function(value) {
+      if (!missing(value)) {
+        tf <- self$text_frame
+        tf$text <- value
+        return(invisible(value))
+      }
+      self$text_frame$text
+    },
+
     shape_type = function() {
       if (self$is_placeholder) return(MSO_SHAPE_TYPE$PLACEHOLDER)
       # Detect textbox via p:cNvSpPr/@txBox="1"

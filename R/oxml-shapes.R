@@ -373,7 +373,17 @@ CT_GroupShape <- R6::R6Class(
 
 #' @keywords internal
 #' @export
-CT_Shape <- R6::R6Class("CT_Shape", inherit = BaseShapeElement)
+CT_Shape <- define_oxml_element(
+  classname = "CT_Shape",
+  tag = "p:sp",
+  children = list(
+    txBody = zero_or_one("p:txBody", successors = character(0))
+  ),
+  inherit = BaseShapeElement
+)
+
+# Override auto-generated _new_txBody to produce a properly structured <p:txBody>.
+CT_Shape$set("public", "_new_txBody", function() .CT_TextBody_new_p_txBody(), overwrite = TRUE)
 
 #' @keywords internal
 #' @export

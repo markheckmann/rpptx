@@ -10,7 +10,7 @@ Shape proxy for p:grpSp (group shape) elements
 }
 \keyword{internal}
 \section{Super class}{
-\code{rpptx::BaseShape} -> \code{GroupShape}
+\code{\link[rpptx:BaseShape]{rpptx::BaseShape}} -> \code{GroupShape}
 }
 \section{Methods}{
 \subsection{Public methods}{

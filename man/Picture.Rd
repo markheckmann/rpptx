@@ -10,7 +10,7 @@ Shape proxy for p:pic elements
 }
 \keyword{internal}
 \section{Super class}{
-\code{rpptx::BaseShape} -> \code{Picture}
+\code{\link[rpptx:BaseShape]{rpptx::BaseShape}} -> \code{Picture}
 }
 \section{Methods}{
 \subsection{Public methods}{

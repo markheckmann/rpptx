@@ -8,7 +8,7 @@ Covers autoshapes, text boxes, and placeholders.
 }
 \keyword{internal}
 \section{Super class}{
-\code{rpptx::BaseShape} -> \code{Shape}
+\code{\link[rpptx:BaseShape]{rpptx::BaseShape}} -> \code{Shape}
 }
 \section{Methods}{
 \subsection{Public methods}{

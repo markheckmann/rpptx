@@ -10,7 +10,7 @@ Shape proxy for p:graphicFrame elements
 }
 \keyword{internal}
 \section{Super class}{
-\code{rpptx::BaseShape} -> \code{GraphicFrame}
+\code{\link[rpptx:BaseShape]{rpptx::BaseShape}} -> \code{GraphicFrame}
 }
 \section{Methods}{
 \subsection{Public methods}{

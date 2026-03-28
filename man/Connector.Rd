@@ -10,7 +10,7 @@ Shape proxy for p:cxnSp elements
 }
 \keyword{internal}
 \section{Super class}{
-\code{rpptx::BaseShape} -> \code{Connector}
+\code{\link[rpptx:BaseShape]{rpptx::BaseShape}} -> \code{Connector}
 }
 \section{Methods}{
 \subsection{Public methods}{

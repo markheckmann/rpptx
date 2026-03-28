@@ -21,7 +21,7 @@ Suggests:
     testthat (>= 3.0.0),
     withr
 Config/testthat/edition: 3
-Collate: 
+Collate:
     'oxml-ns.R'
     'oxml-xmlchemy.R'
     'oxml-init.R'
@@ -34,6 +34,9 @@ Collate:
     'opc-serialized.R'
     'opc-package.R'
     'parts-slide.R'
+    'oxml-shapes.R'
+    'enum-shapes.R'
+    'shapes-base.R'
     'shared.R'
     'slide.R'
     'presentation.R'
@@ -42,5 +45,7 @@ Collate:
     'package.R'
     'api.R'
     'exceptions.R'
-    'rpptx-package.R'
     'utils.R'
+    'oxml-text.R'
+    'rpptx-package.R'
+    'text-text.R'
