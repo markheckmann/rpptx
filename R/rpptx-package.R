@@ -16,5 +16,7 @@ utils::globalVariables(c("self", "private", "super"))
 .onLoad <- function(libname, pkgname) {
   .onLoad_opc_oxml()
   .onLoad_oxml_presentation()
+  .onLoad_oxml_slide()
   .onLoad_parts_presentation()
+  .onLoad_parts_slide()
 }

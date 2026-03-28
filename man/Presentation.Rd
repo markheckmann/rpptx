@@ -4,8 +4,7 @@
 \alias{Presentation}
 \title{Presentation object}
 \description{
-User-facing object for a PowerPoint presentation. Wraps the
-CT_Presentation XML element and delegates to PresentationPart.
+User-facing object for a PowerPoint presentation.
 }
 \keyword{internal}
 \section{Super classes}{

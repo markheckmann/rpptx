@@ -13,7 +13,9 @@ OPC part for the presentation XML (/ppt/presentation.xml).
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
+\item \href{#method-PresentationPart-add_slide}{\code{PresentationPart$add_slide()}}
 \item \href{#method-PresentationPart-get_presentation}{\code{PresentationPart$get_presentation()}}
+\item \href{#method-PresentationPart-get_slide}{\code{PresentationPart$get_slide()}}
 \item \href{#method-PresentationPart-related_slide}{\code{PresentationPart$related_slide()}}
 \item \href{#method-PresentationPart-related_slide_master}{\code{PresentationPart$related_slide_master()}}
 \item \href{#method-PresentationPart-save}{\code{PresentationPart$save()}}
@@ -38,11 +40,29 @@ OPC part for the presentation XML (/ppt/presentation.xml).
 </details>
 }}
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PresentationPart-add_slide"></a>}}
+\if{latex}{\out{\hypertarget{method-PresentationPart-add_slide}{}}}
+\subsection{Method \code{add_slide()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PresentationPart$add_slide(slide_layout)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PresentationPart-get_presentation"></a>}}
 \if{latex}{\out{\hypertarget{method-PresentationPart-get_presentation}{}}}
 \subsection{Method \code{get_presentation()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PresentationPart$get_presentation()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PresentationPart-get_slide"></a>}}
+\if{latex}{\out{\hypertarget{method-PresentationPart-get_slide}{}}}
+\subsection{Method \code{get_slide()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PresentationPart$get_slide(slide_id)}\if{html}{\out{</div>}}
 }
 
 }

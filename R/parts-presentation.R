@@ -6,7 +6,7 @@
 #'
 #' OPC part for the presentation XML (/ppt/presentation.xml).
 #'
-#' @include opc-package.R oxml-presentation.R presentation.R
+#' @include opc-package.R oxml-presentation.R presentation.R parts-slide.R
 #' @keywords internal
 #' @export
 PresentationPart <- R6::R6Class(
@@ -15,8 +15,16 @@ PresentationPart <- R6::R6Class(
 
   public = list(
 
-    # Return the Presentation domain object for this part
-    # Creates it lazily on first access.
+    # Add a new slide based on slide_layout; return list(rId, slide)
+    add_slide = function(slide_layout) {
+      partname <- private$.next_slide_partname()
+      slide_layout_part <- slide_layout$part
+      slide_part <- SlidePart_new(partname, self$package, slide_layout_part)
+      rId <- self$relate_to(slide_part, RT$SLIDE)
+      list(rId = rId, slide = slide_part$slide)
+    },
+
+    # Return the Presentation domain object (lazy)
     get_presentation = function() {
       if (is.null(private$.presentation)) {
         private$.presentation <- Presentation$new(self$element, self)
@@ -24,24 +32,34 @@ PresentationPart <- R6::R6Class(
       private$.presentation
     },
 
+    # Return the Slide with given slide_id, or NULL
+    get_slide = function(slide_id) {
+      sld_id_lst <- self$element$sldIdLst
+      if (is.null(sld_id_lst)) return(NULL)
+      for (sld_id in sld_id_lst$sldId_lst) {
+        if (sld_id$id == slide_id) {
+          return(self$related_part(sld_id$rId)$slide)
+        }
+      }
+      NULL
+    },
+
     # Return the Slide related by rId
     related_slide = function(rId) {
-      slide_part <- self$related_part(rId)
-      slide_part$get_slide()
+      self$related_part(rId)$slide
     },
 
     # Return the SlideMaster related by rId
     related_slide_master = function(rId) {
-      master_part <- self$related_part(rId)
-      master_part$get_slide_master()
+      self$related_part(rId)$slide_master
     },
 
-    # Save to a file path
+    # Save to a file path or connection
     save = function(path) {
       self$package$save(path)
     },
 
-    # Return the slide ID for a given slide part
+    # Return the slide ID integer for a given SlidePart
     slide_id = function(slide_part) {
       sld_id_lst <- self$element$sldIdLst
       if (is.null(sld_id_lst)) {
@@ -56,12 +74,11 @@ PresentationPart <- R6::R6Class(
       stop("slide_part not found in presentation", call. = FALSE)
     },
 
-    # Rename slide parts to sequential order
+    # Rename slide parts to /ppt/slides/slide1.xml, slide2.xml, ...
     rename_slide_parts = function(rIds) {
       for (i in seq_along(rIds)) {
         slide_part <- self$related_part(rIds[i])
-        new_partname <- PackURI(sprintf("/ppt/slides/slide%d.xml", i))
-        slide_part$partname <- new_partname
+        slide_part$partname <- PackURI(sprintf("/ppt/slides/slide%d.xml", i))
       }
     }
   ),
@@ -75,14 +92,16 @@ PresentationPart <- R6::R6Class(
   ),
 
   private = list(
-    .presentation = NULL
+    .presentation = NULL,
+
+    # Next available slide partname: /ppt/slides/slideN.xml
+    .next_slide_partname = function() {
+      sld_id_lst <- self$element$sldIdLst
+      n <- if (is.null(sld_id_lst)) 0L else length(sld_id_lst$sldId_lst)
+      self$package$next_partname("/ppt/slides/slide%d.xml")
+    }
   )
 )
-
-# Class method: load from blob
-PresentationPart_load <- function(partname, content_type, package, blob) {
-  XmlPart_load(PresentationPart, partname, content_type, package, blob)
-}
 
 # Register PresentationPart for its content types
 .onLoad_parts_presentation <- function() {

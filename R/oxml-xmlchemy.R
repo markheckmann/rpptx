@@ -60,17 +60,59 @@ BaseOxmlElement <- R6::R6Class(
     },
 
     # Get an attribute value.
-    # @param attr_name Attribute name (may be namespace-prefixed).
+    # @param attr_name Clark-notation name ({uri}local) or plain local name.
     # @return The attribute value as a string, or NULL.
     get_attr = function(attr_name) {
+      # Clark notation: {uri}localname — use namespace-aware lookup
+      m <- regmatches(attr_name, regexec("^\\{([^}]+)\\}(.+)$", attr_name))[[1]]
+      if (length(m) == 3) {
+        uri <- m[2]; local <- m[3]
+        # Build a namespace map for xml2 lookup
+        pfx <- .pfxmap[[uri]]
+        if (!is.null(pfx)) {
+          ns_vec <- c(pfx, uri); names(ns_vec) <- NULL
+          ns_vec <- setNames(uri, pfx)
+          val <- xml2::xml_attr(private$.node,
+                                paste0(pfx, ":", local),
+                                ns = ns_vec)
+          if (!is.na(val)) return(val)
+        }
+        # Fallback: scan xml_attrs for matching Clark name
+        all_attrs <- xml2::xml_attrs(private$.node)
+        ns_map <- tryCatch(xml2::xml_ns(private$.node), error = function(e) NULL)
+        for (aname in names(all_attrs)) {
+          parts <- strsplit(aname, ":", fixed = TRUE)[[1]]
+          if (length(parts) == 2) {
+            a_pfx <- parts[1]; a_local <- parts[2]
+            a_uri <- if (!is.null(ns_map)) ns_map[[a_pfx]] else .nsmap[[a_pfx]]
+            if (!is.null(a_uri) && !is.na(a_uri) && a_uri == uri && a_local == local) {
+              return(all_attrs[[aname]])
+            }
+          }
+        }
+        return(NULL)
+      }
+      # Plain name (no namespace)
       val <- xml2::xml_attr(private$.node, attr_name)
       if (is.na(val)) NULL else val
     },
 
     # Set an attribute value.
-    # @param attr_name Attribute name.
+    # @param attr_name Clark-notation name ({uri}local) or plain local name.
     # @param value The value to set (character string).
     set_attr = function(attr_name, value) {
+      # Clark notation: map to prefixed name for xml2
+      m <- regmatches(attr_name, regexec("^\\{([^}]+)\\}(.+)$", attr_name))[[1]]
+      if (length(m) == 3) {
+        uri <- m[2]; local <- m[3]
+        pfx <- .pfxmap[[uri]]
+        if (!is.null(pfx)) {
+          ns_vec <- setNames(uri, pfx)
+          xml2::xml_set_attr(private$.node, paste0(pfx, ":", local),
+                             value, ns = ns_vec)
+          return(invisible(self))
+        }
+      }
       xml2::xml_set_attr(private$.node, attr_name, value)
       invisible(self)
     },
@@ -89,9 +131,15 @@ BaseOxmlElement <- R6::R6Class(
 
     # Append a child element node.
     # @param child A BaseOxmlElement or xml2 xml_node.
+    # Returns the child (wrapper updated to point to the inserted node).
     append_child = function(child) {
       child_node <- if (inherits(child, "BaseOxmlElement")) child$get_node() else child
       xml2::xml_add_child(private$.node, child_node)
+      # xml_add_child copies cross-document nodes; re-find inserted node
+      if (inherits(child, "BaseOxmlElement")) {
+        children <- xml2::xml_children(private$.node)
+        child$.__enclos_env__$private$.node <- children[[length(children)]]
+      }
       invisible(self)
     },
 
@@ -117,7 +165,7 @@ BaseOxmlElement <- R6::R6Class(
     # Insert `elm` before the first child matching any of `tagnames`.
     # @param elm A BaseOxmlElement to insert.
     # @param ... Namespace-prefixed tagnames of successor elements.
-    # @return The inserted element.
+    # @return The inserted element (wrapper updated to point to the inserted node).
     insert_element_before = function(elm, ...) {
       successor <- self$first_child_found_in(...)
       elm_node <- if (inherits(elm, "BaseOxmlElement")) elm$get_node() else elm
@@ -127,9 +175,18 @@ BaseOxmlElement <- R6::R6Class(
         } else {
           successor
         }
-        xml2::xml_add_sibling(succ_node, elm_node, .where = "before")
+        # xml_add_sibling returns the inserted node (in the parent doc)
+        inserted_node <- xml2::xml_add_sibling(succ_node, elm_node, .where = "before")
+        if (inherits(elm, "BaseOxmlElement")) {
+          elm$.__enclos_env__$private$.node <- inserted_node
+        }
       } else {
         xml2::xml_add_child(private$.node, elm_node)
+        # xml_add_child returns parent; re-find the last child
+        if (inherits(elm, "BaseOxmlElement")) {
+          children <- xml2::xml_children(private$.node)
+          elm$.__enclos_env__$private$.node <- children[[length(children)]]
+        }
       }
       elm
     },
@@ -475,13 +532,14 @@ define_oxml_element <- function(classname,
   eval(bquote(function(...) {
     new_method <- self[[.(new_method_name)]]
     child <- new_method()
-    # Set attributes from ... if any
+    # Insert first so child is in the parent doc's namespace context
+    insert_method <- self[[.(insert_method_name)]]
+    insert_method(child)
+    # Set attributes after insertion (namespace prefixes now available)
     attrs <- list(...)
     for (key in names(attrs)) {
       child[[key]] <- attrs[[key]]
     }
-    insert_method <- self[[.(insert_method_name)]]
-    insert_method(child)
     child
   }))
 }
