@@ -2,11 +2,9 @@
 % Please edit documentation in R/slide.R
 \name{SlideShapes}
 \alias{SlideShapes}
-\title{Shape collection for a slide (stub)}
+\title{Shape collection for a slide}
 \description{
-Shape collection for a slide (stub)
-
-Shape collection for a slide (stub)
+Supports indexed access (1-based), \code{length()}, and iteration via \code{to_list()}.
 }
 \keyword{internal}
 \section{Super classes}{
@@ -16,8 +14,9 @@ Shape collection for a slide (stub)
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-SlideShapes-new}{\code{SlideShapes$new()}}
-\item \href{#method-SlideShapes-clone_layout_placeholders}{\code{SlideShapes$clone_layout_placeholders()}}
+\item \href{#method-SlideShapes-get}{\code{SlideShapes$get()}}
 \item \href{#method-SlideShapes-to_list}{\code{SlideShapes$to_list()}}
+\item \href{#method-SlideShapes-clone_layout_placeholders}{\code{SlideShapes$clone_layout_placeholders()}}
 \item \href{#method-SlideShapes-clone}{\code{SlideShapes$clone()}}
 }
 }
@@ -31,11 +30,11 @@ Shape collection for a slide (stub)
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-SlideShapes-clone_layout_placeholders"></a>}}
-\if{latex}{\out{\hypertarget{method-SlideShapes-clone_layout_placeholders}{}}}
-\subsection{Method \code{clone_layout_placeholders()}}{
+\if{html}{\out{<a id="method-SlideShapes-get"></a>}}
+\if{latex}{\out{\hypertarget{method-SlideShapes-get}{}}}
+\subsection{Method \code{get()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SlideShapes$clone_layout_placeholders(slide_layout)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SlideShapes$get(idx)}\if{html}{\out{</div>}}
 }
 
 }
@@ -45,6 +44,15 @@ Shape collection for a slide (stub)
 \subsection{Method \code{to_list()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SlideShapes$to_list()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-SlideShapes-clone_layout_placeholders"></a>}}
+\if{latex}{\out{\hypertarget{method-SlideShapes-clone_layout_placeholders}{}}}
+\subsection{Method \code{clone_layout_placeholders()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SlideShapes$clone_layout_placeholders(slide_layout)}\if{html}{\out{</div>}}
 }
 
 }

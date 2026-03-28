@@ -381,11 +381,14 @@ length.SlideMasters <- function(x) {
 
 
 # ============================================================================
-# SlideShapes — stub shape collection (full implementation in Phase 4)
+# SlideShapes — shape collection for a slide
 # ============================================================================
 
-#' Shape collection for a slide (stub)
+#' Shape collection for a slide
 #'
+#' Supports indexed access (1-based), `length()`, and iteration via `to_list()`.
+#'
+#' @include shapes-base.R
 #' @keywords internal
 #' @export
 SlideShapes <- R6::R6Class(
@@ -398,14 +401,24 @@ SlideShapes <- R6::R6Class(
       private$.spTree <- spTree
     },
 
-    # No-op until Phase 4 (placeholder cloning)
-    clone_layout_placeholders = function(slide_layout) {
-      invisible(NULL)
+    # Return shape at 1-based index
+    get = function(idx) {
+      elms <- private$.spTree$iter_shape_elms()
+      if (idx < 1L || idx > length(elms)) {
+        stop("shape index out of range", call. = FALSE)
+      }
+      shape_factory(elms[[idx]], self)
     },
 
-    # Return all shapes as a list (stub — empty for now)
+    # Return all shapes as a list
     to_list = function() {
-      list()
+      lapply(private$.spTree$iter_shape_elms(),
+             function(e) shape_factory(e, self))
+    },
+
+    # Clone layout placeholders onto this slide (stub — full impl in Phase 5)
+    clone_layout_placeholders = function(slide_layout) {
+      invisible(NULL)
     }
   ),
 
@@ -416,5 +429,8 @@ SlideShapes <- R6::R6Class(
 
 #' @export
 length.SlideShapes <- function(x) {
-  0L
+  length(x$.__enclos_env__$private$.spTree$iter_shape_elms())
 }
+
+#' @export
+`[[.SlideShapes` <- function(x, i) x$get(i)
