@@ -575,6 +575,23 @@ SlideShapes <- R6::R6Class(
       shape_factory(gf, self)
     },
 
+    # Add a connector shape.
+    # connector_type: a member of MSO_CONNECTOR_TYPE (e.g. MSO_CONNECTOR_TYPE$STRAIGHT).
+    # begin_x/y and end_x/y are in EMU. flipH/flipV flip the connector geometry.
+    add_connector = function(connector_type, begin_x, begin_y, end_x, end_y) {
+      prst  <- connector_type$prst
+      x     <- min(begin_x, end_x)
+      y     <- min(begin_y, end_y)
+      cx    <- abs(end_x - begin_x)
+      cy    <- abs(end_y - begin_y)
+      flipH <- end_x < begin_x
+      flipV <- end_y < begin_y
+      id    <- private$.spTree$next_shape_id()
+      name  <- sprintf("Connector: %s %d", prst, id - 1L)
+      cxnSp <- private$.spTree$add_cxnSp(id, name, prst, x, y, cx, cy, flipH, flipV)
+      shape_factory(cxnSp, self)
+    },
+
     # Add a picture from a file path or connection.
     # width/height are in EMU (use Inches(), Pt(), etc.); NULL preserves aspect ratio.
     add_picture = function(image_file, left, top, width = NULL, height = NULL) {

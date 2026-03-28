@@ -448,6 +448,48 @@ CT_Shape_new_placeholder_sp <- function(id, name, ph_type, orient, sz, idx) {
 }
 
 
+#' Create a new <p:cxnSp> connector element
+#' @keywords internal
+CT_Connector_new_cxnSp <- function(shape_id, name, prst, x, y, cx, cy,
+                                   flipH = FALSE, flipV = FALSE) {
+  a_uri <- .nsmap[["a"]]
+  p_uri <- .nsmap[["p"]]
+  flip  <- paste0(
+    if (isTRUE(flipH)) ' flipH="1"' else "",
+    if (isTRUE(flipV)) ' flipV="1"' else ""
+  )
+  xml_str <- sprintf(
+    paste0(
+      '<p:cxnSp xmlns:p="%s" xmlns:a="%s">\n',
+      '  <p:nvCxnSpPr>\n',
+      '    <p:cNvPr id="%d" name="%s"/>\n',
+      '    <p:cNvCxnSpPr/>\n',
+      '    <p:nvPr/>\n',
+      '  </p:nvCxnSpPr>\n',
+      '  <p:spPr>\n',
+      '    <a:xfrm%s><a:off x="%d" y="%d"/><a:ext cx="%d" cy="%d"/></a:xfrm>\n',
+      '    <a:prstGeom prst="%s"><a:avLst/></a:prstGeom>\n',
+      '  </p:spPr>\n',
+      '  <p:style>\n',
+      '    <a:lnRef idx="2"><a:schemeClr val="accent1"/></a:lnRef>\n',
+      '    <a:fillRef idx="0"><a:schemeClr val="accent1"/></a:fillRef>\n',
+      '    <a:effectRef idx="1"><a:schemeClr val="accent1"/></a:effectRef>\n',
+      '    <a:fontRef idx="minor"><a:schemeClr val="tx1"/></a:fontRef>\n',
+      '  </p:style>\n',
+      '</p:cxnSp>'
+    ),
+    p_uri, a_uri,
+    as.integer(shape_id),
+    .xml_attr_escape(as.character(name)),
+    flip,
+    as.integer(x), as.integer(y), as.integer(cx), as.integer(cy),
+    as.character(prst)
+  )
+  doc <- xml2::read_xml(xml_str)
+  wrap_element(xml2::xml_root(doc))
+}
+
+
 #' Create a new <p:pic> picture element
 #' @keywords internal
 CT_Picture_new_pic <- function(shape_id, name, desc, rId, x, y, cx, cy) {
@@ -579,6 +621,13 @@ CT_GroupShape <- R6::R6Class(
       pic <- CT_Picture_new_pic(id, name, desc, rId, x, y, cx, cy)
       self$insert_element_before(pic, "p:extLst")
       pic
+    },
+
+    # Append a p:cxnSp connector element before p:extLst
+    add_cxnSp = function(id, name, prst, x, y, cx, cy, flipH = FALSE, flipV = FALSE) {
+      cxnSp <- CT_Connector_new_cxnSp(id, name, prst, x, y, cx, cy, flipH, flipV)
+      self$insert_element_before(cxnSp, "p:extLst")
+      cxnSp
     }
   ),
 

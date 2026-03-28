@@ -192,3 +192,23 @@ PP_PLACEHOLDER <- list(
   MEDIA_CLIP    = "media",
   ORG_CHART     = "dgm"
 )
+
+
+#' Connector type constants (MSO_CONNECTOR_TYPE)
+#'
+#' Members have `$value` (integer) and `$prst` (XML preset name).
+#' Alias: `MSO_CONNECTOR`.
+#'
+#' @keywords internal
+#' @export
+MSO_CONNECTOR_TYPE <- list(
+  STRAIGHT = list(value = 1L, prst = "line"),
+  ELBOW    = list(value = 2L, prst = "bentConnector3"),
+  CURVE    = list(value = 3L, prst = "curvedConnector3"),
+  MIXED    = list(value = -2L, prst = "")
+)
+
+#' MSO connector type enum (alias for MSO_CONNECTOR_TYPE)
+#' @keywords internal
+#' @export
+MSO_CONNECTOR <- MSO_CONNECTOR_TYPE

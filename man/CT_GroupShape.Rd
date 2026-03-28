@@ -25,6 +25,7 @@ Custom element class for p:spTree and p:grpSp elements
 \item \href{#method-CT_GroupShape-add_table}{\code{CT_GroupShape$add_table()}}
 \item \href{#method-CT_GroupShape-add_chart}{\code{CT_GroupShape$add_chart()}}
 \item \href{#method-CT_GroupShape-add_pic}{\code{CT_GroupShape$add_pic()}}
+\item \href{#method-CT_GroupShape-add_cxnSp}{\code{CT_GroupShape$add_cxnSp()}}
 \item \href{#method-CT_GroupShape-clone}{\code{CT_GroupShape$clone()}}
 }
 }
@@ -138,6 +139,25 @@ Custom element class for p:spTree and p:grpSp elements
 \subsection{Method \code{add_pic()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CT_GroupShape$add_pic(id, name, desc, rId, x, y, cx, cy)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CT_GroupShape-add_cxnSp"></a>}}
+\if{latex}{\out{\hypertarget{method-CT_GroupShape-add_cxnSp}{}}}
+\subsection{Method \code{add_cxnSp()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CT_GroupShape$add_cxnSp(
+  id,
+  name,
+  prst,
+  x,
+  y,
+  cx,
+  cy,
+  flipH = FALSE,
+  flipV = FALSE
+)}\if{html}{\out{</div>}}
 }
 
 }
