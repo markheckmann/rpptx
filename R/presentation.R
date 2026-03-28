@@ -82,9 +82,10 @@ Presentation <- R6::R6Class(
       self$slide_master$slide_layouts
     },
 
-    # CorePropertiesPart for this presentation
+    # CorePropertiesPart for this presentation.
+    # No-op setter accepts write-back from chaining: prs$core_properties$title <- "x"
     core_properties = function(value) {
-      if (!missing(value)) stop("Read-only property", call. = FALSE)
+      if (!missing(value)) return(invisible(NULL))
       self$part$package$core_properties
     }
   ),

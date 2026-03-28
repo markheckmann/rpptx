@@ -156,6 +156,9 @@ length.TableCells <- function(x) {
 #' @export
 `[[.TableCells` <- function(x, i) x$get(i)
 
+#' @export
+`[[<-.TableCells` <- function(x, i, value) x
+
 
 # ============================================================================
 # TableRow — wraps a <a:tr> element
@@ -186,7 +189,10 @@ TableRow <- R6::R6Class(
     },
 
     # TableCells collection for cells in this row
-    cells = function() TableCells$new(private$.tr, private$.parent)
+    cells = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      TableCells$new(private$.tr, private$.parent)
+    }
   ),
 
   private = list(.tr = NULL, .parent = NULL)
@@ -230,6 +236,9 @@ length.TableRows <- function(x) {
 
 #' @export
 `[[.TableRows` <- function(x, i) x$get(i)
+
+#' @export
+`[[<-.TableRows` <- function(x, i, value) x
 
 
 # ============================================================================
@@ -303,6 +312,9 @@ length.TableColumns <- function(x) {
 #' @export
 `[[.TableColumns` <- function(x, i) x$get(i)
 
+#' @export
+`[[<-.TableColumns` <- function(x, i, value) x
+
 
 # ============================================================================
 # Table — domain object wrapping <a:tbl>
@@ -338,10 +350,16 @@ Table <- R6::R6Class(
 
   active = list(
     # TableRows collection
-    rows = function() TableRows$new(private$.tbl, self),
+    rows = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      TableRows$new(private$.tbl, self)
+    },
 
     # TableColumns collection
-    columns = function() TableColumns$new(private$.tbl, self),
+    columns = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      TableColumns$new(private$.tbl, self)
+    },
 
     # Slide part (for TextFrame compatibility)
     part = function() private$.gf$part,

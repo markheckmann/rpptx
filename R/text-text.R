@@ -91,6 +91,76 @@ Font <- R6::R6Class(
 
 
 # ============================================================================
+# Hyperlink — wraps a:hlinkClick on a text run
+# ============================================================================
+
+#' Hyperlink on a text run
+#'
+#' Provides read/write access to the URL of a hyperlink on an `a:r` element.
+#' Access via `run$hyperlink`.
+#'
+#' @keywords internal
+#' @export
+Hyperlink <- R6::R6Class(
+  "Hyperlink",
+
+  public = list(
+    initialize = function(rPr, slide_part) {
+      private$.rPr        <- rPr
+      private$.slide_part <- slide_part
+    }
+  ),
+
+  active = list(
+    # URL address of this hyperlink, or NULL if no hyperlink set.
+    # Assign a string to set; assign NULL to remove.
+    address = function(value) {
+      if (!missing(value)) {
+        if (is.null(value)) {
+          # Remove hlinkClick element if present
+          hlink <- private$.rPr$hlinkClick
+          if (!is.null(hlink)) {
+            rId <- hlink$rId
+            private$.rPr$`_remove_hlinkClick`()
+            if (!is.null(rId)) {
+              tryCatch(private$.slide_part$drop_rel(rId), error = function(e) NULL)
+            }
+          }
+        } else {
+          # Add or update hlinkClick with external relationship
+          existing_rId <- NULL
+          hlink <- private$.rPr$hlinkClick
+          if (!is.null(hlink)) existing_rId <- hlink$rId
+          # Create relationship (or reuse if same URL)
+          rId <- private$.slide_part$relate_to(value, RT$HYPERLINK, is_external = TRUE)
+          # Drop old rel if different URL
+          if (!is.null(existing_rId) && existing_rId != rId) {
+            tryCatch(private$.slide_part$drop_rel(existing_rId), error = function(e) NULL)
+          }
+          if (is.null(hlink)) {
+            hlink <- private$.rPr$get_or_add_hlinkClick()
+          }
+          hlink$rId <- rId
+        }
+        return(invisible(value))
+      }
+      # Read: look up URL via relationship
+      hlink <- private$.rPr$hlinkClick
+      if (is.null(hlink)) return(NULL)
+      rId <- hlink$rId
+      if (is.null(rId)) return(NULL)
+      tryCatch({
+        rel <- private$.slide_part$rels$get(rId)
+        rel$target_ref
+      }, error = function(e) NULL)
+    }
+  ),
+
+  private = list(.rPr = NULL, .slide_part = NULL)
+)
+
+
+# ============================================================================
 # Run — text run (a:r)
 # ============================================================================
 
@@ -124,6 +194,15 @@ Run <- R6::R6Class(
       if (!missing(value)) return(invisible(NULL))
       rPr <- private$.r$get_or_add_rPr()
       Font$new(rPr)
+    },
+
+    # Hyperlink on this run. Assign NULL to remove.
+    # Access via run$hyperlink$address <- "https://..."
+    hyperlink = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      rPr <- private$.r$get_or_add_rPr()
+      slide_part <- tryCatch(private$.parent$part, error = function(e) NULL)
+      Hyperlink$new(rPr, slide_part)
     }
   ),
 
@@ -172,6 +251,9 @@ Paragraph <- R6::R6Class(
   ),
 
   active = list(
+    # The slide Part (resolved via parent chain)
+    part = function() private$.parent$part,
+
     # Paragraph text (read/write). \v represents soft line breaks.
     text = function(value) {
       if (!missing(value)) {
@@ -299,6 +381,9 @@ TextFrame <- R6::R6Class(
   ),
 
   active = list(
+    # The slide Part (resolved via parent chain)
+    part = function() private$.parent$part,
+
     # List of Paragraph objects (one per a:p child).
     paragraphs = function(value) {
       if (!missing(value)) return(invisible(NULL))
