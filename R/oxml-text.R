@@ -33,6 +33,10 @@ CT_TextCharacterProperties <- define_oxml_element(
       "a:latin",
       successors = c("a:ea", "a:cs", "a:sym", "a:hlinkClick",
                      "a:hlinkMouseOver", "a:rtl", "a:extLst")
+    ),
+    hlinkClick = zero_or_one(
+      "a:hlinkClick",
+      successors = c("a:hlinkMouseOver", "a:rtl", "a:extLst")
     )
   ),
   attributes = list(
@@ -40,6 +44,33 @@ CT_TextCharacterProperties <- define_oxml_element(
     b  = optional_attribute("b",  XsdBoolean),
     i  = optional_attribute("i",  XsdBoolean),
     u  = optional_attribute("u",  XsdString)
+  )
+)
+
+
+# ============================================================================
+# CT_Hyperlink — <a:hlinkClick>
+# ============================================================================
+
+#' CT_Hyperlink XML element
+#' @keywords internal
+#' @export
+CT_Hyperlink <- R6::R6Class(
+  "CT_Hyperlink",
+  inherit = BaseOxmlElement,
+
+  active = list(
+    # The r:id attribute value (relationship ID) or NULL.
+    # Uses BaseOxmlElement$set_attr/get_attr which convert Clark notation to
+    # prefix:local with ns= — the correct xml2 API for namespaced attributes.
+    rId = function(value) {
+      clark <- paste0("{", .nsmap[["r"]], "}id")
+      if (!missing(value)) {
+        self$set_attr(clark, as.character(value))
+        return(invisible(value))
+      }
+      self$get_attr(clark)
+    }
   )
 )
 
@@ -386,4 +417,5 @@ CT_TextBody <- R6::R6Class(
   register_element_cls("a:bodyPr",     CT_TextBodyProperties)
   register_element_cls("p:txBody",     CT_TextBody)
   register_element_cls("a:txBody",     CT_TextBody)
+  register_element_cls("a:hlinkClick", CT_Hyperlink)
 }
