@@ -149,6 +149,10 @@ CT_ShapeProperties <- define_oxml_element(
                      "a:noFill", "a:solidFill", "a:gradFill", "a:blipFill",
                      "a:pattFill", "a:grpFill", "a:ln",
                      "a:effectLst", "a:effectDag", "a:scene3d", "a:sp3d", "a:extLst")
+    ),
+    ln = zero_or_one(
+      "a:ln",
+      successors = c("a:effectLst", "a:effectDag", "a:scene3d", "a:sp3d", "a:extLst")
     )
   )
 )
@@ -194,6 +198,13 @@ BaseShapeElement <- R6::R6Class(
       spPr <- self$spPr
       if (is.null(spPr)) stop("no spPr element on shape", call. = FALSE)
       spPr$get_or_add_xfrm()
+    },
+
+    # Return the a:ln element, creating it if absent
+    get_or_add_ln = function() {
+      spPr <- self$spPr
+      if (is.null(spPr)) stop("no spPr element on shape", call. = FALSE)
+      spPr$get_or_add_ln()
     }
   ),
 
@@ -206,6 +217,13 @@ BaseShapeElement <- R6::R6Class(
       spPr <- self$spPr
       if (is.null(spPr)) return(NULL)
       spPr$xfrm
+    },
+
+    # The a:ln grandchild element, or NULL
+    ln = function() {
+      spPr <- self$spPr
+      if (is.null(spPr)) return(NULL)
+      spPr$ln
     },
 
     # Shape position and size (EMU, read/write)

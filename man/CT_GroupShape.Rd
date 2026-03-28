@@ -43,6 +43,7 @@ Custom element class for p:spTree and p:grpSp elements
 <li><span class="pkg-link" data-pkg="rpptx" data-topic="BaseOxmlElement" data-id="set_attr"><a href='../../rpptx/html/BaseOxmlElement.html#method-BaseOxmlElement-set_attr'><code>rpptx::BaseOxmlElement$set_attr()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="rpptx" data-topic="BaseOxmlElement" data-id="to_xml"><a href='../../rpptx/html/BaseOxmlElement.html#method-BaseOxmlElement-to_xml'><code>rpptx::BaseOxmlElement$to_xml()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="rpptx" data-topic="BaseOxmlElement" data-id="xpath"><a href='../../rpptx/html/BaseOxmlElement.html#method-BaseOxmlElement-xpath'><code>rpptx::BaseOxmlElement$xpath()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="rpptx" data-topic="BaseShapeElement" data-id="get_or_add_ln"><a href='../../rpptx/html/BaseShapeElement.html#method-BaseShapeElement-get_or_add_ln'><code>rpptx::BaseShapeElement$get_or_add_ln()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="rpptx" data-topic="BaseShapeElement" data-id="get_or_add_xfrm"><a href='../../rpptx/html/BaseShapeElement.html#method-BaseShapeElement-get_or_add_xfrm'><code>rpptx::BaseShapeElement$get_or_add_xfrm()</code></a></span></li>
 </ul>
 </details>

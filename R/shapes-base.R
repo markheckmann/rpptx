@@ -147,6 +147,24 @@ BaseShape <- R6::R6Class(
       PlaceholderFormat$new(ph)
     },
 
+    # FillFormat for this shape's fill properties.
+    # No-op setter enables chaining: shape$fill$solid(); shape$fill$fore_color$rgb <- ...
+    fill = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      spPr <- private$.element$spPr
+      if (is.null(spPr)) stop("shape has no spPr element", call. = FALSE)
+      FillFormat$new(spPr)
+    },
+
+    # LineFormat for this shape's border/line properties.
+    # No-op setter enables chaining: shape$line$color$rgb <- ...
+    line = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      spPr <- private$.element$spPr
+      if (is.null(spPr)) stop("shape has no spPr element", call. = FALSE)
+      LineFormat$new(spPr)
+    },
+
     # MSO_SHAPE_TYPE member — must be implemented by subclasses
     shape_type = function() {
       stop(paste(class(self)[1], "does not implement shape_type"), call. = FALSE)

@@ -15,6 +15,7 @@ via active bindings that delegate through the element's shape properties.
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-BaseShapeElement-get_or_add_xfrm}{\code{BaseShapeElement$get_or_add_xfrm()}}
+\item \href{#method-BaseShapeElement-get_or_add_ln}{\code{BaseShapeElement$get_or_add_ln()}}
 \item \href{#method-BaseShapeElement-clone}{\code{BaseShapeElement$clone()}}
 }
 }
@@ -45,6 +46,15 @@ via active bindings that delegate through the element's shape properties.
 \subsection{Method \code{get_or_add_xfrm()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{BaseShapeElement$get_or_add_xfrm()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-BaseShapeElement-get_or_add_ln"></a>}}
+\if{latex}{\out{\hypertarget{method-BaseShapeElement-get_or_add_ln}{}}}
+\subsection{Method \code{get_or_add_ln()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{BaseShapeElement$get_or_add_ln()}\if{html}{\out{</div>}}
 }
 
 }
