@@ -517,6 +517,15 @@ CT_GroupShape <- R6::R6Class(
       )
       self$insert_element_before(gf, "p:extLst")
       gf
+    },
+
+    # Append a graphicFrame containing a chart reference before p:extLst
+    add_chart = function(id, name, rId, x, y, cx, cy) {
+      gf <- CT_GraphicalObjectFrame_new_chart_graphicFrame(
+        id, name, rId, x, y, cx, cy
+      )
+      self$insert_element_before(gf, "p:extLst")
+      gf
     }
   ),
 
@@ -556,6 +565,45 @@ CT_Connector <- R6::R6Class("CT_Connector", inherit = BaseShapeElement)
 #' @keywords internal
 #' @export
 CT_GraphicalObjectFrame <- R6::R6Class("CT_GraphicalObjectFrame", inherit = BaseShapeElement)
+
+
+# ============================================================================
+# Factory — create a graphicFrame containing a chart reference
+# ============================================================================
+
+.GRAPHIC_DATA_URI_CHART <- "http://schemas.openxmlformats.org/drawingml/2006/chart"
+
+#' Create a new <p:graphicFrame> referencing a chart part via rId
+#' @keywords internal
+CT_GraphicalObjectFrame_new_chart_graphicFrame <- function(id, name, rId, x, y, cx, cy) {
+  p <- .nsmap[["p"]]; a <- .nsmap[["a"]]
+  c_ns <- "http://schemas.openxmlformats.org/drawingml/2006/chart"
+  r_ns <- .nsmap[["r"]]
+  xml_str <- sprintf(paste0(
+    '<p:graphicFrame xmlns:p="%s" xmlns:a="%s" xmlns:r="%s">',
+      '<p:nvGraphicFramePr>',
+        '<p:cNvPr id="%d" name="%s"/>',
+        '<p:cNvGraphicFramePr/>',
+        '<p:nvPr/>',
+      '</p:nvGraphicFramePr>',
+      '<p:xfrm>',
+        '<a:off x="%d" y="%d"/>',
+        '<a:ext cx="%d" cy="%d"/>',
+      '</p:xfrm>',
+      '<a:graphic>',
+        '<a:graphicData uri="%s">',
+          '<c:chart xmlns:c="%s" r:id="%s"/>',
+        '</a:graphicData>',
+      '</a:graphic>',
+    '</p:graphicFrame>'
+  ), p, a, r_ns,
+    as.integer(id), as.character(name),
+    as.integer(x), as.integer(y), as.integer(cx), as.integer(cy),
+    .GRAPHIC_DATA_URI_CHART,
+    c_ns, rId)
+
+  wrap_element(xml2::xml_root(xml2::read_xml(xml_str)))
+}
 
 
 # ============================================================================

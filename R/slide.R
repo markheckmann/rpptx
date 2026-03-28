@@ -449,6 +449,18 @@ SlideShapes <- R6::R6Class(
       shape_factory(gf, self)
     },
 
+    # Add a chart at the specified position/size; returns GraphicFrame.
+    # chart_type must be a member of XL_CHART_TYPE.
+    # chart_data must be a CategoryChartData, XyChartData, or BubbleChartData.
+    add_chart = function(chart_type, left, top, width, height, chart_data) {
+      chart_part <- self$part$add_chart_part(chart_type, chart_data)
+      rId  <- self$part$relate_to(chart_part, RT$CHART)
+      id   <- private$.spTree$next_shape_id()
+      name <- sprintf("Chart %d", id - 1L)
+      gf   <- private$.spTree$add_chart(id, name, rId, left, top, width, height)
+      shape_factory(gf, self)
+    },
+
     # Clone layout placeholders onto this slide.
     # Excluded: date (dt), footer (ftr), slide number (sldNum) — latent placeholders.
     clone_layout_placeholders = function(slide_layout) {

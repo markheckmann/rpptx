@@ -52,6 +52,11 @@ SlidePart <- R6::R6Class(
         self$part_related_by(RT$NOTES_SLIDE)
         TRUE
       }, error = function(e) FALSE)
+    },
+
+    # Create and return a new ChartPart for chart_type/chart_data.
+    add_chart_part = function(chart_type, chart_data) {
+      ChartPart_new(chart_type, chart_data, self$package)
     }
   ),
 

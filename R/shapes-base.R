@@ -314,6 +314,20 @@ GraphicFrame <- R6::R6Class(
       grepl("table", self$.graphic_data_uri, ignore.case = TRUE)
     },
 
+    # rId of the relationship to the chart part, or NULL if none.
+    chart_rId = function() {
+      node   <- private$.element$get_node()
+      c_ns   <- "http://schemas.openxmlformats.org/drawingml/2006/chart"
+      r_ns   <- .nsmap[["r"]]
+      c_chart <- xml2::xml_find_first(
+        node, ".//c:chart",
+        ns = c(c = c_ns, r = r_ns)
+      )
+      if (inherits(c_chart, "xml_missing")) return(NULL)
+      val <- xml2::xml_attr(c_chart, "r:id", ns = c(r = r_ns))
+      if (is.na(val)) NULL else val
+    },
+
     # Table object for table-containing graphic frames.
     # No-op setter handles write-back from chaining.
     table = function(value) {

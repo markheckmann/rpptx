@@ -25,4 +25,5 @@ utils::globalVariables(c("self", "private", "super"))
   .onLoad_oxml_text()
   .onLoad_parts_presentation()
   .onLoad_parts_slide()
+  .onLoad_parts_chart()
 }
