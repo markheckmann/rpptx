@@ -103,9 +103,14 @@ SlideLayout <- R6::R6Class(
   inherit = .BaseSlide,
 
   public = list(
-    # Generate layout placeholders that should be cloned to a new slide
+    # Generate layout placeholder shape elements that should be cloned to a new slide.
+    # Excludes latent types: date (dt), footer (ftr), slide number (sldNum).
     iter_cloneable_placeholders = function() {
-      list()  # Placeholder implementation — full in Phase 4
+      latent <- c(PP_PLACEHOLDER$DATE, PP_PLACEHOLDER$FOOTER, PP_PLACEHOLDER$SLIDE_NUMBER)
+      spTree <- self$element$spTree
+      if (is.null(spTree)) return(list())
+      ph_elms <- spTree$iter_ph_elms()
+      Filter(function(e) !(e$ph_type %in% latent), ph_elms)
     }
   ),
 
@@ -416,8 +421,38 @@ SlideShapes <- R6::R6Class(
              function(e) shape_factory(e, self))
     },
 
-    # Clone layout placeholders onto this slide (stub — full impl in Phase 5)
+    # Add a text box shape at the specified position/size; returns Shape
+    add_textbox = function(left, top, width, height) {
+      id   <- private$.spTree$next_shape_id()
+      name <- sprintf("TextBox %d", id - 1L)
+      sp   <- private$.spTree$add_textbox(id, name, left, top, width, height)
+      shape_factory(sp, self)
+    },
+
+    # Add an autoshape of the given type at position/size; returns Shape.
+    # auto_shape_type must be a member of MSO_AUTO_SHAPE_TYPE.
+    add_shape = function(auto_shape_type, left, top, width, height) {
+      prst <- if (is.list(auto_shape_type)) auto_shape_type[["prst"]] else NULL
+      if (is.null(prst)) stop("auto_shape_type must be an MSO_AUTO_SHAPE_TYPE member", call. = FALSE)
+      id   <- private$.spTree$next_shape_id()
+      name <- sprintf("AutoShape %d", id - 1L)
+      sp   <- private$.spTree$add_autoshape(id, name, prst, left, top, width, height)
+      shape_factory(sp, self)
+    },
+
+    # Clone layout placeholders onto this slide.
+    # Excluded: date (dt), footer (ftr), slide number (sldNum) — latent placeholders.
     clone_layout_placeholders = function(slide_layout) {
+      ph_elms <- slide_layout$iter_cloneable_placeholders()
+      for (layout_ph_elm in ph_elms) {
+        ph_type  <- layout_ph_elm$ph_type
+        ph_orient <- layout_ph_elm$ph_orient
+        ph_sz    <- layout_ph_elm$ph_sz
+        ph_idx   <- layout_ph_elm$ph_idx
+        id       <- private$.spTree$next_shape_id()
+        name     <- .ph_basename(ph_type, ph_orient)
+        private$.spTree$add_placeholder(id, name, ph_type, ph_orient, ph_sz, ph_idx)
+      }
       invisible(NULL)
     }
   ),
@@ -426,6 +461,30 @@ SlideShapes <- R6::R6Class(
     .spTree = NULL
   )
 )
+
+# Map placeholder type to base display name
+.ph_basename <- function(ph_type, orient = "horz") {
+  basenames <- list(
+    clipArt = "ClipArt Placeholder",
+    body    = "Text Placeholder",
+    ctrTitle = "Title",
+    chart   = "Chart Placeholder",
+    dt      = "Date Placeholder",
+    ftr     = "Footer Placeholder",
+    hdr     = "Header Placeholder",
+    media   = "Media Placeholder",
+    obj     = "Content Placeholder",
+    dgm     = "SmartArt Placeholder",
+    pic     = "Picture Placeholder",
+    sldNum  = "Slide Number Placeholder",
+    subTitle = "Subtitle",
+    tbl     = "Table Placeholder",
+    title   = "Title"
+  )
+  name <- basenames[[ph_type]] %||% sprintf("Placeholder %s", ph_type)
+  if (identical(orient, "vert")) name <- paste("Vertical", name)
+  name
+}
 
 #' @export
 length.SlideShapes <- function(x) {

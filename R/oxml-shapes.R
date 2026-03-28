@@ -309,6 +309,118 @@ BaseShapeElement <- R6::R6Class(
 
 
 # ============================================================================
+# CT_Shape factory functions — standalone XML constructors
+# ============================================================================
+
+#' Create a new textbox <p:sp> element
+#' @keywords internal
+CT_Shape_new_textbox_sp <- function(id, name, x, y, cx, cy) {
+  xmlns_a <- .nsmap[["a"]]
+  xmlns_p <- .nsmap[["p"]]
+  xml_str <- sprintf(
+    paste0(
+      '<p:sp xmlns:p="%s" xmlns:a="%s">\n',
+      '  <p:nvSpPr>\n',
+      '    <p:cNvPr id="%d" name="%s"/>\n',
+      '    <p:cNvSpPr txBox="1"/>\n',
+      '    <p:nvPr/>\n',
+      '  </p:nvSpPr>\n',
+      '  <p:spPr>\n',
+      '    <a:xfrm><a:off x="%d" y="%d"/><a:ext cx="%d" cy="%d"/></a:xfrm>\n',
+      '    <a:prstGeom prst="rect"><a:avLst/></a:prstGeom>\n',
+      '    <a:noFill/>\n',
+      '  </p:spPr>\n',
+      '  <p:txBody>\n',
+      '    <a:bodyPr wrap="none"><a:spAutoFit/></a:bodyPr>\n',
+      '    <a:lstStyle/>\n',
+      '    <a:p/>\n',
+      '  </p:txBody>\n',
+      '</p:sp>'
+    ),
+    xmlns_p, xmlns_a,
+    as.integer(id), as.character(name),
+    as.integer(x), as.integer(y), as.integer(cx), as.integer(cy)
+  )
+  wrap_element(xml2::xml_root(xml2::read_xml(xml_str)))
+}
+
+#' Create a new autoshape <p:sp> element
+#' @keywords internal
+CT_Shape_new_autoshape_sp <- function(id, name, prst, x, y, cx, cy) {
+  xmlns_a <- .nsmap[["a"]]
+  xmlns_p <- .nsmap[["p"]]
+  xml_str <- sprintf(
+    paste0(
+      '<p:sp xmlns:p="%s" xmlns:a="%s">\n',
+      '  <p:nvSpPr>\n',
+      '    <p:cNvPr id="%d" name="%s"/>\n',
+      '    <p:cNvSpPr/>\n',
+      '    <p:nvPr/>\n',
+      '  </p:nvSpPr>\n',
+      '  <p:spPr>\n',
+      '    <a:xfrm><a:off x="%d" y="%d"/><a:ext cx="%d" cy="%d"/></a:xfrm>\n',
+      '    <a:prstGeom prst="%s"><a:avLst/></a:prstGeom>\n',
+      '  </p:spPr>\n',
+      '  <p:style>\n',
+      '    <a:lnRef idx="1"><a:schemeClr val="accent1"/></a:lnRef>\n',
+      '    <a:fillRef idx="3"><a:schemeClr val="accent1"/></a:fillRef>\n',
+      '    <a:effectRef idx="2"><a:schemeClr val="accent1"/></a:effectRef>\n',
+      '    <a:fontRef idx="minor"><a:schemeClr val="lt1"/></a:fontRef>\n',
+      '  </p:style>\n',
+      '  <p:txBody>\n',
+      '    <a:bodyPr rtlCol="0" anchor="ctr"/>\n',
+      '    <a:lstStyle/>\n',
+      '    <a:p><a:pPr algn="ctr"/></a:p>\n',
+      '  </p:txBody>\n',
+      '</p:sp>'
+    ),
+    xmlns_p, xmlns_a,
+    as.integer(id), as.character(name),
+    as.integer(x), as.integer(y), as.integer(cx), as.integer(cy),
+    as.character(prst)
+  )
+  wrap_element(xml2::xml_root(xml2::read_xml(xml_str)))
+}
+
+#' Create a new placeholder <p:sp> element
+#' @keywords internal
+CT_Shape_new_placeholder_sp <- function(id, name, ph_type, orient, sz, idx) {
+  xmlns_a <- .nsmap[["a"]]
+  xmlns_p <- .nsmap[["p"]]
+  xml_str <- sprintf(
+    paste0(
+      '<p:sp xmlns:p="%s" xmlns:a="%s">\n',
+      '  <p:nvSpPr>\n',
+      '    <p:cNvPr id="%d" name="%s"/>\n',
+      '    <p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr>\n',
+      '    <p:nvPr/>\n',
+      '  </p:nvSpPr>\n',
+      '  <p:spPr/>\n',
+      '</p:sp>'
+    ),
+    xmlns_p, xmlns_a,
+    as.integer(id), as.character(name)
+  )
+  sp <- wrap_element(xml2::xml_root(xml2::read_xml(xml_str)))
+  # Get nvPr and add the ph element
+  nvPr_nodes <- sp$xpath("./*[1]/p:nvPr")
+  nvPr <- wrap_element(nvPr_nodes[[1]])
+  ph <- nvPr$get_or_add_ph()
+  ph$type   <- ph_type
+  ph$idx    <- as.integer(idx)
+  ph$orient <- orient
+  ph$sz     <- sz
+  # Add txBody for text-bearing placeholder types
+  text_ph_types <- c("title", "ctrTitle", "subTitle", "body", "obj")
+  if (!is.null(ph_type) && ph_type %in% text_ph_types) {
+    txBody <- .CT_TextBody_new_p_txBody()
+    sp$append_child(txBody)
+  }
+  sp
+}
+
+
+# ============================================================================
 # CT_GroupShape — <p:spTree> and <p:grpSp>
 # ============================================================================
 
@@ -357,7 +469,28 @@ CT_GroupShape <- R6::R6Class(
     },
 
     # Next unique shape id (max + 1)
-    next_shape_id = function() self$max_shape_id() + 1L
+    next_shape_id = function() self$max_shape_id() + 1L,
+
+    # Append sp before p:extLst (or at end if none); return the wrapped node
+    add_textbox = function(id, name, x, y, cx, cy) {
+      sp <- CT_Shape_new_textbox_sp(id, name, x, y, cx, cy)
+      self$insert_element_before(sp, "p:extLst")
+      sp
+    },
+
+    # Append autoshape sp before p:extLst
+    add_autoshape = function(id, name, prst, x, y, cx, cy) {
+      sp <- CT_Shape_new_autoshape_sp(id, name, prst, x, y, cx, cy)
+      self$insert_element_before(sp, "p:extLst")
+      sp
+    },
+
+    # Append placeholder sp before p:extLst
+    add_placeholder = function(id, name, ph_type, orient, sz, idx) {
+      sp <- CT_Shape_new_placeholder_sp(id, name, ph_type, orient, sz, idx)
+      self$insert_element_before(sp, "p:extLst")
+      sp
+    }
   ),
 
   active = list(
