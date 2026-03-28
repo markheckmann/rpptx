@@ -81,6 +81,98 @@ Slide <- R6::R6Class(
     placeholders = function(value) {
       if (!missing(value)) stop("Read-only", call. = FALSE)
       SlidePlaceholders$new(self$element$spTree, self)
+    },
+
+    # NotesSlide for this slide (creates one if absent).
+    # No-op setter allows chaining: slide$notes_slide$notes_text_frame$text <- "..."
+    notes_slide = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      self$part$notes_slide
+    }
+  ),
+
+  private = list(
+    .shapes = NULL
+  )
+)
+
+
+# ============================================================================
+# NotesSlide — proxy for notes slide XML
+# ============================================================================
+
+#' Notes slide proxy object
+#'
+#' Provides access to notes content for a slide, including the notes text frame.
+#'
+#' @keywords internal
+#' @export
+NotesSlide <- R6::R6Class(
+  "NotesSlide",
+  inherit = .BaseSlide,
+
+  active = list(
+    # ShapeCollection for shapes on this notes slide
+    shapes = function(value) {
+      if (!missing(value)) stop("Read-only", call. = FALSE)
+      if (is.null(private$.shapes)) {
+        private$.shapes <- SlideShapes$new(self$element$spTree, self)
+      }
+      private$.shapes
+    },
+
+    # The body-type placeholder on this notes slide (contains the notes text), or NULL.
+    notes_placeholder = function(value) {
+      if (!missing(value)) stop("Read-only", call. = FALSE)
+      phs <- SlidePlaceholders$new(self$element$spTree, self)$to_list()
+      for (ph in phs) {
+        ph_type <- tryCatch(ph$placeholder_format$type, error = function(e) NULL)
+        if (!is.null(ph_type) && ph_type == PP_PLACEHOLDER$BODY) return(ph)
+      }
+      NULL
+    },
+
+    # The TextFrame of the notes placeholder, or NULL if no notes placeholder.
+    notes_text_frame = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      ph <- self$notes_placeholder
+      if (is.null(ph)) return(NULL)
+      ph$text_frame
+    }
+  ),
+
+  private = list(
+    .shapes = NULL
+  )
+)
+
+
+# ============================================================================
+# NotesMaster — proxy for notes master XML
+# ============================================================================
+
+#' Notes master proxy object
+#'
+#' @keywords internal
+#' @export
+NotesMaster <- R6::R6Class(
+  "NotesMaster",
+  inherit = .BaseSlide,
+
+  active = list(
+    # ShapeCollection for shapes on this notes master
+    shapes = function(value) {
+      if (!missing(value)) stop("Read-only", call. = FALSE)
+      if (is.null(private$.shapes)) {
+        private$.shapes <- SlideShapes$new(self$element$spTree, self)
+      }
+      private$.shapes
+    },
+
+    # Placeholder collection for notes master
+    placeholders = function(value) {
+      if (!missing(value)) stop("Read-only", call. = FALSE)
+      SlidePlaceholders$new(self$element$spTree, self)
     }
   ),
 

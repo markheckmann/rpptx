@@ -155,14 +155,50 @@ CT_SlideMaster <- .add_slide_element_methods(CT_SlideMaster)
 
 
 # ============================================================================
+# CT_NotesSlide — <p:notes>
+# ============================================================================
+
+#' @keywords internal
+CT_NotesSlide <- define_oxml_element(
+  classname = "CT_NotesSlide",
+  tag = "p:notes",
+  children = list(
+    cSld = one_and_only_one("p:cSld"),
+    clrMapOvr = zero_or_one(
+      "p:clrMapOvr",
+      successors = c("p:extLst")
+    )
+  )
+)
+CT_NotesSlide <- .add_slide_element_methods(CT_NotesSlide)
+
+
+# ============================================================================
+# CT_NotesMaster — <p:notesMaster>
+# ============================================================================
+
+#' @keywords internal
+CT_NotesMaster <- define_oxml_element(
+  classname = "CT_NotesMaster",
+  tag = "p:notesMaster",
+  children = list(
+    cSld = one_and_only_one("p:cSld")
+  )
+)
+CT_NotesMaster <- .add_slide_element_methods(CT_NotesMaster)
+
+
+# ============================================================================
 # Register element classes
 # ============================================================================
 
 .onLoad_oxml_slide <- function() {
-  register_element_cls("p:cSld", CT_CommonSlideData)
-  register_element_cls("p:sld", CT_Slide)
-  register_element_cls("p:sldLayout", CT_SlideLayout)
-  register_element_cls("p:sldLayoutId", CT_SlideLayoutIdListEntry)
-  register_element_cls("p:sldLayoutIdLst", CT_SlideLayoutIdList)
-  register_element_cls("p:sldMaster", CT_SlideMaster)
+  register_element_cls("p:cSld",          CT_CommonSlideData)
+  register_element_cls("p:sld",           CT_Slide)
+  register_element_cls("p:sldLayout",     CT_SlideLayout)
+  register_element_cls("p:sldLayoutId",   CT_SlideLayoutIdListEntry)
+  register_element_cls("p:sldLayoutIdLst",CT_SlideLayoutIdList)
+  register_element_cls("p:sldMaster",     CT_SlideMaster)
+  register_element_cls("p:notes",         CT_NotesSlide)
+  register_element_cls("p:notesMaster",   CT_NotesMaster)
 }

@@ -254,3 +254,67 @@ describe("Slides$move", {
     expect_error(prs$slides$move(s1, 5L), regexp = "out of range")
   })
 })
+
+
+# ============================================================================
+# NotesSlide
+# ============================================================================
+
+describe("Slide$has_notes_slide", {
+  it("returns FALSE when slide has no notes", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    expect_false(slide$has_notes_slide)
+  })
+})
+
+describe("Slide$notes_slide", {
+  it("creates a NotesSlide when accessed on a slide without notes", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    ns <- slide$notes_slide
+    expect_s3_class(ns, "NotesSlide")
+  })
+
+  it("has_notes_slide is TRUE after accessing notes_slide", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    invisible(slide$notes_slide)
+    expect_true(slide$has_notes_slide)
+  })
+
+  it("notes_text_frame returns TextFrame", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    ns  <- slide$notes_slide
+    ntf <- ns$notes_text_frame
+    expect_s3_class(ntf, "TextFrame")
+  })
+
+  it("notes_text_frame text is writable", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    ns  <- slide$notes_slide
+    ntf <- ns$notes_text_frame
+    ntf$text <- "My slide notes"
+    expect_equal(ntf$text, "My slide notes")
+  })
+
+  it("round-trips through save/load", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    invisible(slide$notes_slide)
+    tmp <- tempfile(fileext = ".pptx")
+    on.exit(unlink(tmp))
+    prs$save(tmp)
+    prs2  <- pptx_presentation(tmp)
+    slide2 <- prs2$slides[[1]]
+    expect_true(slide2$has_notes_slide)
+  })
+})

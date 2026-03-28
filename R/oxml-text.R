@@ -59,10 +59,35 @@ CT_Hyperlink <- R6::R6Class(
   "CT_Hyperlink",
   inherit = BaseOxmlElement,
 
+  public = list(
+    # Query portion of a ppaction:// URL as a named list.
+    # e.g. "ppaction://customshow?id=0&return=true" → list(id="0", return="true")
+    action_fields = function() {
+      url <- self$action
+      if (is.null(url)) return(list())
+      halves <- strsplit(url, "?", fixed = TRUE)[[1]]
+      if (length(halves) < 2) return(list())
+      pairs <- strsplit(halves[[2]], "&", fixed = TRUE)[[1]]
+      result <- list()
+      for (p in pairs) {
+        kv <- strsplit(p, "=", fixed = TRUE)[[1]]
+        if (length(kv) == 2) result[[kv[[1]]]] <- kv[[2]]
+      }
+      result
+    },
+
+    # Host portion of the ppaction:// URL (e.g. "customshow"), or NULL.
+    action_verb = function() {
+      url <- self$action
+      if (is.null(url)) return(NULL)
+      host_and_query <- strsplit(url, "?", fixed = TRUE)[[1]][[1]]
+      # Strip "ppaction://" prefix (11 chars)
+      substr(host_and_query, 12, nchar(host_and_query))
+    }
+  ),
+
   active = list(
     # The r:id attribute value (relationship ID) or NULL.
-    # Uses BaseOxmlElement$set_attr/get_attr which convert Clark notation to
-    # prefix:local with ns= — the correct xml2 API for namespaced attributes.
     rId = function(value) {
       clark <- paste0("{", .nsmap[["r"]], "}id")
       if (!missing(value)) {
@@ -70,6 +95,19 @@ CT_Hyperlink <- R6::R6Class(
         return(invisible(value))
       }
       self$get_attr(clark)
+    },
+
+    # The action attribute string (ppaction:// URL), or NULL.
+    action = function(value) {
+      if (!missing(value)) {
+        if (is.null(value)) {
+          self$remove_attr("action")
+        } else {
+          self$set_attr("action", as.character(value))
+        }
+        return(invisible(value))
+      }
+      self$get_attr("action")
     }
   )
 )
@@ -417,5 +455,7 @@ CT_TextBody <- R6::R6Class(
   register_element_cls("a:bodyPr",     CT_TextBodyProperties)
   register_element_cls("p:txBody",     CT_TextBody)
   register_element_cls("a:txBody",     CT_TextBody)
-  register_element_cls("a:hlinkClick", CT_Hyperlink)
+  register_element_cls("a:hlinkClick",      CT_Hyperlink)
+  register_element_cls("a:hlinkHover",      CT_Hyperlink)
+  register_element_cls("a:hlinkMouseOver",  CT_Hyperlink)
 }

@@ -165,6 +165,24 @@ BaseShape <- R6::R6Class(
       LineFormat$new(spPr)
     },
 
+    # ActionSetting for click actions on this shape.
+    # No-op setter handles write-back from chaining (shape$click_action$...).
+    click_action = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      cNvPr <- private$.element$cNvPr
+      if (is.null(cNvPr)) stop("shape has no cNvPr element", call. = FALSE)
+      ActionSetting$new(cNvPr, self, hover = FALSE)
+    },
+
+    # ActionSetting for hover actions on this shape.
+    # No-op setter handles write-back from chaining (shape$hover_action$...).
+    hover_action = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      cNvPr <- private$.element$cNvPr
+      if (is.null(cNvPr)) stop("shape has no cNvPr element", call. = FALSE)
+      ActionSetting$new(cNvPr, self, hover = TRUE)
+    },
+
     # MSO_SHAPE_TYPE member — must be implemented by subclasses
     shape_type = function() {
       stop(paste(class(self)[1], "does not implement shape_type"), call. = FALSE)

@@ -15,6 +15,55 @@ CT_NonVisualDrawingProps <- define_oxml_element(
   attributes = list(
     id   = required_attribute("id",   ST_DrawingElementId),
     name = required_attribute("name", XsdString)
+  ),
+  active = list(
+    # a:hlinkClick child element (click action), or NULL.
+    hlinkClick = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      nd <- xml2::xml_find_first(self$get_node(), "a:hlinkClick",
+                                 ns = c(a = .nsmap[["a"]]))
+      if (inherits(nd, "xml_missing")) return(NULL)
+      wrap_element(nd)
+    },
+
+    # a:hlinkHover child element (hover action), or NULL.
+    hlinkHover = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      nd <- xml2::xml_find_first(self$get_node(), "a:hlinkHover",
+                                 ns = c(a = .nsmap[["a"]]))
+      if (inherits(nd, "xml_missing")) return(NULL)
+      wrap_element(nd)
+    }
+  ),
+  methods = list(
+    get_or_add_hlinkClick = function() {
+      nd <- xml2::xml_find_first(self$get_node(), "a:hlinkClick",
+                                 ns = c(a = .nsmap[["a"]]))
+      if (inherits(nd, "xml_missing")) {
+        nd <- xml2::xml_add_child(self$get_node(), "a:hlinkClick",
+                                  xmlns = .nsmap[["a"]])
+      }
+      wrap_element(nd)
+    },
+    get_or_add_hlinkHover = function() {
+      nd <- xml2::xml_find_first(self$get_node(), "a:hlinkHover",
+                                 ns = c(a = .nsmap[["a"]]))
+      if (inherits(nd, "xml_missing")) {
+        nd <- xml2::xml_add_child(self$get_node(), "a:hlinkHover",
+                                  xmlns = .nsmap[["a"]])
+      }
+      wrap_element(nd)
+    },
+    .remove_hlinkClick = function() {
+      nd <- xml2::xml_find_first(self$get_node(), "a:hlinkClick",
+                                 ns = c(a = .nsmap[["a"]]))
+      if (!inherits(nd, "xml_missing")) xml2::xml_remove(nd)
+    },
+    .remove_hlinkHover = function() {
+      nd <- xml2::xml_find_first(self$get_node(), "a:hlinkHover",
+                                 ns = c(a = .nsmap[["a"]]))
+      if (!inherits(nd, "xml_missing")) xml2::xml_remove(nd)
+    }
   )
 )
 
@@ -263,6 +312,13 @@ BaseShapeElement <- R6::R6Class(
       }
       xfrm <- self$xfrm; if (is.null(xfrm)) return(0.0)
       r <- xfrm$rot; if (is.null(r)) 0.0 else r
+    },
+
+    # CT_NonVisualDrawingProps wrapper for this shape's first-child cNvPr, or NULL.
+    cNvPr = function() {
+      nodes <- self$xpath("./*[1]/p:cNvPr")
+      if (length(nodes) == 0) return(NULL)
+      wrap_element(nodes[[1]])
     },
 
     # Integer shape ID (from p:cNvPr/@id of first child)

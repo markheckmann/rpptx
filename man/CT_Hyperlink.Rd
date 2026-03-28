@@ -15,6 +15,8 @@ CT_Hyperlink XML element
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
+\item \href{#method-CT_Hyperlink-action_fields}{\code{CT_Hyperlink$action_fields()}}
+\item \href{#method-CT_Hyperlink-action_verb}{\code{CT_Hyperlink$action_verb()}}
 \item \href{#method-CT_Hyperlink-clone}{\code{CT_Hyperlink$clone()}}
 }
 }
@@ -39,6 +41,24 @@ CT_Hyperlink XML element
 </ul>
 </details>
 }}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CT_Hyperlink-action_fields"></a>}}
+\if{latex}{\out{\hypertarget{method-CT_Hyperlink-action_fields}{}}}
+\subsection{Method \code{action_fields()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CT_Hyperlink$action_fields()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CT_Hyperlink-action_verb"></a>}}
+\if{latex}{\out{\hypertarget{method-CT_Hyperlink-action_verb}{}}}
+\subsection{Method \code{action_verb()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CT_Hyperlink$action_verb()}\if{html}{\out{</div>}}
+}
+
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CT_Hyperlink-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-CT_Hyperlink-clone}{}}}

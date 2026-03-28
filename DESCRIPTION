@@ -22,6 +22,7 @@ Suggests:
     withr
 Config/testthat/edition: 3
 Collate:
+    'action.R'
     'oxml-ns.R'
     'oxml-xmlchemy.R'
     'oxml-init.R'
@@ -54,8 +55,10 @@ Collate:
     'dml-color.R'
     'dml-fill.R'
     'dml-line.R'
+    'enum-action.R'
     'enum-chart.R'
     'enum-dml.R'
+    'enum-text.R'
     'exceptions.R'
     'oxml-chart.R'
     'oxml-dml-color.R'
@@ -64,6 +67,7 @@ Collate:
     'oxml-table.R'
     'utils.R'
     'oxml-text.R'
+    'oxml-theme.R'
     'parts-chart.R'
     'rpptx-package.R'
     'table.R'

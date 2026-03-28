@@ -88,6 +88,20 @@ PresentationPart <- R6::R6Class(
     presentation = function(value) {
       if (!missing(value)) stop("Read-only property", call. = FALSE)
       self$get_presentation()
+    },
+
+    # NotesMaster domain object for this presentation.
+    # Creates a default NotesMasterPart + part relationship if absent.
+    notes_master_part = function(value) {
+      if (!missing(value)) stop("Read-only property", call. = FALSE)
+      tryCatch(
+        self$part_related_by(RT$NOTES_MASTER),
+        error = function(e) {
+          part <- NotesMasterPart_create_default(self$package)
+          self$relate_to(part, RT$NOTES_MASTER)
+          part
+        }
+      )
     }
   ),
 
