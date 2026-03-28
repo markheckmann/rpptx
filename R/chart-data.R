@@ -448,9 +448,15 @@ XyChartData <- R6::R6Class(
   inherit = BaseChartData,
 
   public = list(
-    add_series = function(name, number_format = NULL) {
+    # Add a series. Optionally supply x_values and y_values vectors for convenience.
+    add_series = function(name, x_values = NULL, y_values = NULL, number_format = NULL) {
       s <- XySeriesData$new(self, name, number_format)
       private$.series <- c(private$.series, list(s))
+      if (!is.null(x_values) && !is.null(y_values)) {
+        for (i in seq_along(x_values)) {
+          s$add_data_point(x_values[[i]], y_values[[i]])
+        }
+      }
       invisible(s)
     },
 

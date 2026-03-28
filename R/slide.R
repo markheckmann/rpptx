@@ -699,6 +699,17 @@ SlideShapes <- R6::R6Class(
       shape_factory(pic, self)
     },
 
+    # Group existing shapes into a p:grpSp. shapes_list is a list of shape objects.
+    # Each shape is removed from the slide and placed into the new group.
+    # Returns a GroupShape wrapping the new p:grpSp element.
+    add_group_shape = function(shapes_list) {
+      shape_elms <- lapply(shapes_list, function(s) s$.__enclos_env__$private$.element)
+      id   <- private$.spTree$next_shape_id()
+      name <- sprintf("Group %d", id - 1L)
+      grpSp <- private$.spTree$add_grpSp(id, name, shape_elms)
+      shape_factory(grpSp, self)
+    },
+
     # Clone layout placeholders onto this slide.
     # Excluded: date (dt), footer (ftr), slide number (sldNum) — latent placeholders.
     clone_layout_placeholders = function(slide_layout) {

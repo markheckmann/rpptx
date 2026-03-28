@@ -278,28 +278,28 @@ BaseShapeElement <- R6::R6Class(
     # Shape position and size (EMU, read/write)
     x = function(value) {
       if (!missing(value)) {
-        self$get_or_add_xfrm()$x <- value; return(invisible(value))
+        xfrm_elm <- self$get_or_add_xfrm(); xfrm_elm$x <- value; return(invisible(value))
       }
       xfrm <- self$xfrm; if (is.null(xfrm)) return(Emu(0L)); r <- xfrm$x
       if (is.null(r)) Emu(0L) else r
     },
     y = function(value) {
       if (!missing(value)) {
-        self$get_or_add_xfrm()$y <- value; return(invisible(value))
+        xfrm_elm <- self$get_or_add_xfrm(); xfrm_elm$y <- value; return(invisible(value))
       }
       xfrm <- self$xfrm; if (is.null(xfrm)) return(Emu(0L)); r <- xfrm$y
       if (is.null(r)) Emu(0L) else r
     },
     cx = function(value) {
       if (!missing(value)) {
-        self$get_or_add_xfrm()$cx <- value; return(invisible(value))
+        xfrm_elm <- self$get_or_add_xfrm(); xfrm_elm$cx <- value; return(invisible(value))
       }
       xfrm <- self$xfrm; if (is.null(xfrm)) return(Emu(0L)); r <- xfrm$cx
       if (is.null(r)) Emu(0L) else r
     },
     cy = function(value) {
       if (!missing(value)) {
-        self$get_or_add_xfrm()$cy <- value; return(invisible(value))
+        xfrm_elm <- self$get_or_add_xfrm(); xfrm_elm$cy <- value; return(invisible(value))
       }
       xfrm <- self$xfrm; if (is.null(xfrm)) return(Emu(0L)); r <- xfrm$cy
       if (is.null(r)) Emu(0L) else r
@@ -308,7 +308,7 @@ BaseShapeElement <- R6::R6Class(
     # Rotation in clockwise degrees (read/write)
     rot = function(value) {
       if (!missing(value)) {
-        self$get_or_add_xfrm()$rot <- value; return(invisible(value))
+        xfrm_elm <- self$get_or_add_xfrm(); xfrm_elm$rot <- value; return(invisible(value))
       }
       xfrm <- self$xfrm; if (is.null(xfrm)) return(0.0)
       r <- xfrm$rot; if (is.null(r)) 0.0 else r
@@ -684,6 +684,28 @@ CT_GroupShape <- R6::R6Class(
       cxnSp <- CT_Connector_new_cxnSp(id, name, prst, x, y, cx, cy, flipH, flipV)
       self$insert_element_before(cxnSp, "p:extLst")
       cxnSp
+    },
+
+    # Create a p:grpSp containing shape_elms (list of wrapped elements).
+    # Each shape_elm node is removed from its current parent and added to the group.
+    add_grpSp = function(id, name, shape_elms) {
+      # Compute bounding box across all shapes
+      xs  <- sapply(shape_elms, function(e) as.integer(e$x))
+      ys  <- sapply(shape_elms, function(e) as.integer(e$y))
+      cxs <- sapply(shape_elms, function(e) as.integer(e$cx))
+      cys <- sapply(shape_elms, function(e) as.integer(e$cy))
+      x   <- min(xs)
+      y   <- min(ys)
+      cx  <- max(xs + cxs) - x
+      cy  <- max(ys + cys) - y
+      grpSp <- CT_GroupShape_new_grpSp(id, name, x, y, cx, cy)
+      # Move shape nodes into the group
+      for (elm in shape_elms) {
+        xml2::xml_remove(elm$get_node())
+        xml2::xml_add_child(grpSp$get_node(), elm$get_node())
+      }
+      self$insert_element_before(grpSp, "p:extLst")
+      grpSp
     }
   ),
 
@@ -764,6 +786,38 @@ CT_GraphicalObjectFrame_new_chart_graphicFrame <- function(id, name, rId, x, y, 
     .GRAPHIC_DATA_URI_CHART,
     c_ns, rId)
 
+  wrap_element(xml2::xml_root(xml2::read_xml(xml_str)))
+}
+
+
+# ============================================================================
+# Factory — create a p:grpSp (group shape) element
+# ============================================================================
+
+#' Create a new empty <p:grpSp> with bounding-box transform
+#' @keywords internal
+CT_GroupShape_new_grpSp <- function(id, name, x, y, cx, cy) {
+  p <- .nsmap[["p"]]; a <- .nsmap[["a"]]
+  xml_str <- sprintf(paste0(
+    '<p:grpSp xmlns:p="%s" xmlns:a="%s">',
+      '<p:nvGrpSpPr>',
+        '<p:cNvPr id="%d" name="%s"/>',
+        '<p:cNvGrpSpPr/>',
+        '<p:nvPr/>',
+      '</p:nvGrpSpPr>',
+      '<p:grpSpPr>',
+        '<a:xfrm>',
+          '<a:off x="%d" y="%d"/>',
+          '<a:ext cx="%d" cy="%d"/>',
+          '<a:chOff x="%d" y="%d"/>',
+          '<a:chExt cx="%d" cy="%d"/>',
+        '</a:xfrm>',
+      '</p:grpSpPr>',
+    '</p:grpSp>'
+  ), p, a,
+     as.integer(id), as.character(name),
+     as.integer(x), as.integer(y), as.integer(cx), as.integer(cy),
+     as.integer(x), as.integer(y), as.integer(cx), as.integer(cy))
   wrap_element(xml2::xml_root(xml2::read_xml(xml_str)))
 }
 

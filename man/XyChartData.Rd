@@ -40,7 +40,12 @@ Chart data container for XY (scatter) charts
 \if{latex}{\out{\hypertarget{method-XyChartData-add_series}{}}}
 \subsection{Method \code{add_series()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{XyChartData$add_series(name, number_format = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{XyChartData$add_series(
+  name,
+  x_values = NULL,
+  y_values = NULL,
+  number_format = NULL
+)}\if{html}{\out{</div>}}
 }
 
 }

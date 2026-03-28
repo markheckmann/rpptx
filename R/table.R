@@ -4,6 +4,25 @@
 # Provides Table, TableRow, TableColumn, TableCell and their collections.
 
 # ============================================================================
+# Helper — find (row, col) position of a CT_TableCell in a Table
+# ============================================================================
+
+.find_cell_pos <- function(table, tc_elm) {
+  tbl <- table$.__enclos_env__$private$.tbl
+  rows <- tbl$tr_lst
+  for (r in seq_along(rows)) {
+    tcs <- rows[[r]]$tc_lst
+    for (c in seq_along(tcs)) {
+      if (identical(tcs[[c]]$get_node(), tc_elm$get_node())) {
+        return(c(r, c))
+      }
+    }
+  }
+  stop("cell not found in table", call. = FALSE)
+}
+
+
+# ============================================================================
 # TableCell — wraps a <a:tc> element
 # ============================================================================
 
@@ -21,6 +40,44 @@ TableCell <- R6::R6Class(
     initialize = function(tc, parent) {
       private$.tc     <- tc
       private$.parent <- parent  # Table
+    },
+
+    # Merge a rectangular range from this cell to other_cell (bottom-right corner).
+    # After merging, only this cell (the origin) retains content; spanned cells
+    # get hMerge / vMerge flags set.
+    merge = function(other_cell) {
+      tbl <- private$.parent
+      # Find (row, col) of both cells by iterating the table
+      self_pos  <- .find_cell_pos(tbl, private$.tc)
+      other_pos <- .find_cell_pos(tbl, other_cell$.__enclos_env__$private$.tc)
+      r1 <- min(self_pos[1], other_pos[1]); r2 <- max(self_pos[1], other_pos[1])
+      c1 <- min(self_pos[2], other_pos[2]); c2 <- max(self_pos[2], other_pos[2])
+      n_rows <- r2 - r1 + 1L; n_cols <- c2 - c1 + 1L
+      # Configure all cells in the range
+      for (r in r1:r2) {
+        for (c in c1:c2) {
+          tc <- tbl$.__enclos_env__$private$.tbl$tc(r, c)
+          if (r == r1 && c == c1) {
+            # Origin cell
+            if (n_cols > 1L) tc$gridSpan <- n_cols else tc$gridSpan <- 1L
+            if (n_rows > 1L) tc$rowSpan  <- n_rows else tc$rowSpan  <- 1L
+            tc$hMerge <- FALSE; tc$vMerge <- FALSE
+          } else if (r == r1) {
+            # Same row, non-origin
+            tc$hMerge <- TRUE; tc$vMerge <- FALSE
+            tc$gridSpan <- 1L; tc$rowSpan <- 1L
+          } else if (c == c1) {
+            # Same col, non-origin
+            tc$vMerge <- TRUE; tc$hMerge <- FALSE
+            tc$gridSpan <- 1L; tc$rowSpan <- 1L
+          } else {
+            # Interior
+            tc$hMerge <- TRUE; tc$vMerge <- TRUE
+            tc$gridSpan <- 1L; tc$rowSpan <- 1L
+          }
+        }
+      }
+      invisible(self)
     }
   ),
 

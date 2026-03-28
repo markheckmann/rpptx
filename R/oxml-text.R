@@ -29,6 +29,11 @@ CT_TextCharacterProperties <- define_oxml_element(
   classname = "CT_TextCharacterProperties",
   tag = "a:rPr",
   children = list(
+    solidFill = zero_or_one(
+      "a:solidFill",
+      successors = c("a:latin", "a:ea", "a:cs", "a:sym", "a:hlinkClick",
+                     "a:hlinkMouseOver", "a:rtl", "a:extLst")
+    ),
     latin = zero_or_one(
       "a:latin",
       successors = c("a:ea", "a:cs", "a:sym", "a:hlinkClick",
@@ -455,6 +460,7 @@ CT_TextBody <- R6::R6Class(
   register_element_cls("a:bodyPr",     CT_TextBodyProperties)
   register_element_cls("p:txBody",     CT_TextBody)
   register_element_cls("a:txBody",     CT_TextBody)
+  register_element_cls("c:rich",       CT_TextBody)   # chart title rich text body
   register_element_cls("a:hlinkClick",      CT_Hyperlink)
   register_element_cls("a:hlinkHover",      CT_Hyperlink)
   register_element_cls("a:hlinkMouseOver",  CT_Hyperlink)

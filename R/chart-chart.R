@@ -1361,7 +1361,7 @@ Legend <- R6::R6Class(
         if (is.null(value)) {
           private$.element$.remove_overlay()
         } else {
-          private$.element$get_or_add_overlay()$val <- isTRUE(value)
+          ovl_elm <- private$.element$get_or_add_overlay(); ovl_elm$val <- isTRUE(value)
         }
         return(invisible(value))
       }

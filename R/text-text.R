@@ -83,6 +83,13 @@ Font <- R6::R6Class(
       if (u == "none") return(FALSE)
       if (u == "sng")  return(TRUE)
       u
+    },
+
+    # ColorFormat for this font's solid fill color. No-op setter for R6 write-back.
+    color = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      solidFill <- private$.rPr$get_or_add_solidFill()
+      ColorFormat$new(solidFill)
     }
   ),
 

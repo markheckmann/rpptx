@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Getting Started with rpptx</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Getting Started with rpptx</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(rpptx)</span></code></pre></div>
+<p><code>rpptx</code> is an R port of the Python
+<code>python-pptx</code> library. It lets you create, read, and update
+PowerPoint (<code>.pptx</code>) files entirely from R, with an R6-based
+object model that closely mirrors the Python API.</p>
+<div id="creating-a-presentation" class="section level2">
+<h2>Creating a presentation</h2>
+<p><code>pptx_presentation()</code> opens an existing file or — with no
+argument — creates a new blank presentation based on the built-in
+default template.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>prs <span class="ot">&lt;-</span> <span class="fu">pptx_presentation</span>()</span></code></pre></div>
+<p>Check the slide dimensions (in EMU — English Metric Units, 914400 per
+inch):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>prs<span class="sc">$</span>slide_width   <span class="co"># 10 inches</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; &lt;Length: 9144000 EMU (10.00 in, 25.40 cm, 720.0 pt)&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>prs<span class="sc">$</span>slide_height  <span class="co"># 7.5 inches</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; &lt;Length: 6858000 EMU (7.50 in, 19.05 cm, 540.0 pt)&gt;</span></span></code></pre></div>
+<p>Use <code>Inches()</code>, <code>Cm()</code>, or <code>Pt()</code> to
+convert from convenient units to EMU:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">Inches</span>(<span class="dv">1</span>)     <span class="co"># 914400L</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; &lt;Length: 914400 EMU (1.00 in, 2.54 cm, 72.0 pt)&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">Cm</span>(<span class="fl">2.54</span>)      <span class="co"># 914400L</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; &lt;Length: 914400 EMU (1.00 in, 2.54 cm, 72.0 pt)&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="fu">Pt</span>(<span class="dv">72</span>)        <span class="co"># 914400L</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; &lt;Length: 914400 EMU (1.00 in, 2.54 cm, 72.0 pt)&gt;</span></span></code></pre></div>
+</div>
+<div id="adding-slides" class="section level2">
+<h2>Adding slides</h2>
+<p>Slides are added through the <code>Slides</code> collection using a
+slide layout as a template. Every new blank presentation has one slide
+master with eleven layouts.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># List available layout names</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">sapply</span>(<span class="fu">seq_len</span>(<span class="fu">length</span>(prs<span class="sc">$</span>slide_layouts)), <span class="cf">function</span>(i) {</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  prs<span class="sc">$</span>slide_layouts[[i]]<span class="sc">$</span>name</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>})</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;Title Slide&quot;             &quot;Title and Content&quot;      </span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt;  [3] &quot;Section Header&quot;          &quot;Two Content&quot;            </span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt;  [5] &quot;Comparison&quot;              &quot;Title Only&quot;             </span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;Blank&quot;                   &quot;Content with Caption&quot;   </span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt;  [9] &quot;Picture with Caption&quot;    &quot;Title and Vertical Text&quot;</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; [11] &quot;Vertical Title and Text&quot;</span></span></code></pre></div>
+<p>Add a blank slide (layout index 6 is “Blank” in the default
+template):</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>layout <span class="ot">&lt;-</span> prs<span class="sc">$</span>slide_layouts[[<span class="dv">6</span>]]</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>slide  <span class="ot">&lt;-</span> prs<span class="sc">$</span>slides<span class="sc">$</span><span class="fu">add_slide</span>(layout)</span></code></pre></div>
+<p>Access individual slides by 1-based index:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">length</span>(prs<span class="sc">$</span>slides)    <span class="co"># 1</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>prs<span class="sc">$</span>slides[[<span class="dv">1</span>]]       <span class="co"># the slide we just added</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; &lt;Slide&gt;</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt;   Inherits from: &lt;.BaseSlide&gt;</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt;   Public:</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt;     element: active binding</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt;     follow_master_background: active binding</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt;     has_notes_slide: active binding</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt;     initialize: function (element, part) </span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;     name: active binding</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;     notes_slide: active binding</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt;     part: active binding</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt;     placeholders: active binding</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt;     shapes: active binding</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt;     slide_id: active binding</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt;     slide_layout: active binding</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt;   Private:</span></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&gt;     .element: CT_Slide, BaseOxmlElement, R6</span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt;     .part: SlidePart, BaseSlidePart, XmlPart, Part, R6</span></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt;     .shapes: SlideShapes, ParentedElementProxy, ElementProxy, R6</span></span></code></pre></div>
+</div>
+<div id="adding-a-text-box" class="section level2">
+<h2>Adding a text box</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>slide<span class="sc">$</span>shapes<span class="sc">$</span><span class="fu">add_textbox</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="at">left   =</span> <span class="fu">Inches</span>(<span class="dv">1</span>),</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">top    =</span> <span class="fu">Inches</span>(<span class="dv">1</span>),</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">width  =</span> <span class="fu">Inches</span>(<span class="dv">5</span>),</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="at">height =</span> <span class="fu">Inches</span>(<span class="dv">1</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>)</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; &lt;Shape&gt;</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt;   Inherits from: &lt;BaseShape&gt;</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt;   Public:</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt;     click_action: active binding</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt;     element: active binding</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt;     fill: active binding</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt;     has_text_frame: active binding</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt;     height: active binding</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt;     hover_action: active binding</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&gt;     initialize: function (shape_elm, parent) </span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co">#&gt;     is_placeholder: active binding</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="co">#&gt;     left: active binding</span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="co">#&gt;     line: active binding</span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="co">#&gt;     name: active binding</span></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a><span class="co">#&gt;     part: active binding</span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="co">#&gt;     placeholder_format: active binding</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="co">#&gt;     rotation: active binding</span></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="co">#&gt;     shape_id: active binding</span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="co">#&gt;     shape_type: active binding</span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="co">#&gt;     text: active binding</span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="co">#&gt;     text_frame: active binding</span></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a><span class="co">#&gt;     top: active binding</span></span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a><span class="co">#&gt;     width: active binding</span></span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a><span class="co">#&gt;   Private:</span></span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a><span class="co">#&gt;     .base_placeholder: function () </span></span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a><span class="co">#&gt;     .element: CT_Shape, BaseShapeElement, BaseOxmlElement, R6</span></span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a><span class="co">#&gt;     .inherit_dimension: function (dim_name) </span></span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a><span class="co">#&gt;     .parent: SlideShapes, ParentedElementProxy, ElementProxy, R6</span></span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a>shape <span class="ot">&lt;-</span> slide<span class="sc">$</span>shapes[[<span class="dv">1</span>]]</span>
+<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a>shape<span class="sc">$</span>text_frame<span class="sc">$</span>text <span class="ot">&lt;-</span> <span class="st">&quot;Hello, rpptx!&quot;</span></span></code></pre></div>
+</div>
+<div id="adding-a-rectangle" class="section level2">
+<h2>Adding a rectangle</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>rect <span class="ot">&lt;-</span> slide<span class="sc">$</span>shapes<span class="sc">$</span><span class="fu">add_shape</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  MSO_AUTO_SHAPE_TYPE<span class="sc">$</span>ROUNDED_RECTANGLE,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">left   =</span> <span class="fu">Inches</span>(<span class="dv">1</span>),</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="at">top    =</span> <span class="fu">Inches</span>(<span class="fl">2.5</span>),</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="at">width  =</span> <span class="fu">Inches</span>(<span class="dv">3</span>),</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="at">height =</span> <span class="fu">Inches</span>(<span class="fl">1.5</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>)</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>rect<span class="sc">$</span>text <span class="ot">&lt;-</span> <span class="st">&quot;A rounded rectangle&quot;</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>rect<span class="sc">$</span>fill<span class="sc">$</span><span class="fu">solid</span>()</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>rect<span class="sc">$</span>fill<span class="sc">$</span>fore_color<span class="sc">$</span>rgb <span class="ot">&lt;-</span> <span class="fu">RGBColor</span>(<span class="dv">0x46</span><span class="dt">L</span>, <span class="dv">0x72</span><span class="dt">L</span>, <span class="dv">0xC4</span><span class="dt">L</span>)</span></code></pre></div>
+</div>
+<div id="adding-a-picture" class="section level2">
+<h2>Adding a picture</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>slide<span class="sc">$</span>shapes<span class="sc">$</span><span class="fu">add_picture</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="st">&quot;path/to/photo.jpg&quot;</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">left   =</span> <span class="fu">Inches</span>(<span class="dv">5</span>),</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="at">top    =</span> <span class="fu">Inches</span>(<span class="dv">2</span>),</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="at">width  =</span> <span class="fu">Inches</span>(<span class="dv">3</span>),</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="at">height =</span> <span class="fu">Inches</span>(<span class="dv">2</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="saving" class="section level2">
+<h2>Saving</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>prs<span class="sc">$</span><span class="fu">save</span>(<span class="st">&quot;my_presentation.pptx&quot;</span>)</span></code></pre></div>
+<p>Or save to a temp file:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.pptx&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>prs<span class="sc">$</span><span class="fu">save</span>(tmp)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="fu">file.exists</span>(tmp)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+</div>
+<div id="opening-an-existing-file" class="section level2">
+<h2>Opening an existing file</h2>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>prs2 <span class="ot">&lt;-</span> <span class="fu">pptx_presentation</span>(<span class="st">&quot;existing.pptx&quot;</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>slide1 <span class="ot">&lt;-</span> prs2<span class="sc">$</span>slides[[<span class="dv">1</span>]]</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="cf">for</span> (shape <span class="cf">in</span> slide1<span class="sc">$</span>shapes<span class="sc">$</span><span class="fu">to_list</span>()) {</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="fu">cat</span>(shape<span class="sc">$</span>name, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="slide-operations" class="section level2">
+<h2>Slide operations</h2>
+<div id="deleting-a-slide" class="section level3">
+<h3>Deleting a slide</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>prs2 <span class="ot">&lt;-</span> <span class="fu">pptx_presentation</span>()</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>layout <span class="ot">&lt;-</span> prs2<span class="sc">$</span>slide_layouts[[<span class="dv">6</span>]]</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>s1 <span class="ot">&lt;-</span> prs2<span class="sc">$</span>slides<span class="sc">$</span><span class="fu">add_slide</span>(layout)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>s2 <span class="ot">&lt;-</span> prs2<span class="sc">$</span>slides<span class="sc">$</span><span class="fu">add_slide</span>(layout)</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="fu">length</span>(prs2<span class="sc">$</span>slides)   <span class="co"># 2</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; [1] 2</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>prs2<span class="sc">$</span>slides<span class="sc">$</span><span class="fu">delete</span>(s1)</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="fu">length</span>(prs2<span class="sc">$</span>slides)   <span class="co"># 1</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span></code></pre></div>
+</div>
+<div id="reordering-slides" class="section level3">
+<h3>Reordering slides</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>prs3 <span class="ot">&lt;-</span> <span class="fu">pptx_presentation</span>()</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>layout <span class="ot">&lt;-</span> prs3<span class="sc">$</span>slide_layouts[[<span class="dv">6</span>]]</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>) prs3<span class="sc">$</span>slides<span class="sc">$</span><span class="fu">add_slide</span>(layout)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>id_last <span class="ot">&lt;-</span> prs3<span class="sc">$</span>slides[[<span class="dv">3</span>]]<span class="sc">$</span>slide_id</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>prs3<span class="sc">$</span>slides<span class="sc">$</span><span class="fu">move</span>(prs3<span class="sc">$</span>slides[[<span class="dv">3</span>]], <span class="dv">1</span><span class="dt">L</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>prs3<span class="sc">$</span>slides[[<span class="dv">1</span>]]<span class="sc">$</span>slide_id <span class="sc">==</span> id_last  <span class="co"># TRUE</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+</div>
+</div>
+<div id="core-properties" class="section level2">
+<h2>Core properties</h2>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>prs4 <span class="ot">&lt;-</span> <span class="fu">pptx_presentation</span>()</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>cp <span class="ot">&lt;-</span> prs4<span class="sc">$</span>core_properties</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>cp<span class="sc">$</span>title   <span class="ot">&lt;-</span> <span class="st">&quot;My Presentation&quot;</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>cp<span class="sc">$</span>author  <span class="ot">&lt;-</span> <span class="st">&quot;Jane Doe&quot;</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>cp<span class="sc">$</span>subject <span class="ot">&lt;-</span> <span class="st">&quot;rpptx demo&quot;</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>cp<span class="sc">$</span>title</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;My Presentation&quot;</span></span></code></pre></div>
+</div>
+<div id="unit-conversion-reference" class="section level2">
+<h2>Unit conversion reference</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Units</th>
+<th>EMU</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Emu(n)</code></td>
+<td>EMU</td>
+<td>n</td>
+</tr>
+<tr class="even">
+<td><code>Inches(n)</code></td>
+<td>inches</td>
+<td>n × 914 400</td>
+</tr>
+<tr class="odd">
+<td><code>Cm(n)</code></td>
+<td>centimetres</td>
+<td>n × 360 000</td>
+</tr>
+<tr class="even">
+<td><code>Pt(n)</code></td>
+<td>points</td>
+<td>n × 12 700</td>
+</tr>
+<tr class="odd">
+<td><code>Mm(n)</code></td>
+<td>millimetres</td>
+<td>n × 36 000</td>
+</tr>
+<tr class="even">
+<td><code>Centipoints(n)</code></td>
+<td>centipoints</td>
+<td>n × 127</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
