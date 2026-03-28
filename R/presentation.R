@@ -80,6 +80,12 @@ Presentation <- R6::R6Class(
     slide_layouts = function(value) {
       if (!missing(value)) stop("Read-only property", call. = FALSE)
       self$slide_master$slide_layouts
+    },
+
+    # CorePropertiesPart for this presentation
+    core_properties = function(value) {
+      if (!missing(value)) stop("Read-only property", call. = FALSE)
+      self$part$package$core_properties
     }
   ),
 

@@ -139,3 +139,118 @@ test_that("slide_id is stable across round-trip", {
   prs2 <- pptx_presentation(tmp)
   expect_equal(prs2$slides[[1]]$slide_id, original_id)
 })
+
+
+# ============================================================================
+# Slide deletion
+# ============================================================================
+
+describe("Slides$delete", {
+  it("removes a slide from the collection", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    s1 <- prs$slides$add_slide(layout)
+    s2 <- prs$slides$add_slide(layout)
+    s3 <- prs$slides$add_slide(layout)
+    prs$slides$delete(s2)
+    expect_equal(length(prs$slides), 2L)
+  })
+
+  it("persists deletion across save/reload", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    s1 <- prs$slides$add_slide(layout)
+    s2 <- prs$slides$add_slide(layout)
+    prs$slides$delete(s1)
+
+    tmp <- tempfile(fileext = ".pptx")
+    on.exit(unlink(tmp))
+    prs$save(tmp)
+    prs2 <- pptx_presentation(tmp)
+    expect_equal(length(prs2$slides), 1L)
+  })
+
+  it("errors when slide not in presentation", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    s1 <- prs$slides$add_slide(layout)
+
+    prs2   <- pptx_presentation()
+    layout2 <- prs2$slide_layouts[[1]]
+    s2 <- prs2$slides$add_slide(layout2)
+
+    expect_error(prs$slides$delete(s2), regexp = "not found")
+  })
+})
+
+
+# ============================================================================
+# Slide reordering
+# ============================================================================
+
+describe("Slides$move", {
+  it("moves a slide forward in the collection", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    s1 <- prs$slides$add_slide(layout)
+    s2 <- prs$slides$add_slide(layout)
+    s3 <- prs$slides$add_slide(layout)
+    ids_orig <- sapply(prs$slides$to_list(), function(s) s$slide_id)
+
+    prs$slides$move(s1, 3L)
+    ids_new <- sapply(prs$slides$to_list(), function(s) s$slide_id)
+
+    # s1 (originally first) should now be last
+    expect_equal(ids_new, c(ids_orig[2], ids_orig[3], ids_orig[1]))
+  })
+
+  it("moves a slide backward in the collection", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    s1 <- prs$slides$add_slide(layout)
+    s2 <- prs$slides$add_slide(layout)
+    s3 <- prs$slides$add_slide(layout)
+    ids_orig <- sapply(prs$slides$to_list(), function(s) s$slide_id)
+
+    prs$slides$move(s3, 1L)
+    ids_new <- sapply(prs$slides$to_list(), function(s) s$slide_id)
+
+    # s3 (originally last) should now be first
+    expect_equal(ids_new, c(ids_orig[3], ids_orig[1], ids_orig[2]))
+  })
+
+  it("is a no-op when moving to same position", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    s1 <- prs$slides$add_slide(layout)
+    s2 <- prs$slides$add_slide(layout)
+    ids_orig <- sapply(prs$slides$to_list(), function(s) s$slide_id)
+
+    prs$slides$move(s1, 1L)
+    ids_new <- sapply(prs$slides$to_list(), function(s) s$slide_id)
+    expect_equal(ids_new, ids_orig)
+  })
+
+  it("persists move across save/reload", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    s1 <- prs$slides$add_slide(layout)
+    s2 <- prs$slides$add_slide(layout)
+    s3 <- prs$slides$add_slide(layout)
+    orig_id_last <- s3$slide_id
+
+    prs$slides$move(s3, 1L)
+    tmp <- tempfile(fileext = ".pptx")
+    on.exit(unlink(tmp))
+    prs$save(tmp)
+    prs2 <- pptx_presentation(tmp)
+    expect_equal(prs2$slides[[1]]$slide_id, orig_id_last)
+  })
+
+  it("errors on out-of-range index", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    s1 <- prs$slides$add_slide(layout)
+    expect_error(prs$slides$move(s1, 5L), regexp = "out of range")
+  })
+})

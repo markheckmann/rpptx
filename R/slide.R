@@ -241,6 +241,58 @@ Slides <- R6::R6Class(
       lapply(private$.sldIdLst$sldId_lst, function(sld_id) {
         self$part$related_slide(sld_id$rId)
       })
+    },
+
+    # Remove a slide from the presentation.
+    # The slide part is unlinked and its relationship dropped. Use with care.
+    delete = function(slide) {
+      sld_id_lst <- private$.sldIdLst$sldId_lst
+      for (sld_id in sld_id_lst) {
+        if (identical(self$part$related_slide(sld_id$rId), slide)) {
+          rId <- sld_id$rId
+          private$.sldIdLst$remove_child(sld_id)
+          self$part$drop_rel(rId)
+          return(invisible(NULL))
+        }
+      }
+      stop("slide not found in this presentation", call. = FALSE)
+    },
+
+    # Move slide to 1-based position idx.
+    # The slide is removed from its current position and inserted at idx.
+    move = function(slide, idx) {
+      sld_id_lst <- private$.sldIdLst$sldId_lst
+      n <- length(sld_id_lst)
+      if (idx < 1L || idx > n) stop("slide index out of range", call. = FALSE)
+
+      # Find current position
+      from_idx <- NULL
+      for (i in seq_len(n)) {
+        if (identical(self$part$related_slide(sld_id_lst[[i]]$rId), slide)) {
+          from_idx <- i
+          break
+        }
+      }
+      if (is.null(from_idx)) stop("slide not found in this presentation", call. = FALSE)
+      if (from_idx == idx) return(invisible(NULL))
+
+      # Collect (id, rId) pairs in current order, then reorder
+      pairs <- lapply(sld_id_lst, function(s) list(id = s$id, rId = s$rId))
+      moved  <- pairs[[from_idx]]
+      pairs  <- pairs[-from_idx]
+      pairs  <- append(pairs, list(moved), after = idx - 1L)
+
+      # Remove all sldId children
+      sldIdLst_node <- private$.sldIdLst$get_node()
+      for (sld_id in private$.sldIdLst$sldId_lst) {
+        xml2::xml_remove(sld_id$get_node())
+      }
+
+      # Re-add in new order preserving original IDs
+      for (pair in pairs) {
+        private$.sldIdLst$`_add_sldId`(id = pair$id, rId = pair$rId)
+      }
+      invisible(NULL)
     }
   ),
 

@@ -8,7 +8,7 @@
 #' Top-level container for a .pptx file. Extends OpcPackage with
 #' presentation-specific behavior.
 #'
-#' @include opc-package.R
+#' @include opc-package.R parts-coreprops.R
 #' @keywords internal
 #' @export
 Package <- R6::R6Class(
@@ -20,7 +20,27 @@ Package <- R6::R6Class(
     presentation_part = function(value) {
       if (!missing(value)) stop("Read-only property", call. = FALSE)
       self$main_document_part
+    },
+
+    # CorePropertiesPart (lazy; creates a default if absent)
+    core_properties = function(value) {
+      if (!missing(value)) stop("Read-only property", call. = FALSE)
+      if (is.null(private$.core_properties)) {
+        private$.core_properties <- tryCatch(
+          self$part_related_by(RT$CORE_PROPERTIES),
+          error = function(e) {
+            cp <- CorePropertiesPart_default(self)
+            self$relate_to(cp, RT$CORE_PROPERTIES)
+            cp
+          }
+        )
+      }
+      private$.core_properties
     }
+  ),
+
+  private = list(
+    .core_properties = NULL
   )
 )
 
