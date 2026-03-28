@@ -12,3 +12,9 @@ NULL
 
 # Suppress R CMD check NOTEs for R6 standard variables
 utils::globalVariables(c("self", "private", "super"))
+
+.onLoad <- function(libname, pkgname) {
+  .onLoad_opc_oxml()
+  .onLoad_oxml_presentation()
+  .onLoad_parts_presentation()
+}

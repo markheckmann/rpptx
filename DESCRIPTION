@@ -14,11 +14,30 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Imports:
     R6,
-    xml2,
-    zip
+    xml2
 Suggests:
     magick,
     openxlsx2,
     testthat (>= 3.0.0),
     withr
 Config/testthat/edition: 3
+Collate: 
+    'shared.R'
+    'presentation.R'
+    'oxml-ns.R'
+    'oxml-xmlchemy.R'
+    'oxml-init.R'
+    'oxml-simpletypes.R'
+    'oxml-presentation.R'
+    'opc-spec.R'
+    'opc-packuri.R'
+    'opc-constants.R'
+    'opc-oxml.R'
+    'opc-serialized.R'
+    'opc-package.R'
+    'parts-presentation.R'
+    'package.R'
+    'api.R'
+    'exceptions.R'
+    'rpptx-package.R'
+    'utils.R'
