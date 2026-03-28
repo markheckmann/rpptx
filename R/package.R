@@ -8,12 +8,65 @@
 #' Top-level container for a .pptx file. Extends OpcPackage with
 #' presentation-specific behavior.
 #'
-#' @include opc-package.R parts-coreprops.R
+#' @include opc-package.R parts-coreprops.R parts-image.R
 #' @keywords internal
 #' @export
 Package <- R6::R6Class(
   "Package",
   inherit = OpcPackage,
+
+  public = list(
+    # Return the next available image partname with the given extension.
+    next_image_partname = function(ext) {
+      existing <- Filter(
+        function(p) grepl("^/ppt/media/image[0-9]+\\.", p$partname),
+        self$iter_parts()
+      )
+      idxs <- as.integer(regmatches(
+        sapply(existing, function(p) p$partname),
+        regexpr("[0-9]+(?=\\.)", sapply(existing, function(p) p$partname), perl = TRUE)
+      ))
+      idx <- 1L
+      for (candidate in seq_len(length(idxs) + 1L)) {
+        if (!(candidate %in% idxs)) { idx <- candidate; break }
+      }
+      PackURI(sprintf("/ppt/media/image%d.%s", idx, ext))
+    },
+
+    # Return an ImagePart for the given image file; reuse if same image already exists.
+    get_or_add_image_part = function(image_file) {
+      image <- Image_from_file(image_file)
+      hash  <- image$sha1()
+      # Look for existing image part with same content
+      for (p in self$iter_parts()) {
+        if (inherits(p, "ImagePart") && !is.null(tryCatch(p$sha1, error = function(e) NULL))) {
+          if (identical(p$sha1, hash)) return(p)
+        }
+      }
+      ImagePart_new(self, image)
+    },
+
+    # Iterate all parts reachable from this package.
+    iter_parts = function() {
+      seen  <- list()
+      queue <- list(self)
+      parts <- list()
+      while (length(queue) > 0L) {
+        node  <- queue[[1L]]
+        queue <- queue[-1L]
+        for (rel in node$rels$.__enclos_env__$private$.rels) {
+          if (rel$is_external) next
+          part <- rel$target_part
+          key  <- part$partname
+          if (key %in% seen) next
+          seen  <- c(seen, key)
+          parts <- c(parts, list(part))
+          queue <- c(queue, list(part))
+        }
+      }
+      parts
+    }
+  ),
 
   active = list(
     # The PresentationPart for this package

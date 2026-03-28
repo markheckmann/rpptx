@@ -57,6 +57,14 @@ SlidePart <- R6::R6Class(
     # Create and return a new ChartPart for chart_type/chart_data.
     add_chart_part = function(chart_type, chart_data) {
       ChartPart_new(chart_type, chart_data, self$package)
+    },
+
+    # Return list(image_part, rId) for image_file; reuses existing part if possible.
+    get_or_add_image_part = function(image_file) {
+      image_part <- self$package$get_or_add_image_part(image_file)
+      # relate_to returns existing rId if image_part is already related
+      rId <- self$relate_to(image_part, RT$IMAGE)
+      list(image_part = image_part, rId = rId)
     }
   ),
 

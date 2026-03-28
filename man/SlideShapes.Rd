@@ -20,6 +20,7 @@ Supports indexed access (1-based), \code{length()}, and iteration via \code{to_l
 \item \href{#method-SlideShapes-add_shape}{\code{SlideShapes$add_shape()}}
 \item \href{#method-SlideShapes-add_table}{\code{SlideShapes$add_table()}}
 \item \href{#method-SlideShapes-add_chart}{\code{SlideShapes$add_chart()}}
+\item \href{#method-SlideShapes-add_picture}{\code{SlideShapes$add_picture()}}
 \item \href{#method-SlideShapes-clone_layout_placeholders}{\code{SlideShapes$clone_layout_placeholders()}}
 \item \href{#method-SlideShapes-clone}{\code{SlideShapes$clone()}}
 }
@@ -84,6 +85,15 @@ Supports indexed access (1-based), \code{length()}, and iteration via \code{to_l
 \subsection{Method \code{add_chart()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SlideShapes$add_chart(chart_type, left, top, width, height, chart_data)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-SlideShapes-add_picture"></a>}}
+\if{latex}{\out{\hypertarget{method-SlideShapes-add_picture}{}}}
+\subsection{Method \code{add_picture()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SlideShapes$add_picture(image_file, left, top, width = NULL, height = NULL)}\if{html}{\out{</div>}}
 }
 
 }

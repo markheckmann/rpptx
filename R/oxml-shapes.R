@@ -438,6 +438,52 @@ CT_Shape_new_placeholder_sp <- function(id, name, ph_type, orient, sz, idx) {
 }
 
 
+# Escape a string for use in an XML attribute value.
+.xml_attr_escape <- function(s) {
+  s <- gsub("&",  "&amp;",  s, fixed = TRUE)
+  s <- gsub("<",  "&lt;",   s, fixed = TRUE)
+  s <- gsub(">",  "&gt;",   s, fixed = TRUE)
+  s <- gsub('"',  "&quot;", s, fixed = TRUE)
+  s
+}
+
+
+#' Create a new <p:pic> picture element
+#' @keywords internal
+CT_Picture_new_pic <- function(shape_id, name, desc, rId, x, y, cx, cy) {
+  a_uri <- .nsmap[["a"]]
+  p_uri <- .nsmap[["p"]]
+  r_uri <- .nsmap[["r"]]
+  xml_str <- sprintf(
+    paste0(
+      '<p:pic xmlns:p="%s" xmlns:a="%s" xmlns:r="%s">\n',
+      '  <p:nvPicPr>\n',
+      '    <p:cNvPr id="%d" name="%s" descr="%s"/>\n',
+      '    <p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr>\n',
+      '    <p:nvPr/>\n',
+      '  </p:nvPicPr>\n',
+      '  <p:blipFill>\n',
+      '    <a:blip r:embed="%s"/>\n',
+      '    <a:stretch><a:fillRect/></a:stretch>\n',
+      '  </p:blipFill>\n',
+      '  <p:spPr>\n',
+      '    <a:xfrm><a:off x="%d" y="%d"/><a:ext cx="%d" cy="%d"/></a:xfrm>\n',
+      '    <a:prstGeom prst="rect"><a:avLst/></a:prstGeom>\n',
+      '  </p:spPr>\n',
+      '</p:pic>'
+    ),
+    p_uri, a_uri, r_uri,
+    as.integer(shape_id),
+    .xml_attr_escape(as.character(name)),
+    .xml_attr_escape(as.character(desc)),
+    as.character(rId),
+    as.integer(x), as.integer(y), as.integer(cx), as.integer(cy)
+  )
+  doc <- xml2::read_xml(xml_str)
+  wrap_element(xml2::xml_root(doc))
+}
+
+
 # ============================================================================
 # CT_GroupShape — <p:spTree> and <p:grpSp>
 # ============================================================================
@@ -526,6 +572,13 @@ CT_GroupShape <- R6::R6Class(
       )
       self$insert_element_before(gf, "p:extLst")
       gf
+    },
+
+    # Append a p:pic element before p:extLst
+    add_pic = function(id, name, desc, rId, x, y, cx, cy) {
+      pic <- CT_Picture_new_pic(id, name, desc, rId, x, y, cx, cy)
+      self$insert_element_before(pic, "p:extLst")
+      pic
     }
   ),
 

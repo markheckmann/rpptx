@@ -42,6 +42,7 @@ Collate:
     'presentation.R'
     'oxml-presentation.R'
     'parts-presentation.R'
+    'parts-image.R'
     'oxml-coreprops.R'
     'parts-coreprops.R'
     'package.R'

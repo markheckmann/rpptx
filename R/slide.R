@@ -575,6 +575,21 @@ SlideShapes <- R6::R6Class(
       shape_factory(gf, self)
     },
 
+    # Add a picture from a file path or connection.
+    # width/height are in EMU (use Inches(), Pt(), etc.); NULL preserves aspect ratio.
+    add_picture = function(image_file, left, top, width = NULL, height = NULL) {
+      img_info   <- self$part$get_or_add_image_part(image_file)
+      image_part <- img_info$image_part
+      rId        <- img_info$rId
+      dims       <- image_part$scale(width, height)
+      cx         <- dims[1]; cy <- dims[2]
+      id         <- private$.spTree$next_shape_id()
+      name       <- sprintf("Picture %d", id - 1L)
+      desc       <- image_part$desc
+      pic        <- private$.spTree$add_pic(id, name, desc, rId, left, top, cx, cy)
+      shape_factory(pic, self)
+    },
+
     # Clone layout placeholders onto this slide.
     # Excluded: date (dt), footer (ftr), slide number (sldNum) — latent placeholders.
     clone_layout_placeholders = function(slide_layout) {

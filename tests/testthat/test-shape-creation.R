@@ -375,3 +375,58 @@ describe("SlideShapes$clone_layout_placeholders()", {
     }
   })
 })
+
+
+# ============================================================================
+# add_picture
+# ============================================================================
+
+describe("SlideShapes$add_picture", {
+  make_png <- function(width = 100L, height = 80L) {
+    skip_if_not_installed("magick")
+    tmp <- tempfile(fileext = ".png")
+    magick::image_write(magick::image_blank(width, height, "red"), tmp)
+    tmp
+  }
+
+  it("returns a Picture proxy", {
+    f   <- make_png()
+    prs <- pptx_presentation()
+    sl  <- invisible(prs$slides$add_slide(prs$slide_layouts[[6]]))
+    pic <- sl$shapes$add_picture(f, Inches(1), Inches(1))
+    expect_true(inherits(pic, "Picture"))
+  })
+
+  it("uses native dimensions when width and height omitted", {
+    f   <- make_png(200L, 100L)
+    prs <- pptx_presentation()
+    sl  <- invisible(prs$slides$add_slide(prs$slide_layouts[[6]]))
+    pic <- sl$shapes$add_picture(f, Inches(0), Inches(0))
+    # 200px @ 72dpi = 200/72 * 914400 EMU
+    expect_equal(pic$width,  as.integer(round(914400 * 200 / 72)))
+    expect_equal(pic$height, as.integer(round(914400 * 100 / 72)))
+  })
+
+  it("preserves aspect ratio when only width given", {
+    f   <- make_png(200L, 100L)  # 2:1 ratio
+    prs <- pptx_presentation()
+    sl  <- invisible(prs$slides$add_slide(prs$slide_layouts[[6]]))
+    pic <- sl$shapes$add_picture(f, Inches(0), Inches(0), width = Inches(4))
+    expect_equal(pic$width,  as.integer(Inches(4)))
+    expect_equal(pic$height, as.integer(Inches(2)))
+  })
+
+  it("round-trips through save/reload", {
+    skip_if_not_installed("magick")
+    f   <- make_png()
+    prs <- pptx_presentation()
+    sl  <- invisible(prs$slides$add_slide(prs$slide_layouts[[6]]))
+    invisible(sl$shapes$add_picture(f, Inches(1), Inches(1)))
+    tmp <- tempfile(fileext = ".pptx")
+    prs$save(tmp)
+    prs2 <- pptx_presentation(tmp)
+    shapes <- prs2$slides[[1]]$shapes$to_list()
+    pics <- Filter(function(s) inherits(s, "Picture"), shapes)
+    expect_equal(length(pics), 1L)
+  })
+})

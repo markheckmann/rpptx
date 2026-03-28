@@ -18,6 +18,7 @@ Slide part
 \item \href{#method-SlidePart-get_slide}{\code{SlidePart$get_slide()}}
 \item \href{#method-SlidePart-has_notes_slide}{\code{SlidePart$has_notes_slide()}}
 \item \href{#method-SlidePart-add_chart_part}{\code{SlidePart$add_chart_part()}}
+\item \href{#method-SlidePart-get_or_add_image_part}{\code{SlidePart$get_or_add_image_part()}}
 \item \href{#method-SlidePart-clone}{\code{SlidePart$clone()}}
 }
 }
@@ -60,6 +61,15 @@ Slide part
 \subsection{Method \code{add_chart_part()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SlidePart$add_chart_part(chart_type, chart_data)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-SlidePart-get_or_add_image_part"></a>}}
+\if{latex}{\out{\hypertarget{method-SlidePart-get_or_add_image_part}{}}}
+\subsection{Method \code{get_or_add_image_part()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SlidePart$get_or_add_image_part(image_file)}\if{html}{\out{</div>}}
 }
 
 }

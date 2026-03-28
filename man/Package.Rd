@@ -14,6 +14,9 @@ presentation-specific behavior.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
+\item \href{#method-Package-next_image_partname}{\code{Package$next_image_partname()}}
+\item \href{#method-Package-get_or_add_image_part}{\code{Package$get_or_add_image_part()}}
+\item \href{#method-Package-iter_parts}{\code{Package$iter_parts()}}
 \item \href{#method-Package-clone}{\code{Package$clone()}}
 }
 }
@@ -22,7 +25,6 @@ presentation-specific behavior.
 <ul>
 <li><span class="pkg-link" data-pkg="rpptx" data-topic="OpcPackage" data-id="drop_rel"><a href='../../rpptx/html/OpcPackage.html#method-OpcPackage-drop_rel'><code>rpptx::OpcPackage$drop_rel()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="rpptx" data-topic="OpcPackage" data-id="initialize"><a href='../../rpptx/html/OpcPackage.html#method-OpcPackage-initialize'><code>rpptx::OpcPackage$initialize()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="rpptx" data-topic="OpcPackage" data-id="iter_parts"><a href='../../rpptx/html/OpcPackage.html#method-OpcPackage-iter_parts'><code>rpptx::OpcPackage$iter_parts()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="rpptx" data-topic="OpcPackage" data-id="iter_rels"><a href='../../rpptx/html/OpcPackage.html#method-OpcPackage-iter_rels'><code>rpptx::OpcPackage$iter_rels()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="rpptx" data-topic="OpcPackage" data-id="next_partname"><a href='../../rpptx/html/OpcPackage.html#method-OpcPackage-next_partname'><code>rpptx::OpcPackage$next_partname()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="rpptx" data-topic="OpcPackage" data-id="part_related_by"><a href='../../rpptx/html/OpcPackage.html#method-OpcPackage-part_related_by'><code>rpptx::OpcPackage$part_related_by()</code></a></span></li>
@@ -33,6 +35,33 @@ presentation-specific behavior.
 </ul>
 </details>
 }}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Package-next_image_partname"></a>}}
+\if{latex}{\out{\hypertarget{method-Package-next_image_partname}{}}}
+\subsection{Method \code{next_image_partname()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Package$next_image_partname(ext)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Package-get_or_add_image_part"></a>}}
+\if{latex}{\out{\hypertarget{method-Package-get_or_add_image_part}{}}}
+\subsection{Method \code{get_or_add_image_part()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Package$get_or_add_image_part(image_file)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Package-iter_parts"></a>}}
+\if{latex}{\out{\hypertarget{method-Package-iter_parts}{}}}
+\subsection{Method \code{iter_parts()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Package$iter_parts()}\if{html}{\out{</div>}}
+}
+
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Package-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-Package-clone}{}}}
