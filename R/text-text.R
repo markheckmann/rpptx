@@ -2,10 +2,6 @@
 #
 # Ported from python-pptx/src/pptx/text/text.py.
 
-#' @include oxml-text.R
-#' @keywords internal
-
-
 # ============================================================================
 # Font — character properties (a:rPr / a:defRPr / a:endParaRPr)
 # ============================================================================
@@ -16,6 +12,7 @@
 #' to font name, size, bold, italic, and underline. All properties are R/W;
 #' assigning NULL removes the override and inherits from the style hierarchy.
 #'
+#' @include oxml-text.R
 #' @keywords internal
 #' @export
 Font <- R6::R6Class(

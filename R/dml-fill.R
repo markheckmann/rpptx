@@ -57,6 +57,7 @@
 # GradientStop — wraps a <a:gs> element
 # ============================================================================
 
+#' Gradient stop proxy
 #' @keywords internal
 #' @export
 GradientStop <- R6::R6Class(
@@ -95,6 +96,7 @@ GradientStop <- R6::R6Class(
 # GradientStops — sequence of GradientStop objects
 # ============================================================================
 
+#' Gradient stops collection
 #' @keywords internal
 #' @export
 GradientStops <- R6::R6Class(

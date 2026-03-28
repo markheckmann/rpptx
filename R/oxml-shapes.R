@@ -540,6 +540,7 @@ CT_GroupShape <- R6::R6Class(
 # Concrete shape element classes — p:sp, p:pic, p:cxnSp, p:graphicFrame
 # ============================================================================
 
+#' CT_Shape XML element
 #' @keywords internal
 #' @export
 CT_Shape <- define_oxml_element(
@@ -554,14 +555,17 @@ CT_Shape <- define_oxml_element(
 # Override auto-generated _new_txBody to produce a properly structured <p:txBody>.
 CT_Shape$set("public", "_new_txBody", function() .CT_TextBody_new_p_txBody(), overwrite = TRUE)
 
+#' CT_Picture XML element
 #' @keywords internal
 #' @export
 CT_Picture <- R6::R6Class("CT_Picture", inherit = BaseShapeElement)
 
+#' CT_Connector XML element
 #' @keywords internal
 #' @export
 CT_Connector <- R6::R6Class("CT_Connector", inherit = BaseShapeElement)
 
+#' CT_GraphicalObjectFrame XML element
 #' @keywords internal
 #' @export
 CT_GraphicalObjectFrame <- R6::R6Class("CT_GraphicalObjectFrame", inherit = BaseShapeElement)

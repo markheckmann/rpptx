@@ -39,6 +39,8 @@ MSO_SHAPE_TYPE <- list(
 )
 
 # Re-export as MSO for backward compat / convenience
+#' MSO shape type enum (alias for MSO_SHAPE_TYPE)
+#' @keywords internal
 #' @export
 MSO <- MSO_SHAPE_TYPE
 

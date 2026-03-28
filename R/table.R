@@ -122,6 +122,7 @@ TableCell <- R6::R6Class(
 # TableCells — cell collection for a single row
 # ============================================================================
 
+#' Cell collection for a table row
 #' @keywords internal
 #' @export
 TableCells <- R6::R6Class(
@@ -196,6 +197,7 @@ TableRow <- R6::R6Class(
 # TableRows — collection of TableRow objects
 # ============================================================================
 
+#' Row collection for a table
 #' @keywords internal
 #' @export
 TableRows <- R6::R6Class(
@@ -267,6 +269,7 @@ TableColumn <- R6::R6Class(
 # TableColumns — collection of TableColumn objects
 # ============================================================================
 
+#' Column collection for a table
 #' @keywords internal
 #' @export
 TableColumns <- R6::R6Class(

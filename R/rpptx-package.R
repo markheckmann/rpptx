@@ -7,6 +7,7 @@
 #'   xml_set_attr xml_name xml_ns xml_add_child xml_remove xml_children
 #'   xml_root xml_new_root write_xml xml_set_text xml_add_sibling xml_parent
 #'   xml_attrs xml_set_attrs as_xml_document xml_serialize
+#' @importFrom openxlsx2 wb_workbook
 ## usethis namespace: end
 NULL
 

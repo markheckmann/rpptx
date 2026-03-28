@@ -85,6 +85,7 @@ CT_TableCellProperties <- define_oxml_element(
 # CT_TableCell — <a:tc>
 # ============================================================================
 
+#' CT_TableCell XML element
 #' @keywords internal
 #' @export
 CT_TableCell <- R6::R6Class(
@@ -210,6 +211,7 @@ CT_TableCell <- R6::R6Class(
 # CT_TableRow — <a:tr>
 # ============================================================================
 
+#' CT_TableRow XML element
 #' @keywords internal
 #' @export
 CT_TableRow <- R6::R6Class(
@@ -252,6 +254,7 @@ CT_TableRow <- R6::R6Class(
 # CT_Table — <a:tbl>
 # ============================================================================
 
+#' CT_Table XML element
 #' @keywords internal
 #' @export
 CT_Table <- R6::R6Class(
