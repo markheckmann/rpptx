@@ -321,6 +321,28 @@ ST_MarkerSize <- XsdUnsignedByte
 #' @keywords internal
 ST_Style <- XsdUnsignedByte
 
+# Simple pass-through types for chart XML string enums
+# These read/write the XML string value directly. The enum list constants
+# (XL_AXIS_CROSSES, XL_LEGEND_POSITION, etc.) use the same string values.
+
+#' @keywords internal
+ST_AxisCrosses <- simple_type(from_xml = function(x) x, to_xml = function(x) as.character(x))
+
+#' @keywords internal
+ST_DataLabelPosition <- simple_type(from_xml = function(x) x, to_xml = function(x) as.character(x))
+
+#' @keywords internal
+ST_LegendPosition <- simple_type(from_xml = function(x) x, to_xml = function(x) as.character(x))
+
+#' @keywords internal
+ST_MarkerStyle <- simple_type(from_xml = function(x) x, to_xml = function(x) as.character(x))
+
+#' @keywords internal
+ST_TickLabelPosition <- simple_type(from_xml = function(x) x, to_xml = function(x) as.character(x))
+
+#' @keywords internal
+ST_TickMark <- simple_type(from_xml = function(x) x, to_xml = function(x) as.character(x))
+
 #' @keywords internal
 ST_PositiveFixedAngle <- simple_type(
   from_xml = function(x) ST_Angle$from_xml(x),

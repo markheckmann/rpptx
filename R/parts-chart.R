@@ -135,6 +135,11 @@ ChartPart <- R6::R6Class(
   ),
 
   active = list(
+    # Chart domain object for this chart part.
+    chart = function() {
+      Chart$new(self$element, self)
+    },
+
     # ChartWorkbook that manages the embedded xlsx.
     chart_workbook = function() {
       if (is.null(private$.workbook_cache)) {

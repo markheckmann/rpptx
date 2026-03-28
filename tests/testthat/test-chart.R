@@ -423,3 +423,414 @@ describe("SlideShapes$add_chart", {
     expect_true(grepl("^rId", gf2$chart_rId))
   })
 })
+
+
+# ============================================================================
+# Helpers — build Chart domain objects from generated XML
+# ============================================================================
+
+# Helper: generate chartSpace XML for a category chart and return Chart object
+.make_cat_chart <- function(chart_type = XL_CHART_TYPE$COLUMN_CLUSTERED,
+                            categories = c("A", "B", "C"),
+                            series     = list(list("S1", c(1, 2, 3)))) {
+  cd <- CategoryChartData$new()
+  cd$categories <- categories
+  for (s in series) cd$add_series(s[[1]], s[[2]])
+  xml_str <- chart_xml_writer(chart_type, cd)$xml
+  node <- xml2::read_xml(xml_str)
+  Chart$new(wrap_element(node), NULL)
+}
+
+
+# ============================================================================
+# chart$chart_type — plot type inspection
+# ============================================================================
+
+describe("chart$chart_type", {
+  it("returns COLUMN_CLUSTERED for a clustered column chart", {
+    ch <- .make_cat_chart(XL_CHART_TYPE$COLUMN_CLUSTERED)
+    expect_equal(ch$chart_type, XL_CHART_TYPE$COLUMN_CLUSTERED)
+  })
+
+  it("returns COLUMN_STACKED for a stacked column chart", {
+    ch <- .make_cat_chart(XL_CHART_TYPE$COLUMN_STACKED)
+    expect_equal(ch$chart_type, XL_CHART_TYPE$COLUMN_STACKED)
+  })
+
+  it("returns BAR_CLUSTERED for a horizontal bar chart", {
+    ch <- .make_cat_chart(XL_CHART_TYPE$BAR_CLUSTERED)
+    expect_equal(ch$chart_type, XL_CHART_TYPE$BAR_CLUSTERED)
+  })
+
+  it("returns LINE for a line chart without markers", {
+    ch <- .make_cat_chart(XL_CHART_TYPE$LINE)
+    expect_equal(ch$chart_type, XL_CHART_TYPE$LINE)
+  })
+
+  it("returns LINE_MARKERS for a line chart with markers", {
+    ch <- .make_cat_chart(XL_CHART_TYPE$LINE_MARKERS)
+    expect_equal(ch$chart_type, XL_CHART_TYPE$LINE_MARKERS)
+  })
+
+  it("returns PIE for a pie chart", {
+    ch <- .make_cat_chart(XL_CHART_TYPE$PIE)
+    expect_equal(ch$chart_type, XL_CHART_TYPE$PIE)
+  })
+
+  it("returns AREA for an area chart", {
+    ch <- .make_cat_chart(XL_CHART_TYPE$AREA)
+    expect_equal(ch$chart_type, XL_CHART_TYPE$AREA)
+  })
+})
+
+
+# ============================================================================
+# chart$series — SeriesCollection
+# ============================================================================
+
+describe("chart$series", {
+  it("returns a SeriesCollection with correct length", {
+    ch <- .make_cat_chart(
+      series = list(list("Alpha", c(1, 2, 3)), list("Beta", c(4, 5, 6)))
+    )
+    sc <- ch$series
+    expect_equal(length(sc), 2L)
+  })
+
+  it("series have correct index, name, and values", {
+    ch <- .make_cat_chart(
+      categories = c("Q1", "Q2"),
+      series     = list(list("Revenue", c(100, 200)))
+    )
+    sc  <- ch$series
+    ser <- sc[[1]]
+    expect_equal(ser$index, 0L)
+    expect_equal(ser$name, "Revenue")
+    expect_equal(ser$values, c(100, 200))
+  })
+
+  it("series are ordered by c:order, not DOM order", {
+    ch <- .make_cat_chart(
+      series = list(
+        list("First",  c(1, 2)),
+        list("Second", c(3, 4)),
+        list("Third",  c(5, 6))
+      )
+    )
+    sc <- ch$series
+    expect_equal(length(sc), 3L)
+    expect_equal(sc[[1]]$name, "First")
+    expect_equal(sc[[3]]$name, "Third")
+  })
+})
+
+
+# ============================================================================
+# chart$plots — plot collection
+# ============================================================================
+
+describe("chart$plots", {
+  it("returns a list of one plot for a simple chart", {
+    ch <- .make_cat_chart()
+    plots <- ch$plots
+    expect_equal(length(plots), 1L)
+    expect_true(inherits(plots[[1]], "BarPlot"))
+  })
+
+  it("BarPlot has a vary_by_categories property", {
+    ch <- .make_cat_chart(XL_CHART_TYPE$COLUMN_CLUSTERED)
+    pl <- ch$plots[[1]]
+    expect_true(inherits(pl, "BarPlot"))
+    expect_false(is.null(pl$vary_by_categories))
+  })
+
+  it("BarPlot gap_width defaults to 150", {
+    ch <- .make_cat_chart(XL_CHART_TYPE$COLUMN_CLUSTERED)
+    pl <- ch$plots[[1]]
+    expect_equal(pl$gap_width, 150L)
+  })
+
+  it("LinePlot is returned for a line chart", {
+    ch <- .make_cat_chart(XL_CHART_TYPE$LINE)
+    pl <- ch$plots[[1]]
+    expect_true(inherits(pl, "LinePlot"))
+  })
+
+  it("PiePlot is returned for a pie chart", {
+    ch <- .make_cat_chart(XL_CHART_TYPE$PIE)
+    pl <- ch$plots[[1]]
+    expect_true(inherits(pl, "PiePlot"))
+  })
+})
+
+
+# ============================================================================
+# chart$has_legend / chart$legend
+# ============================================================================
+
+describe("chart$has_legend", {
+  it("returns FALSE for a chart with no legend", {
+    ch <- .make_cat_chart()
+    expect_false(ch$has_legend)
+  })
+
+  it("setting has_legend to TRUE adds a legend", {
+    ch <- .make_cat_chart()
+    ch$has_legend <- TRUE
+    expect_true(ch$has_legend)
+    expect_false(is.null(ch$legend))
+  })
+
+  it("setting has_legend to FALSE removes the legend", {
+    ch <- .make_cat_chart()
+    ch$has_legend <- TRUE
+    ch$has_legend <- FALSE
+    expect_false(ch$has_legend)
+    expect_null(ch$legend)
+  })
+})
+
+
+describe("Legend$position", {
+  it("returns RIGHT (default) when no legendPos element exists", {
+    ch <- .make_cat_chart()
+    ch$has_legend <- TRUE
+    lgnd <- ch$legend
+    expect_equal(lgnd$position, XL_LEGEND_POSITION$RIGHT)
+  })
+
+  it("position can be set and read back", {
+    ch <- .make_cat_chart()
+    ch$has_legend <- TRUE
+    lgnd <- ch$legend
+    lgnd$position <- XL_LEGEND_POSITION$BOTTOM
+    expect_equal(lgnd$position, XL_LEGEND_POSITION$BOTTOM)
+  })
+})
+
+
+# ============================================================================
+# chart$has_title
+# ============================================================================
+
+describe("chart$has_title", {
+  it("returns FALSE when no title element", {
+    ch <- .make_cat_chart()
+    expect_false(ch$has_title)
+  })
+
+  it("setting has_title to TRUE creates a title element", {
+    ch <- .make_cat_chart()
+    ch$has_title <- TRUE
+    expect_true(ch$has_title)
+  })
+
+  it("setting has_title to FALSE removes the title", {
+    ch <- .make_cat_chart()
+    ch$has_title <- TRUE
+    ch$has_title <- FALSE
+    expect_false(ch$has_title)
+  })
+})
+
+
+# ============================================================================
+# chart$category_axis
+# ============================================================================
+
+describe("chart$category_axis", {
+  it("returns a CategoryAxis for category charts", {
+    ch <- .make_cat_chart()
+    ax <- ch$category_axis
+    expect_true(inherits(ax, "CategoryAxis"))
+  })
+
+  it("category axis has_major_gridlines returns FALSE by default", {
+    ch <- .make_cat_chart()
+    ax <- ch$category_axis
+    expect_false(ax$has_major_gridlines)
+  })
+
+  it("setting has_major_gridlines to TRUE works", {
+    ch <- .make_cat_chart()
+    ax <- ch$category_axis
+    ax$has_major_gridlines <- TRUE
+    expect_true(ax$has_major_gridlines)
+  })
+
+  it("tick_label_position defaults to nextTo for generated charts", {
+    ch <- .make_cat_chart()
+    ax <- ch$category_axis
+    expect_equal(ax$tick_label_position, XL_TICK_LABEL_POSITION$NEXT_TO_AXIS)
+  })
+
+  it("tick_label_position can be set", {
+    ch <- .make_cat_chart()
+    ax <- ch$category_axis
+    ax$tick_label_position <- XL_TICK_LABEL_POSITION$NONE
+    expect_equal(ax$tick_label_position, XL_TICK_LABEL_POSITION$NONE)
+  })
+
+  it("category_type is CATEGORY_SCALE for CategoryAxis", {
+    ch <- .make_cat_chart()
+    ax <- ch$category_axis
+    expect_equal(ax$category_type, XL_CATEGORY_TYPE$CATEGORY_SCALE)
+  })
+
+  it("reverse_order defaults to FALSE", {
+    ch <- .make_cat_chart()
+    ax <- ch$category_axis
+    expect_false(ax$reverse_order)
+  })
+
+  it("reverse_order can be toggled", {
+    ch <- .make_cat_chart()
+    ax <- ch$category_axis
+    ax$reverse_order <- TRUE
+    expect_true(ax$reverse_order)
+  })
+})
+
+
+# ============================================================================
+# chart$value_axis
+# ============================================================================
+
+describe("chart$value_axis", {
+  it("returns a ValueAxis for category charts", {
+    ch <- .make_cat_chart()
+    ax <- ch$value_axis
+    expect_true(inherits(ax, "ValueAxis"))
+  })
+
+  it("has_major_gridlines returns TRUE by default (standard xml writer output)", {
+    ch <- .make_cat_chart()
+    ax <- ch$value_axis
+    # xmlwriter adds c:majorGridlines by default
+    expect_true(ax$has_major_gridlines)
+  })
+
+  it("maximum_scale defaults to NULL", {
+    ch <- .make_cat_chart()
+    ax <- ch$value_axis
+    expect_null(ax$maximum_scale)
+  })
+
+  it("minimum_scale defaults to NULL", {
+    ch <- .make_cat_chart()
+    ax <- ch$value_axis
+    expect_null(ax$minimum_scale)
+  })
+
+  it("maximum_scale can be set and read", {
+    ch <- .make_cat_chart()
+    ax <- ch$value_axis
+    ax$maximum_scale <- 100
+    expect_equal(ax$maximum_scale, 100)
+  })
+
+  it("minimum_scale can be set and read", {
+    ch <- .make_cat_chart()
+    ax <- ch$value_axis
+    ax$minimum_scale <- 0
+    expect_equal(ax$minimum_scale, 0)
+  })
+
+  it("visible defaults to TRUE", {
+    ch <- .make_cat_chart()
+    ax <- ch$value_axis
+    expect_true(ax$visible)
+  })
+
+  it("setting visible=FALSE marks axis as deleted", {
+    ch <- .make_cat_chart()
+    ax <- ch$value_axis
+    ax$visible <- FALSE
+    expect_false(ax$visible)
+  })
+})
+
+
+# ============================================================================
+# BarPlot$has_data_labels / DataLabels
+# ============================================================================
+
+describe("BasePlot$has_data_labels", {
+  it("returns FALSE when no dLbls element", {
+    ch <- .make_cat_chart()
+    pl <- ch$plots[[1]]
+    expect_false(pl$has_data_labels)
+  })
+
+  it("setting has_data_labels to TRUE adds dLbls", {
+    ch <- .make_cat_chart()
+    pl <- ch$plots[[1]]
+    pl$has_data_labels <- TRUE
+    expect_true(pl$has_data_labels)
+  })
+
+  it("data_labels returns a DataLabels object after enabling", {
+    ch <- .make_cat_chart()
+    pl <- ch$plots[[1]]
+    pl$has_data_labels <- TRUE
+    dl <- pl$data_labels
+    expect_true(inherits(dl, "DataLabels"))
+  })
+
+  it("setting has_data_labels to FALSE removes dLbls", {
+    ch <- .make_cat_chart()
+    pl <- ch$plots[[1]]
+    pl$has_data_labels <- TRUE
+    pl$has_data_labels <- FALSE
+    expect_false(pl$has_data_labels)
+  })
+})
+
+
+# ============================================================================
+# New enum constants
+# ============================================================================
+
+describe("XL_AXIS_CROSSES constants", {
+  it("contains expected XML string values", {
+    expect_equal(XL_AXIS_CROSSES$AUTOMATIC, "autoZero")
+    expect_equal(XL_AXIS_CROSSES$MAXIMUM,   "max")
+    expect_equal(XL_AXIS_CROSSES$MINIMUM,   "min")
+  })
+})
+
+describe("XL_LEGEND_POSITION constants", {
+  it("contains expected XML string values", {
+    expect_equal(XL_LEGEND_POSITION$BOTTOM, "b")
+    expect_equal(XL_LEGEND_POSITION$RIGHT,  "r")
+    expect_equal(XL_LEGEND_POSITION$TOP,    "t")
+  })
+})
+
+describe("XL_TICK_MARK constants", {
+  it("contains expected XML string values", {
+    expect_equal(XL_TICK_MARK$CROSS,   "cross")
+    expect_equal(XL_TICK_MARK$INSIDE,  "in")
+    expect_equal(XL_TICK_MARK$NONE,    "none")
+    expect_equal(XL_TICK_MARK$OUTSIDE, "out")
+  })
+})
+
+describe("XL_TICK_LABEL_POSITION constants", {
+  it("contains expected values", {
+    expect_equal(XL_TICK_LABEL_POSITION$HIGH,         "high")
+    expect_equal(XL_TICK_LABEL_POSITION$NEXT_TO_AXIS, "nextTo")
+    expect_equal(XL_TICK_LABEL_POSITION$NONE,         "none")
+  })
+})
+
+describe("XL_DATA_LABEL_POSITION / XL_LABEL_POSITION", {
+  it("has expected values", {
+    expect_equal(XL_DATA_LABEL_POSITION$CENTER,      "ctr")
+    expect_equal(XL_DATA_LABEL_POSITION$OUTSIDE_END, "outEnd")
+  })
+
+  it("XL_LABEL_POSITION is an alias for XL_DATA_LABEL_POSITION", {
+    expect_identical(XL_LABEL_POSITION, XL_DATA_LABEL_POSITION)
+  })
+})

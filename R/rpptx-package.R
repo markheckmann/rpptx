@@ -8,6 +8,7 @@
 #'   xml_root xml_new_root write_xml xml_set_text xml_add_sibling xml_parent
 #'   xml_attrs xml_set_attrs as_xml_document xml_serialize
 #' @importFrom openxlsx2 wb_workbook
+#' @importFrom stats setNames
 ## usethis namespace: end
 NULL
 
@@ -25,6 +26,7 @@ utils::globalVariables(c("self", "private", "super"))
   .onLoad_oxml_table()
   .onLoad_oxml_text()
   .onLoad_oxml_coreprops()
+  .onLoad_oxml_chart()
   .onLoad_parts_presentation()
   .onLoad_parts_slide()
   .onLoad_parts_chart()

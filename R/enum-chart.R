@@ -84,3 +84,121 @@ XL_CHART_TYPE <- list(
   XY_SCATTER_SMOOTH            =    72L,
   XY_SCATTER_SMOOTH_NO_MARKERS =    73L
 )
+
+
+#' XL_AXIS_CROSSES — where the other axis crosses this axis
+#'
+#' XML string values for `c:crosses/@val`. Use with axis `crosses` property.
+#'
+#' @keywords internal
+#' @export
+XL_AXIS_CROSSES <- list(
+  AUTOMATIC = "autoZero",
+  CUSTOM    = "",
+  MAXIMUM   = "max",
+  MINIMUM   = "min"
+)
+
+
+#' XL_CATEGORY_TYPE — category axis scale type
+#'
+#' Integer constants (read-only identifiers, not XML-encoded directly).
+#'
+#' @keywords internal
+#' @export
+XL_CATEGORY_TYPE <- list(
+  AUTOMATIC_SCALE =  -4105L,
+  CATEGORY_SCALE  =     2L,
+  TIME_SCALE      =     3L
+)
+
+
+#' XL_DATA_LABEL_POSITION — position of a data label
+#'
+#' XML string values for `c:dLblPos/@val`.
+#'
+#' @keywords internal
+#' @export
+XL_DATA_LABEL_POSITION <- list(
+  ABOVE       = "t",
+  BELOW       = "b",
+  BEST_FIT    = "bestFit",
+  CENTER      = "ctr",
+  INSIDE_BASE = "inBase",
+  INSIDE_END  = "inEnd",
+  LEFT        = "l",
+  MIXED       = "",
+  OUTSIDE_END = "outEnd",
+  RIGHT       = "r"
+)
+
+#' XL_LABEL_POSITION — alias for XL_DATA_LABEL_POSITION
+#' @keywords internal
+#' @export
+XL_LABEL_POSITION <- XL_DATA_LABEL_POSITION
+
+
+#' XL_LEGEND_POSITION — position of chart legend
+#'
+#' XML string values for `c:legendPos/@val`.
+#'
+#' @keywords internal
+#' @export
+XL_LEGEND_POSITION <- list(
+  BOTTOM = "b",
+  CORNER = "tr",
+  CUSTOM = "",
+  LEFT   = "l",
+  RIGHT  = "r",
+  TOP    = "t"
+)
+
+
+#' XL_MARKER_STYLE — shape of a data point marker
+#'
+#' XML string values for `c:symbol/@val`.
+#'
+#' @keywords internal
+#' @export
+XL_MARKER_STYLE <- list(
+  AUTOMATIC = "auto",
+  CIRCLE    = "circle",
+  DASH      = "dash",
+  DIAMOND   = "diamond",
+  DOT       = "dot",
+  NONE      = "none",
+  PICTURE   = "picture",
+  PLUS      = "plus",
+  SQUARE    = "square",
+  STAR      = "star",
+  TRIANGLE  = "triangle",
+  X         = "x"
+)
+
+
+#' XL_TICK_LABEL_POSITION — position of tick-mark labels on a chart axis
+#'
+#' XML string values for `c:tickLblPos/@val`.
+#'
+#' @keywords internal
+#' @export
+XL_TICK_LABEL_POSITION <- list(
+  HIGH         = "high",
+  LOW          = "low",
+  NEXT_TO_AXIS = "nextTo",
+  NONE         = "none"
+)
+
+
+#' XL_TICK_MARK — type of axis tick mark
+#'
+#' XML string values for `c:majorTickMark/@val` and `c:minorTickMark/@val`.
+#'
+#' @keywords internal
+#' @export
+XL_TICK_MARK <- list(
+  CROSS   = "cross",
+  INSIDE  = "in",
+  NONE    = "none",
+  OUTSIDE = "out"
+)

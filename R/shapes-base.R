@@ -391,6 +391,14 @@ GraphicFrame <- R6::R6Class(
       Table$new(tbl_elm, self)
     },
 
+    # Chart object for chart-containing graphic frames.
+    chart = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      rId <- self$chart_rId
+      if (is.null(rId)) stop("this shape does not contain a chart", call. = FALSE)
+      Chart$new(self$part$related_part(rId)$element, self$part$related_part(rId))
+    },
+
     shape_type = function() {
       if (self$has_chart) return(MSO_SHAPE_TYPE$CHART)
       if (self$has_table) return(MSO_SHAPE_TYPE$TABLE)
