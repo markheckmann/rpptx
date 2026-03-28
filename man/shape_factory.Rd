@@ -15,7 +15,9 @@ shape_factory(shape_elm, parent)
 An R6 shape proxy.
 }
 \description{
-Dispatches on element tag: p:sp → Shape, p:pic → Picture, p:cxnSp → Connector,
-p:grpSp → GroupShape, p:graphicFrame → GraphicFrame. Falls back to BaseShape.
+Dispatches on element tag and placeholder context.
+p:sp with p:ph → SlidePlaceholder / LayoutPlaceholder / MasterPlaceholder;
+p:sp without p:ph → Shape; p:pic → Picture; p:cxnSp → Connector;
+p:grpSp → GroupShape; p:graphicFrame → GraphicFrame.
 }
 \keyword{internal}

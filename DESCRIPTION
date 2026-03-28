@@ -75,3 +75,4 @@ Collate:
     'rpptx-package.R'
     'table.R'
     'text-text.R'
+    'utils-print.R'

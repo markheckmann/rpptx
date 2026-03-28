@@ -12,6 +12,7 @@ Access via \code{table$cell(row, col)} or \code{table$rows[[i]]$cells[[j]]}.
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-TableCell-new}{\code{TableCell$new()}}
+\item \href{#method-TableCell-merge}{\code{TableCell$merge()}}
 \item \href{#method-TableCell-clone}{\code{TableCell$clone()}}
 }
 }
@@ -21,6 +22,15 @@ Access via \code{table$cell(row, col)} or \code{table$rows[[i]]$cells[[j]]}.
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TableCell$new(tc, parent)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TableCell-merge"></a>}}
+\if{latex}{\out{\hypertarget{method-TableCell-merge}{}}}
+\subsection{Method \code{merge()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TableCell$merge(other_cell)}\if{html}{\out{</div>}}
 }
 
 }

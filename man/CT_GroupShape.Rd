@@ -26,6 +26,7 @@ Custom element class for p:spTree and p:grpSp elements
 \item \href{#method-CT_GroupShape-add_chart}{\code{CT_GroupShape$add_chart()}}
 \item \href{#method-CT_GroupShape-add_pic}{\code{CT_GroupShape$add_pic()}}
 \item \href{#method-CT_GroupShape-add_cxnSp}{\code{CT_GroupShape$add_cxnSp()}}
+\item \href{#method-CT_GroupShape-add_grpSp}{\code{CT_GroupShape$add_grpSp()}}
 \item \href{#method-CT_GroupShape-clone}{\code{CT_GroupShape$clone()}}
 }
 }
@@ -158,6 +159,15 @@ Custom element class for p:spTree and p:grpSp elements
   flipH = FALSE,
   flipV = FALSE
 )}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CT_GroupShape-add_grpSp"></a>}}
+\if{latex}{\out{\hypertarget{method-CT_GroupShape-add_grpSp}{}}}
+\subsection{Method \code{add_grpSp()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CT_GroupShape$add_grpSp(id, name, shape_elms)}\if{html}{\out{</div>}}
 }
 
 }
