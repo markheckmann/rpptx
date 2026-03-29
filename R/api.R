@@ -8,6 +8,7 @@
 #' @param pptx Path to a .pptx file, or NULL to use the default template.
 #' @return A Presentation object.
 #' @include package.R parts-presentation.R
+#' @example inst/examples/ex-pptx-presentation.R
 #' @export
 pptx_presentation <- function(pptx = NULL) {
   if (is.null(pptx)) {

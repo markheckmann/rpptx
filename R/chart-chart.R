@@ -1410,7 +1410,8 @@ Chart <- R6::R6Class(
     # The ChartPart that owns this chart
     part = function() private$.chart_part,
 
-    category_axis = function() {
+    category_axis = function(value) {
+      if (!missing(value)) return(invisible(NULL))
       cat_lst <- private$.chartSpace$catAx_lst
       if (length(cat_lst) > 0) return(CategoryAxis$new(cat_lst[[1]]))
       date_lst <- private$.chartSpace$dateAx_lst
@@ -1483,7 +1484,8 @@ Chart <- R6::R6Class(
       SeriesCollection$new(private$.chartSpace$plotArea)
     },
 
-    value_axis = function() {
+    value_axis = function(value) {
+      if (!missing(value)) return(invisible(NULL))
       val_lst <- private$.chartSpace$valAx_lst
       if (length(val_lst) == 0) stop("chart has no value axis", call. = FALSE)
       idx <- if (length(val_lst) > 1) 2L else 1L

@@ -277,6 +277,9 @@ length.SlidePlaceholders <- function(x) {
 #' @export
 `[[.SlidePlaceholders` <- function(x, i) x$get_at(i)
 
+#' @export
+`[[<-.SlidePlaceholders` <- function(x, i, value) x
+
 
 # ============================================================================
 # SlideMasterPlaceholders — placeholder collection for a slide master
@@ -311,6 +314,9 @@ length.SlideMasterPlaceholders <- function(x) length(x$to_list())
 
 #' @export
 `[[.SlideMasterPlaceholders` <- function(x, i) x$get_at(i)
+
+#' @export
+`[[<-.SlideMasterPlaceholders` <- function(x, i, value) x
 
 
 # ============================================================================
@@ -548,6 +554,9 @@ length.Slides <- function(x) {
 #' @export
 `[[.Slides` <- function(x, i) x$get(i)
 
+#' @export
+`[[<-.Slides` <- function(x, i, value) x
+
 
 # ============================================================================
 # SlideLayouts — sequence of slide layouts for a master
@@ -626,6 +635,9 @@ length.SlideLayouts <- function(x) {
 #' @export
 `[[.SlideLayouts` <- function(x, i) x$get(i)
 
+#' @export
+`[[<-.SlideLayouts` <- function(x, i, value) x
+
 
 # ============================================================================
 # SlideMasters — sequence of slide masters
@@ -673,6 +685,9 @@ length.SlideMasters <- function(x) {
 
 #' @export
 `[[.SlideMasters` <- function(x, i) x$get(i)
+
+#' @export
+`[[<-.SlideMasters` <- function(x, i, value) x
 
 
 # ============================================================================
@@ -1063,3 +1078,6 @@ length.SlideShapes <- function(x) {
 
 #' @export
 `[[.SlideShapes` <- function(x, i) x$get(i)
+
+#' @export
+`[[<-.SlideShapes` <- function(x, i, value) x
