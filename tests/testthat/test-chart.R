@@ -891,4 +891,91 @@ describe("Bubble / Radar / Doughnut chart round-trips", {
                    prs2$slides[[1]]$shapes$to_list())
     expect_equal(length(gfs), 1L)
   })
+
+  it("line chart saves and reloads with correct type", {
+    e <- make_slide()
+    cd <- CategoryChartData$new()
+    cd$categories <- c("Jan", "Feb", "Mar")
+    cd$add_series("Sales", c(100, 120, 115))
+    e$slide$shapes$add_chart(
+      XL_CHART_TYPE$LINE, Inches(1), Inches(1), Inches(4), Inches(3), cd
+    )
+    tmp <- tempfile(fileext = ".pptx")
+    e$prs$save(tmp)
+    prs2 <- pptx_presentation(tmp)
+    gfs  <- Filter(function(s) inherits(s, "GraphicFrame"),
+                   prs2$slides[[1]]$shapes$to_list())
+    expect_equal(length(gfs), 1L)
+    expect_equal(gfs[[1]]$chart$chart_type, XL_CHART_TYPE$LINE)
+  })
+
+  it("pie chart saves and reloads with correct type", {
+    e <- make_slide()
+    cd <- CategoryChartData$new()
+    cd$categories <- c("A", "B", "C")
+    cd$add_series("Share", c(50, 30, 20))
+    e$slide$shapes$add_chart(
+      XL_CHART_TYPE$PIE, Inches(1), Inches(1), Inches(4), Inches(3), cd
+    )
+    tmp <- tempfile(fileext = ".pptx")
+    e$prs$save(tmp)
+    prs2 <- pptx_presentation(tmp)
+    gfs  <- Filter(function(s) inherits(s, "GraphicFrame"),
+                   prs2$slides[[1]]$shapes$to_list())
+    expect_equal(length(gfs), 1L)
+    expect_equal(gfs[[1]]$chart$chart_type, XL_CHART_TYPE$PIE)
+  })
+
+  it("area chart saves and reloads with correct type", {
+    e <- make_slide()
+    cd <- CategoryChartData$new()
+    cd$categories <- c("Q1", "Q2", "Q3")
+    cd$add_series("Revenue", c(400, 500, 450))
+    e$slide$shapes$add_chart(
+      XL_CHART_TYPE$AREA, Inches(1), Inches(1), Inches(4), Inches(3), cd
+    )
+    tmp <- tempfile(fileext = ".pptx")
+    e$prs$save(tmp)
+    prs2 <- pptx_presentation(tmp)
+    gfs  <- Filter(function(s) inherits(s, "GraphicFrame"),
+                   prs2$slides[[1]]$shapes$to_list())
+    expect_equal(length(gfs), 1L)
+    expect_equal(gfs[[1]]$chart$chart_type, XL_CHART_TYPE$AREA)
+  })
+
+  it("XY scatter chart saves and reloads", {
+    e  <- make_slide()
+    xd <- XyChartData$new()
+    s  <- xd$add_series("Series 1")
+    s$add_data_point(1.0, 2.0)
+    s$add_data_point(2.0, 3.5)
+    s$add_data_point(3.0, 2.8)
+    e$slide$shapes$add_chart(
+      XL_CHART_TYPE$XY_SCATTER, Inches(1), Inches(1), Inches(4), Inches(3), xd
+    )
+    tmp <- tempfile(fileext = ".pptx")
+    e$prs$save(tmp)
+    prs2 <- pptx_presentation(tmp)
+    gfs  <- Filter(function(s) inherits(s, "GraphicFrame"),
+                   prs2$slides[[1]]$shapes$to_list())
+    expect_equal(length(gfs), 1L)
+    expect_true(gfs[[1]]$has_chart)
+  })
+
+  it("bar clustered chart saves and reloads with correct type", {
+    e <- make_slide()
+    cd <- CategoryChartData$new()
+    cd$categories <- c("North", "South", "East")
+    cd$add_series("Units", c(30, 45, 25))
+    e$slide$shapes$add_chart(
+      XL_CHART_TYPE$BAR_CLUSTERED, Inches(1), Inches(1), Inches(4), Inches(3), cd
+    )
+    tmp <- tempfile(fileext = ".pptx")
+    e$prs$save(tmp)
+    prs2 <- pptx_presentation(tmp)
+    gfs  <- Filter(function(s) inherits(s, "GraphicFrame"),
+                   prs2$slides[[1]]$shapes$to_list())
+    expect_equal(length(gfs), 1L)
+    expect_equal(gfs[[1]]$chart$chart_type, XL_CHART_TYPE$BAR_CLUSTERED)
+  })
 })

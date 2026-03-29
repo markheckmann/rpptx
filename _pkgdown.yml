@@ -25,6 +25,8 @@ navbar:
           href: articles/tables.html
         - text: Charts
           href: articles/charts.html
+        - text: Colors, fills & lines
+          href: articles/dml.html
 
 reference:
   - title: Open / save
@@ -86,9 +88,17 @@ reference:
   - title: Formatting
     contents:
       - FillFormat
+      - GradientStop
+      - GradientStops
       - LineFormat
       - ColorFormat
       - RGBColor
+      - ShadowFormat
+
+  - title: Actions / hyperlinks
+    contents:
+      - ActionSetting
+      - ShapeHyperlink
 
   - title: Enumerations
     contents:

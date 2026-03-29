@@ -354,17 +354,83 @@ CT_TextParagraph$set("public", "_new_r", function() {
 # CT_TextBodyProperties — <a:bodyPr>
 # ============================================================================
 
+# Helper: Clark names for autofit children
+.autofit_clark_names <- c(
+  "{http://schemas.openxmlformats.org/drawingml/2006/main}noAutofit",
+  "{http://schemas.openxmlformats.org/drawingml/2006/main}spAutoFit",
+  "{http://schemas.openxmlformats.org/drawingml/2006/main}normAutofit"
+)
+
 #' @keywords internal
-CT_TextBodyProperties <- define_oxml_element(
-  classname = "CT_TextBodyProperties",
-  tag = "a:bodyPr",
-  attributes = list(
-    lIns   = optional_attribute("lIns",   ST_Coordinate32, default = Emu(91440L)),
-    tIns   = optional_attribute("tIns",   ST_Coordinate32, default = Emu(45720L)),
-    rIns   = optional_attribute("rIns",   ST_Coordinate32, default = Emu(91440L)),
-    bIns   = optional_attribute("bIns",   ST_Coordinate32, default = Emu(45720L)),
-    anchor = optional_attribute("anchor", XsdString),
-    wrap   = optional_attribute("wrap",   XsdString)
+CT_TextBodyProperties <- R6::R6Class(
+  "CT_TextBodyProperties",
+  inherit = BaseOxmlElement,
+
+  public = list(
+    # Get or add <a:noAutofit/> — suppress auto-fit (MSO_AUTO_SIZE$NONE)
+    get_or_add_noAutofit = function() {
+      af <- private$.autofit_child()
+      if (!is.null(af) && inherits(af, "CT_NoAutofit")) return(af)
+      private$.remove_autofit()
+      a <- .nsmap[["a"]]
+      xml2::xml_add_child(private$.node,
+                          xml2::xml_root(xml2::read_xml(
+                            sprintf('<a:noAutofit xmlns:a="%s"/>', a))))
+      private$.autofit_child()
+    },
+
+    # Get or add <a:spAutoFit/> — shape grows to fit text (MSO_AUTO_SIZE$SHAPE_TO_FIT_TEXT)
+    get_or_add_spAutoFit = function() {
+      af <- private$.autofit_child()
+      if (!is.null(af) && inherits(af, "CT_ShapeAutoFit")) return(af)
+      private$.remove_autofit()
+      a <- .nsmap[["a"]]
+      xml2::xml_add_child(private$.node,
+                          xml2::xml_root(xml2::read_xml(
+                            sprintf('<a:spAutoFit xmlns:a="%s"/>', a))))
+      private$.autofit_child()
+    },
+
+    # Get or add <a:normAutofit/> — text shrinks to fit (MSO_AUTO_SIZE$TEXT_TO_FIT_SHAPE)
+    get_or_add_normAutofit = function() {
+      af <- private$.autofit_child()
+      if (!is.null(af) && inherits(af, "CT_NormalAutofit")) return(af)
+      private$.remove_autofit()
+      a <- .nsmap[["a"]]
+      xml2::xml_add_child(private$.node,
+                          xml2::xml_root(xml2::read_xml(
+                            sprintf('<a:normAutofit xmlns:a="%s"/>', a))))
+      private$.autofit_child()
+    }
+  ),
+
+  active = list(
+    # Attribute bindings (replicate define_oxml_element behaviour)
+    lIns   = .make_optional_attr_binding("lIns",   ST_Coordinate32, Emu(91440L)),
+    tIns   = .make_optional_attr_binding("tIns",   ST_Coordinate32, Emu(45720L)),
+    rIns   = .make_optional_attr_binding("rIns",   ST_Coordinate32, Emu(91440L)),
+    bIns   = .make_optional_attr_binding("bIns",   ST_Coordinate32, Emu(45720L)),
+    anchor = .make_optional_attr_binding("anchor", XsdString,        NULL),
+    wrap   = .make_optional_attr_binding("wrap",   XsdString,        NULL),
+
+    # Current autofit child element, or NULL if absent
+    autofit = function() private$.autofit_child()
+  ),
+
+  private = list(
+    .autofit_child = function() {
+      for (child in xml2::xml_children(private$.node)) {
+        if (.get_clark_name(child) %in% .autofit_clark_names)
+          return(wrap_element(child))
+      }
+      NULL
+    },
+    .remove_autofit = function() {
+      for (child in xml2::xml_children(private$.node)) {
+        if (.get_clark_name(child) %in% .autofit_clark_names)
+          xml2::xml_remove(child)
+      }
+    }
   )
 )
 
@@ -440,6 +506,11 @@ CT_TextBody <- R6::R6Class(
 # Register element classes
 # ============================================================================
 
+# Autofit child elements — simple elements with no meaningful content
+CT_NoAutofit    <- define_oxml_element("CT_NoAutofit",    "a:noAutofit")
+CT_ShapeAutoFit <- define_oxml_element("CT_ShapeAutoFit", "a:spAutoFit")
+CT_NormalAutofit <- define_oxml_element("CT_NormalAutofit", "a:normAutofit")
+
 .onLoad_oxml_text <- function() {
   register_element_cls("a:latin",      CT_TextFont)
   register_element_cls("a:ea",         CT_TextFont)
@@ -458,6 +529,9 @@ CT_TextBody <- R6::R6Class(
   register_element_cls("a:p",          CT_TextParagraph)
   register_element_cls("a:r",          CT_RegularTextRun)
   register_element_cls("a:bodyPr",     CT_TextBodyProperties)
+  register_element_cls("a:noAutofit",  CT_NoAutofit)
+  register_element_cls("a:spAutoFit",  CT_ShapeAutoFit)
+  register_element_cls("a:normAutofit", CT_NormalAutofit)
   register_element_cls("p:txBody",     CT_TextBody)
   register_element_cls("a:txBody",     CT_TextBody)
   register_element_cls("c:rich",       CT_TextBody)   # chart title rich text body

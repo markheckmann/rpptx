@@ -64,9 +64,17 @@
 * `PP_PARAGRAPH_ALIGNMENT` / `PP_ALIGN`, `MSO_AUTO_SIZE`, `MSO_VERTICAL_ANCHOR`
 * `XL_CHART_TYPE` (73 chart types)
 
+### Text — auto size
+* `text_frame$auto_size` — read/write auto-fit behaviour (`MSO_AUTO_SIZE` constants):
+  `NONE` (no auto-fit), `SHAPE_TO_FIT_TEXT` (`<a:spAutoFit/>`),
+  `TEXT_TO_FIT_SHAPE` (`<a:normAutofit/>`)
+
 ### Units
 * `Inches()`, `Cm()`, `Pt()`, `Mm()`, `Emu()`, `Centipoints()` — length unit constructors
 
 ### Display
 * `print()` / `format()` methods for all major objects: `Presentation`, `Slide`,
   `SlideLayout`, `SlideMaster`, shapes, `Table`, `TextFrame`
+
+### Vignettes
+* `vignette("dml")` — colors, fills (solid, gradient, pattern), line formatting, shadow

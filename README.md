@@ -61,6 +61,7 @@ prs$core_properties$title <- "My Presentation"
 tf <- shape$text_frame
 tf$text <- "Replace all text"
 tf$word_wrap <- TRUE
+tf$auto_size <- MSO_AUTO_SIZE$SHAPE_TO_FIT_TEXT   # expand shape to fit text
 tf$vertical_anchor <- MSO_VERTICAL_ANCHOR$MIDDLE
 
 para <- tf$paragraphs[[1]]

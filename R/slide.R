@@ -102,7 +102,6 @@ Slide <- R6::R6Class(
       self$part$slide_layout
     },
 
-    # ShapeCollection (stub — shapes implemented in Phase 4)
     shapes = function(value) {
       if (!missing(value)) stop("Read-only", call. = FALSE)
       if (is.null(private$.shapes)) {
@@ -339,7 +338,6 @@ SlideLayout <- R6::R6Class(
   ),
 
   active = list(
-    # SlideShapes collection (stub)
     shapes = function(value) {
       if (!missing(value)) stop("Read-only", call. = FALSE)
       NULL
@@ -394,7 +392,6 @@ SlideMaster <- R6::R6Class(
       private$.slide_layouts
     },
 
-    # MasterShapes collection (stub)
     shapes = function(value) {
       if (!missing(value)) stop("Read-only", call. = FALSE)
       NULL

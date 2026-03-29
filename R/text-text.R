@@ -410,6 +410,33 @@ TextFrame <- R6::R6Class(
       paste0(vapply(self$paragraphs, function(p) p$text, character(1)), collapse = "\n")
     },
 
+    # Auto-size behaviour (MSO_AUTO_SIZE constant).
+    # NONE (0): no auto-fit (explicit <a:noAutofit/>).
+    # SHAPE_TO_FIT_TEXT (1): shape expands to fit text (<a:spAutoFit/>).
+    # TEXT_TO_FIT_SHAPE (2): text shrinks to fit shape (<a:normAutofit/>).
+    # NULL: no autofit child present (inherit from style).
+    auto_size = function(value) {
+      if (!missing(value)) {
+        bodyPr <- private$.txBody$bodyPr
+        if (is.null(value) || identical(value, MSO_AUTO_SIZE$NONE)) {
+          bodyPr$get_or_add_noAutofit()
+        } else if (identical(value, MSO_AUTO_SIZE$SHAPE_TO_FIT_TEXT)) {
+          bodyPr$get_or_add_spAutoFit()
+        } else if (identical(value, MSO_AUTO_SIZE$TEXT_TO_FIT_SHAPE)) {
+          bodyPr$get_or_add_normAutofit()
+        } else {
+          stop("auto_size must be an MSO_AUTO_SIZE constant", call. = FALSE)
+        }
+        return(invisible(value))
+      }
+      af <- private$.txBody$bodyPr$autofit
+      if (is.null(af))                             return(NULL)
+      if (inherits(af, "CT_NoAutofit"))            return(MSO_AUTO_SIZE$NONE)
+      if (inherits(af, "CT_ShapeAutoFit"))         return(MSO_AUTO_SIZE$SHAPE_TO_FIT_TEXT)
+      if (inherits(af, "CT_NormalAutofit"))        return(MSO_AUTO_SIZE$TEXT_TO_FIT_SHAPE)
+      NULL
+    },
+
     # Word wrap: TRUE, FALSE, or NULL (inherit).
     word_wrap = function(value) {
       if (!missing(value)) {

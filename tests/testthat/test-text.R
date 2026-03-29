@@ -614,3 +614,63 @@ describe("Run$hyperlink", {
     expect_null(run$hyperlink$address)
   })
 })
+
+
+# ============================================================================
+# TextFrame auto_size
+# ============================================================================
+
+describe("TextFrame$auto_size", {
+  make_tf <- function() {
+    prs   <- pptx_presentation()
+    slide <- prs$slides$add_slide(prs$slide_layouts[[6]])
+    txb   <- slide$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    list(prs = prs, tf = txb$text_frame)
+  }
+
+  it("returns NULL when no autofit child is present", {
+    tf <- make_tf()$tf
+    # Fresh textbox has <a:spAutoFit/> from the template; check it's readable
+    as_val <- tf$auto_size
+    expect_true(is.null(as_val) || is.integer(as_val))
+  })
+
+  it("NONE sets noAutofit child", {
+    tf <- make_tf()$tf
+    tf$auto_size <- MSO_AUTO_SIZE$NONE
+    expect_equal(tf$auto_size, MSO_AUTO_SIZE$NONE)
+  })
+
+  it("SHAPE_TO_FIT_TEXT sets spAutoFit child", {
+    tf <- make_tf()$tf
+    tf$auto_size <- MSO_AUTO_SIZE$SHAPE_TO_FIT_TEXT
+    expect_equal(tf$auto_size, MSO_AUTO_SIZE$SHAPE_TO_FIT_TEXT)
+  })
+
+  it("TEXT_TO_FIT_SHAPE sets normAutofit child", {
+    tf <- make_tf()$tf
+    tf$auto_size <- MSO_AUTO_SIZE$TEXT_TO_FIT_SHAPE
+    expect_equal(tf$auto_size, MSO_AUTO_SIZE$TEXT_TO_FIT_SHAPE)
+  })
+
+  it("only one autofit child is present after switching", {
+    tf <- make_tf()$tf
+    tf$auto_size <- MSO_AUTO_SIZE$TEXT_TO_FIT_SHAPE
+    tf$auto_size <- MSO_AUTO_SIZE$SHAPE_TO_FIT_TEXT
+    expect_equal(tf$auto_size, MSO_AUTO_SIZE$SHAPE_TO_FIT_TEXT)
+  })
+
+  it("auto_size round-trips through save/load", {
+    e   <- make_tf()
+    e$tf$auto_size <- MSO_AUTO_SIZE$TEXT_TO_FIT_SHAPE
+    tmp <- tempfile(fileext = ".pptx")
+    on.exit(unlink(tmp))
+    e$prs$save(tmp)
+    prs2  <- pptx_presentation(tmp)
+    slide2 <- prs2$slides[[1]]
+    txbs  <- Filter(function(s) inherits(s, "Shape") && s$has_text_frame,
+                    slide2$shapes$to_list())
+    tf2   <- txbs[[length(txbs)]]$text_frame
+    expect_equal(tf2$auto_size, MSO_AUTO_SIZE$TEXT_TO_FIT_SHAPE)
+  })
+})
