@@ -23,6 +23,66 @@ CT_CommonSlideData <- define_oxml_element(
   )
 )
 
+# Return <p:bg/p:bgPr> grandchild, creating a noFill background if absent.
+CT_CommonSlideData$set("public", "get_or_add_bgPr", function() {
+  bg <- self$bg
+  if (is.null(bg) || is.null(wrap_element(bg$get_node())$bgPr)) {
+    bg <- private$.change_to_noFill_bg()
+  }
+  bg <- self$bg
+  if (inherits(bg, "BaseOxmlElement")) bg <- wrap_element(bg$get_node())
+  bgPr_nd <- xml2::xml_find_first(bg$get_node(), "p:bgPr",
+                                   ns = c(p = .nsmap[["p"]]))
+  wrap_element(bgPr_nd)
+})
+
+# Remove existing bg and add a noFill bgPr; return the new CT_Background.
+CT_CommonSlideData$set("private", ".change_to_noFill_bg", function() {
+  existing <- xml2::xml_find_first(self$get_node(), "p:bg",
+                                    ns = c(p = .nsmap[["p"]]))
+  if (!inherits(existing, "xml_missing")) xml2::xml_remove(existing)
+  bg_nd <- xml2::xml_add_child(
+    self$get_node(), "p:bg", .where = 0L,  # insert before spTree
+    xmlns = .nsmap[["p"]]
+  )
+  bgPr_nd <- xml2::xml_add_child(bg_nd, "p:bgPr", xmlns = .nsmap[["p"]])
+  xml2::xml_add_child(bgPr_nd, "a:noFill", xmlns = .nsmap[["a"]])
+  xml2::xml_add_child(bgPr_nd, "a:effectLst", xmlns = .nsmap[["a"]])
+  wrap_element(bg_nd)
+})
+
+
+# ============================================================================
+# CT_Background — <p:bg>
+# ============================================================================
+
+#' @keywords internal
+CT_Background <- R6::R6Class(
+  "CT_Background",
+  inherit = BaseOxmlElement,
+
+  active = list(
+    # <p:bgPr> child or NULL
+    bgPr = function() {
+      nd <- xml2::xml_find_first(self$get_node(), "p:bgPr",
+                                 ns = c(p = .nsmap[["p"]]))
+      if (inherits(nd, "xml_missing")) return(NULL)
+      wrap_element(nd)
+    }
+  )
+)
+
+
+# ============================================================================
+# CT_BackgroundProperties — <p:bgPr>
+# ============================================================================
+
+#' @keywords internal
+CT_BackgroundProperties <- R6::R6Class(
+  "CT_BackgroundProperties",
+  inherit = BaseOxmlElement
+)
+
 
 # ============================================================================
 # _BaseSlideElement helpers — spTree shortcut via cSld
@@ -194,6 +254,8 @@ CT_NotesMaster <- .add_slide_element_methods(CT_NotesMaster)
 
 .onLoad_oxml_slide <- function() {
   register_element_cls("p:cSld",          CT_CommonSlideData)
+  register_element_cls("p:bg",            CT_Background)
+  register_element_cls("p:bgPr",          CT_BackgroundProperties)
   register_element_cls("p:sld",           CT_Slide)
   register_element_cls("p:sldLayout",     CT_SlideLayout)
   register_element_cls("p:sldLayoutId",   CT_SlideLayoutIdListEntry)

@@ -462,3 +462,40 @@ describe("LineFormat — color", {
     expect_true(shape$line$color$rgb == RGBColor(0L, 0L, 255L))
   })
 })
+
+
+# ============================================================================
+# ShadowFormat
+# ============================================================================
+
+describe("ShadowFormat", {
+  it("shape$shadow returns a ShadowFormat", {
+    shape <- new_shape_with_empty_spPr()
+    expect_s3_class(shape$shadow, "ShadowFormat")
+  })
+
+  it("inherit is TRUE by default (no explicit effectLst)", {
+    shape <- new_shape_with_empty_spPr()
+    expect_true(shape$shadow$inherit)
+  })
+
+  it("setting inherit <- FALSE adds an empty effectLst", {
+    shape <- new_shape_with_empty_spPr()
+    shape$shadow$inherit <- FALSE
+    expect_false(shape$shadow$inherit)
+  })
+
+  it("setting inherit <- TRUE after FALSE removes effectLst", {
+    shape <- new_shape_with_empty_spPr()
+    shape$shadow$inherit <- FALSE
+    shape$shadow$inherit <- TRUE
+    expect_true(shape$shadow$inherit)
+  })
+
+  it("inherit <- FALSE is idempotent", {
+    shape <- new_shape_with_empty_spPr()
+    shape$shadow$inherit <- FALSE
+    shape$shadow$inherit <- FALSE
+    expect_false(shape$shadow$inherit)
+  })
+})

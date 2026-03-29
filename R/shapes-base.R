@@ -198,6 +198,15 @@ BaseShape <- R6::R6Class(
       LineFormat$new(spPr)
     },
 
+    # ShadowFormat for this shape's shadow effect.
+    # shape$shadow$inherit <- FALSE to suppress inherited shadow.
+    shadow = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      spPr <- private$.element$spPr
+      if (is.null(spPr)) stop("shape has no spPr element", call. = FALSE)
+      ShadowFormat$new(spPr)
+    },
+
     # ActionSetting for click actions on this shape.
     # No-op setter handles write-back from chaining (shape$click_action$...).
     click_action = function(value) {

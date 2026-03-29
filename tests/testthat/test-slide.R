@@ -318,3 +318,123 @@ describe("Slide$notes_slide", {
     expect_true(slide2$has_notes_slide)
   })
 })
+
+
+# ============================================================================
+# Slide background
+# ============================================================================
+
+describe("Slide$background", {
+  it("returns a .SlideBackground object", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    bg <- slide$background
+    expect_s3_class(bg, ".SlideBackground")
+  })
+
+  it("background$fill returns FillFormat", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    ff <- slide$background$fill
+    expect_s3_class(ff, "FillFormat")
+  })
+
+  it("can set a solid background colour", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    ff <- slide$background$fill
+    ff$solid()
+    ff$fore_color$rgb <- RGBColor(0xFF, 0x00, 0x00)
+    expect_equal(as.character(slide$background$fill$fore_color$rgb), "FF0000")
+  })
+
+  it("solid background round-trips through save/load", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    slide$background$fill$solid()
+    slide$background$fill$fore_color$rgb <- RGBColor(0x00, 0xFF, 0x00)
+    tmp <- tempfile(fileext = ".pptx")
+    on.exit(unlink(tmp))
+    prs$save(tmp)
+    prs2  <- pptx_presentation(tmp)
+    rgb2  <- prs2$slides[[1]]$background$fill$fore_color$rgb
+    expect_equal(as.character(rgb2), "00FF00")
+  })
+})
+
+
+# ============================================================================
+# Slides$duplicate_slide
+# ============================================================================
+
+describe("Slides$duplicate_slide", {
+  it("increases slide count by one", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    n_before <- length(prs$slides)
+    prs$slides$duplicate_slide(slide)
+    expect_equal(length(prs$slides), n_before + 1L)
+  })
+
+  it("returns a Slide object", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    dup <- prs$slides$duplicate_slide(slide)
+    expect_s3_class(dup, "Slide")
+  })
+
+  it("duplicate has the same slide layout", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    dup <- prs$slides$duplicate_slide(slide)
+    expect_equal(dup$slide_layout$name, slide$slide_layout$name)
+  })
+
+  it("duplicate preserves text added to the source", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    txb    <- slide$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    txb$text_frame$text <- "Hello from source"
+    dup <- prs$slides$duplicate_slide(slide)
+    texts <- sapply(dup$shapes$to_list(), function(s) {
+      tryCatch(s$text_frame$text, error = function(e) "")
+    })
+    expect_true(any(grepl("Hello from source", texts)))
+  })
+
+  it("duplicate is appended after source in slide order", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    s1 <- prs$slides$add_slide(layout)
+    s2 <- prs$slides$add_slide(layout)
+    dup <- prs$slides$duplicate_slide(s1)
+    # dup should be last (index 3)
+    expect_equal(prs$slides[[3]]$slide_id, dup$slide_id)
+  })
+
+  it("round-trips through save/load", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    txb    <- slide$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    txb$text_frame$text <- "Duplicate test"
+    prs$slides$duplicate_slide(slide)
+    tmp <- tempfile(fileext = ".pptx")
+    on.exit(unlink(tmp))
+    prs$save(tmp)
+    prs2 <- pptx_presentation(tmp)
+    expect_equal(length(prs2$slides), 2L)
+    texts <- sapply(prs2$slides[[2]]$shapes$to_list(), function(s) {
+      tryCatch(s$text_frame$text, error = function(e) "")
+    })
+    expect_true(any(grepl("Duplicate test", texts)))
+  })
+})

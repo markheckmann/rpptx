@@ -74,6 +74,29 @@ PresentationPart <- R6::R6Class(
       stop("slide_part not found in presentation", call. = FALSE)
     },
 
+    # Duplicate slide_part and return list(rId, slide) for the new slide.
+    # The new SlidePart has cloned XML and a copy of all source relationships.
+    duplicate_slide = function(slide_part) {
+      cloned_elm <- rpptx_parse_xml(slide_part$blob)
+      partname   <- self$package$next_partname("/ppt/slides/slide%d.xml")
+      new_part   <- SlidePart$new(partname, CT$PML_SLIDE, self$package, cloned_elm)
+      # Copy relationships in rId-numeric order so the new rIds match the XML
+      src_rels <- slide_part$rels$values()
+      rId_nums <- vapply(src_rels, function(rel) {
+        m <- regmatches(rel$rId, regexec("^rId([0-9]+)$", rel$rId))[[1]]
+        if (length(m) < 2L) 0L else as.integer(m[2L])
+      }, integer(1L))
+      for (rel in src_rels[order(rId_nums)]) {
+        if (rel$is_external) {
+          new_part$relate_to(rel$target_ref, rel$reltype, is_external = TRUE)
+        } else {
+          new_part$relate_to(rel$target_part, rel$reltype)
+        }
+      }
+      rId <- self$relate_to(new_part, RT$SLIDE)
+      list(rId = rId, slide = new_part$slide)
+    },
+
     # Rename slide parts to /ppt/slides/slide1.xml, slide2.xml, ...
     rename_slide_parts = function(rIds) {
       for (i in seq_along(rIds)) {

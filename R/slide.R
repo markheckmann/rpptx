@@ -24,8 +24,42 @@
         return(invisible(value))
       }
       self$element$cSld$name
+    },
+
+    # _Background object providing access to the slide background fill.
+    # Accessing this property may interrupt background inheritance from the
+    # master (a noFill background is substituted). Set fill on the returned
+    # object to change the background.
+    background = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      .SlideBackground$new(self$element$cSld)
     }
   )
+)
+
+
+# ============================================================================
+# _SlideBackground — background fill wrapper
+# ============================================================================
+
+.SlideBackground <- R6::R6Class(
+  ".SlideBackground",
+
+  public = list(
+    initialize = function(cSld) private$.cSld <- cSld
+  ),
+
+  active = list(
+    # FillFormat for the slide background. Accessing this property with no
+    # explicit background causes it to be set to noFill (interrupts inheritance).
+    fill = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      bgPr <- private$.cSld$get_or_add_bgPr()
+      FillFormat$from_fill_parent(bgPr)
+    }
+  ),
+
+  private = list(.cSld = NULL)
 )
 
 
@@ -441,6 +475,13 @@ Slides <- R6::R6Class(
       lapply(private$.sldIdLst$sldId_lst, function(sld_id) {
         self$part$related_slide(sld_id$rId)
       })
+    },
+
+    # Duplicate slide and insert it immediately after. Returns the new Slide.
+    duplicate_slide = function(slide) {
+      result <- self$part$duplicate_slide(slide$part)
+      private$.sldIdLst$add_sldId(result$rId)
+      result$slide
     },
 
     # Remove a slide from the presentation.

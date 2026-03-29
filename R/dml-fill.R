@@ -264,3 +264,6 @@ FillFormat <- R6::R6Class(
 
   private = list(.spPr = NULL)
 )
+
+# Class-level factory: FillFormat$from_fill_parent(spPr) — mirrors Python classmethod.
+FillFormat$from_fill_parent <- function(spPr) FillFormat$new(spPr)
