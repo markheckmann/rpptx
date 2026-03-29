@@ -364,7 +364,7 @@ CT_Table_new_tbl <- function(rows, cols, width, height) {
 # ============================================================================
 
 # GRAPHIC_DATA_URI for tables
-.GRAPHIC_DATA_URI_TABLE <- "http://schemas.openxmlformats.org/presentationml/2006/table"
+.GRAPHIC_DATA_URI_TABLE <- "http://schemas.openxmlformats.org/drawingml/2006/table"
 
 # Get or create p:xfrm child on a graphicFrame element
 .gf_get_or_add_pxfrm <- function(self_elm) {
