@@ -206,14 +206,14 @@ rpptx is a direct R port of
 property names, and API are intentionally kept as close as possible to
 the Python original. Key differences:
 
-| python-pptx                                                                        | rpptx                                                                                        |
-|------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|
-| [`Presentation()`](https://markheckmann.github.io/rpptx/reference/Presentation.md) | [`pptx_presentation()`](https://markheckmann.github.io/rpptx/reference/pptx_presentation.md) |
-| `prs.slides[0]`                                                                    | `prs$slides[[1]]` (1-based)                                                                  |
-| `shape.text_frame`                                                                 | `shape$text_frame`                                                                           |
-| `font.bold = True`                                                                 | `font$bold <- TRUE`                                                                          |
-| `Inches(1.5)`                                                                      | `Inches(1.5)`                                                                                |
-| `MSO_SHAPE.RECTANGLE`                                                              | `MSO_AUTO_SHAPE_TYPE$RECTANGLE`                                                              |
+| python-pptx           | rpptx                                                                                        |
+|-----------------------|----------------------------------------------------------------------------------------------|
+| `Presentation()`      | [`pptx_presentation()`](https://markheckmann.github.io/rpptx/reference/pptx_presentation.md) |
+| `prs.slides[0]`       | `prs$slides[[1]]` (1-based)                                                                  |
+| `shape.text_frame`    | `shape$text_frame`                                                                           |
+| `font.bold = True`    | `font$bold <- TRUE`                                                                          |
+| `Inches(1.5)`         | `Inches(1.5)`                                                                                |
+| `MSO_SHAPE.RECTANGLE` | `MSO_AUTO_SHAPE_TYPE$RECTANGLE`                                                              |
 
 ## License
 
