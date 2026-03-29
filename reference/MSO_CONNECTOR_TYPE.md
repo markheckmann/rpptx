@@ -7,8 +7,12 @@ Members have `$value` (integer) and `$prst` (XML preset name). Alias:
 
 ``` r
 MSO_CONNECTOR_TYPE
+
+MSO_CONNECTOR
 ```
 
 ## Format
+
+An object of class `list` of length 4.
 
 An object of class `list` of length 4.

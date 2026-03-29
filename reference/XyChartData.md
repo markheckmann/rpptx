@@ -1,13 +1,11 @@
 # Chart data container for XY (scatter) charts
 
-Chart data container for XY (scatter) charts
-
-Chart data container for XY (scatter) charts
+Holds series and XY data points. Use `add_series()` to add a series,
+then call `add_data_point()` on each returned series object.
 
 ## Super class
 
-[`rpptx::BaseChartData`](https://markheckmann.github.io/rpptx/reference/BaseChartData.md)
--\> `XyChartData`
+`rpptx::BaseChartData` -\> `XyChartData`
 
 ## Methods
 

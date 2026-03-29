@@ -1,13 +1,12 @@
 # Chart data container for bubble charts
 
-Chart data container for bubble charts
-
-Chart data container for bubble charts
+Holds series and bubble data points (x, y, bubble size). Use
+`add_series()` to add a series, then call `add_data_point()` on each
+returned series object.
 
 ## Super classes
 
-[`rpptx::BaseChartData`](https://markheckmann.github.io/rpptx/reference/BaseChartData.md)
--\>
+`rpptx::BaseChartData` -\>
 [`rpptx::XyChartData`](https://markheckmann.github.io/rpptx/reference/XyChartData.md)
 -\> `BubbleChartData`
 

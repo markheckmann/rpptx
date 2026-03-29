@@ -99,7 +99,7 @@
 <span>  <span class="fu"><a href="reference/Length.html">Inches</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="reference/Length.html">Inches</a></span><span class="op">(</span><span class="fl">2.5</span><span class="op">)</span>, <span class="fu"><a href="reference/Length.html">Inches</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="reference/Length.html">Inches</a></span><span class="op">(</span><span class="fl">1.5</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">shp</span><span class="op">$</span><span class="va">fill</span><span class="op">$</span><span class="fu">solid</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">shp</span><span class="op">$</span><span class="va">fill</span><span class="op">$</span><span class="va">fore_color</span><span class="op">$</span><span class="va">rgb</span> <span class="op">&lt;-</span> <span class="fu">RGBColor</span><span class="op">(</span><span class="fl">0x4F</span>, <span class="fl">0x81</span>, <span class="fl">0xBD</span><span class="op">)</span></span>
+<span><span class="va">shp</span><span class="op">$</span><span class="va">fill</span><span class="op">$</span><span class="va">fore_color</span><span class="op">$</span><span class="va">rgb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/RGBColor.html">RGBColor</a></span><span class="op">(</span><span class="fl">0x4F</span>, <span class="fl">0x81</span>, <span class="fl">0xBD</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ---- Save --------------------------------------------------------------------</span></span>
 <span><span class="va">prs</span><span class="op">$</span><span class="fu">save</span><span class="op">(</span><span class="st">"output.pptx"</span><span class="op">)</span></span></code></pre></div>
@@ -134,7 +134,7 @@
 <span><span class="va">run</span><span class="op">$</span><span class="va">text</span> <span class="op">&lt;-</span> <span class="st">"Bold blue text"</span></span>
 <span><span class="va">run</span><span class="op">$</span><span class="va">font</span><span class="op">$</span><span class="va">bold</span>  <span class="op">&lt;-</span> <span class="cn">TRUE</span></span>
 <span><span class="va">run</span><span class="op">$</span><span class="va">font</span><span class="op">$</span><span class="va">size</span>  <span class="op">&lt;-</span> <span class="fu"><a href="reference/Length.html">Pt</a></span><span class="op">(</span><span class="fl">24</span><span class="op">)</span></span>
-<span><span class="va">run</span><span class="op">$</span><span class="va">font</span><span class="op">$</span><span class="va">color</span><span class="op">$</span><span class="va">rgb</span> <span class="op">&lt;-</span> <span class="fu">RGBColor</span><span class="op">(</span><span class="fl">0xFF</span>, <span class="fl">0x00</span>, <span class="fl">0x00</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">run</span><span class="op">$</span><span class="va">font</span><span class="op">$</span><span class="va">color</span><span class="op">$</span><span class="va">rgb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/RGBColor.html">RGBColor</a></span><span class="op">(</span><span class="fl">0xFF</span>, <span class="fl">0x00</span>, <span class="fl">0x00</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="tables">Tables<a class="anchor" aria-label="anchor" href="#tables"></a>
@@ -149,7 +149,7 @@
 <span></span>
 <span><span class="co"># Style a cell</span></span>
 <span><span class="va">cell</span><span class="op">$</span><span class="va">fill</span><span class="op">$</span><span class="fu">solid</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">cell</span><span class="op">$</span><span class="va">fill</span><span class="op">$</span><span class="va">fore_color</span><span class="op">$</span><span class="va">rgb</span> <span class="op">&lt;-</span> <span class="fu">RGBColor</span><span class="op">(</span><span class="fl">0x4F</span>, <span class="fl">0x81</span>, <span class="fl">0xBD</span><span class="op">)</span></span>
+<span><span class="va">cell</span><span class="op">$</span><span class="va">fill</span><span class="op">$</span><span class="va">fore_color</span><span class="op">$</span><span class="va">rgb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/RGBColor.html">RGBColor</a></span><span class="op">(</span><span class="fl">0x4F</span>, <span class="fl">0x81</span>, <span class="fl">0xBD</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Convert to data frame</span></span>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
@@ -159,7 +159,7 @@
 </h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Column chart</span></span>
-<span><span class="va">chart_data</span> <span class="op">&lt;-</span> <span class="va">CategoryChartData</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">chart_data</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/CategoryChartData.html">CategoryChartData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">chart_data</span><span class="op">$</span><span class="va">categories</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"East"</span>, <span class="st">"West"</span>, <span class="st">"North"</span><span class="op">)</span></span>
 <span><span class="va">chart_data</span><span class="op">$</span><span class="fu">add_series</span><span class="op">(</span><span class="st">"Q1"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">19.2</span>, <span class="fl">21.4</span>, <span class="fl">16.7</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">chart_data</span><span class="op">$</span><span class="fu">add_series</span><span class="op">(</span><span class="st">"Q2"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">22.3</span>, <span class="fl">28.6</span>, <span class="fl">15.2</span><span class="op">)</span><span class="op">)</span></span>
@@ -171,14 +171,14 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Scatter (XY) chart</span></span>
-<span><span class="va">xy_data</span> <span class="op">&lt;-</span> <span class="va">XyChartData</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">xy_data</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/XyChartData.html">XyChartData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">s</span> <span class="op">&lt;-</span> <span class="va">xy_data</span><span class="op">$</span><span class="fu">add_series</span><span class="op">(</span><span class="st">"Series 1"</span><span class="op">)</span></span>
 <span><span class="va">s</span><span class="op">$</span><span class="fu">add_data_point</span><span class="op">(</span><span class="fl">1.0</span>, <span class="fl">2.3</span><span class="op">)</span></span>
 <span><span class="va">s</span><span class="op">$</span><span class="fu">add_data_point</span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">1.8</span><span class="op">)</span></span>
 <span><span class="va">slide</span><span class="op">$</span><span class="va">shapes</span><span class="op">$</span><span class="fu">add_chart</span><span class="op">(</span><span class="va">XL_CHART_TYPE</span><span class="op">$</span><span class="va">XY_SCATTER</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Bubble chart</span></span>
-<span><span class="va">bd</span> <span class="op">&lt;-</span> <span class="va">BubbleChartData</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">bd</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/BubbleChartData.html">BubbleChartData</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">s</span>  <span class="op">&lt;-</span> <span class="va">bd</span><span class="op">$</span><span class="fu">add_series</span><span class="op">(</span><span class="st">"Bubbles"</span><span class="op">)</span></span>
 <span><span class="va">s</span><span class="op">$</span><span class="fu">add_data_point</span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1.0</span>, y <span class="op">=</span> <span class="fl">2.0</span>, size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="va">s</span><span class="op">$</span><span class="fu">add_data_point</span><span class="op">(</span>x <span class="op">=</span> <span class="fl">2.0</span>, y <span class="op">=</span> <span class="fl">3.0</span>, size <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
@@ -212,7 +212,7 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Solid fill</span></span>
 <span><span class="va">shp</span><span class="op">$</span><span class="va">fill</span><span class="op">$</span><span class="fu">solid</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">shp</span><span class="op">$</span><span class="va">fill</span><span class="op">$</span><span class="va">fore_color</span><span class="op">$</span><span class="va">rgb</span> <span class="op">&lt;-</span> <span class="fu">RGBColor</span><span class="op">(</span><span class="fl">0xFF</span>, <span class="fl">0x00</span>, <span class="fl">0x00</span><span class="op">)</span></span>
+<span><span class="va">shp</span><span class="op">$</span><span class="va">fill</span><span class="op">$</span><span class="va">fore_color</span><span class="op">$</span><span class="va">rgb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/RGBColor.html">RGBColor</a></span><span class="op">(</span><span class="fl">0xFF</span>, <span class="fl">0x00</span>, <span class="fl">0x00</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Theme color</span></span>
 <span><span class="va">shp</span><span class="op">$</span><span class="va">fill</span><span class="op">$</span><span class="va">fore_color</span><span class="op">$</span><span class="va">theme_color</span> <span class="op">&lt;-</span> <span class="va">MSO_THEME_COLOR</span><span class="op">$</span><span class="va">ACCENT_1</span></span>

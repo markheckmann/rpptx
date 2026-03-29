@@ -6,8 +6,12 @@ XML string values for `c:dLblPos/@val`.
 
 ``` r
 XL_DATA_LABEL_POSITION
+
+XL_LABEL_POSITION
 ```
 
 ## Format
+
+An object of class `list` of length 10.
 
 An object of class `list` of length 10.

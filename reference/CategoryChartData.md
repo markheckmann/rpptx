@@ -6,8 +6,7 @@ vector to `$categories`.
 
 ## Super class
 
-[`rpptx::BaseChartData`](https://markheckmann.github.io/rpptx/reference/BaseChartData.md)
--\> `CategoryChartData`
+`rpptx::BaseChartData` -\> `CategoryChartData`
 
 ## Methods
 
