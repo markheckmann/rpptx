@@ -1110,7 +1110,88 @@ CT_Picture <- R6::R6Class(
 #' CT_Connector XML element
 #' @keywords internal
 #' @export
-CT_Connector <- R6::R6Class("CT_Connector", inherit = BaseShapeElement)
+CT_Connector <- R6::R6Class(
+  "CT_Connector",
+  inherit = BaseShapeElement,
+
+  active = list(
+    # Return the <p:cNvCxnSpPr> element (always present in a valid cxnSp)
+    cNvCxnSpPr = function() {
+      nd <- xml2::xml_find_first(
+        self$get_node(), "p:nvCxnSpPr/p:cNvCxnSpPr",
+        ns = c(p = .nsmap[["p"]])
+      )
+      if (inherits(nd, "xml_missing")) return(NULL)
+      nd
+    },
+
+    # The <a:stCxn> child of cNvCxnSpPr, or NULL.
+    stCxn = function() {
+      pr <- self$cNvCxnSpPr
+      if (is.null(pr)) return(NULL)
+      nd <- xml2::xml_find_first(pr, "a:stCxn", ns = c(a = .nsmap[["a"]]))
+      if (inherits(nd, "xml_missing")) return(NULL)
+      nd
+    },
+
+    # The <a:endCxn> child of cNvCxnSpPr, or NULL.
+    endCxn = function() {
+      pr <- self$cNvCxnSpPr
+      if (is.null(pr)) return(NULL)
+      nd <- xml2::xml_find_first(pr, "a:endCxn", ns = c(a = .nsmap[["a"]]))
+      if (inherits(nd, "xml_missing")) return(NULL)
+      nd
+    }
+  ),
+
+  public = list(
+    # Set (or replace) the <a:stCxn id="shapeId" idx="siteIdx"/> element.
+    set_stCxn = function(shape_id, site_idx) {
+      pr <- self$cNvCxnSpPr
+      if (is.null(pr)) stop("cxnSp has no cNvCxnSpPr", call. = FALSE)
+      nd <- xml2::xml_find_first(pr, "a:stCxn", ns = c(a = .nsmap[["a"]]))
+      if (inherits(nd, "xml_missing")) {
+        xml_str <- sprintf('<a:stCxn xmlns:a="%s" id="%d" idx="%d"/>',
+                           .nsmap[["a"]], as.integer(shape_id), as.integer(site_idx))
+        xml2::xml_add_child(pr, xml2::xml_root(xml2::read_xml(xml_str)), .where = 0L)
+      } else {
+        xml2::xml_set_attr(nd, "id",  as.character(shape_id))
+        xml2::xml_set_attr(nd, "idx", as.character(site_idx))
+      }
+      invisible(self)
+    },
+
+    # Set (or replace) the <a:endCxn id="shapeId" idx="siteIdx"/> element.
+    set_endCxn = function(shape_id, site_idx) {
+      pr <- self$cNvCxnSpPr
+      if (is.null(pr)) stop("cxnSp has no cNvCxnSpPr", call. = FALSE)
+      nd <- xml2::xml_find_first(pr, "a:endCxn", ns = c(a = .nsmap[["a"]]))
+      if (inherits(nd, "xml_missing")) {
+        xml_str <- sprintf('<a:endCxn xmlns:a="%s" id="%d" idx="%d"/>',
+                           .nsmap[["a"]], as.integer(shape_id), as.integer(site_idx))
+        xml2::xml_add_child(pr, xml2::xml_root(xml2::read_xml(xml_str)))
+      } else {
+        xml2::xml_set_attr(nd, "id",  as.character(shape_id))
+        xml2::xml_set_attr(nd, "idx", as.character(site_idx))
+      }
+      invisible(self)
+    },
+
+    # Remove the <a:stCxn> element (disconnect begin endpoint).
+    remove_stCxn = function() {
+      nd <- self$stCxn
+      if (!is.null(nd)) xml2::xml_remove(nd)
+      invisible(self)
+    },
+
+    # Remove the <a:endCxn> element (disconnect end endpoint).
+    remove_endCxn = function() {
+      nd <- self$endCxn
+      if (!is.null(nd)) xml2::xml_remove(nd)
+      invisible(self)
+    }
+  )
+)
 
 #' CT_GraphicalObjectFrame XML element
 #' @keywords internal

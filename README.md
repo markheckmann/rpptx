@@ -1,5 +1,10 @@
 # rpptx
 
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![R-CMD-check](https://github.com/markheckmann/rpptx/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/markheckmann/rpptx/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
 **rpptx** is an R package for creating, reading, and updating PowerPoint
 (.pptx) presentations. It is a close R port of the Python
 [python-pptx](https://python-pptx.readthedocs.io/) library, providing an

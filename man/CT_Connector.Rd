@@ -15,6 +15,10 @@ CT_Connector XML element
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
+\item \href{#method-CT_Connector-set_stCxn}{\code{CT_Connector$set_stCxn()}}
+\item \href{#method-CT_Connector-set_endCxn}{\code{CT_Connector$set_endCxn()}}
+\item \href{#method-CT_Connector-remove_stCxn}{\code{CT_Connector$remove_stCxn()}}
+\item \href{#method-CT_Connector-remove_endCxn}{\code{CT_Connector$remove_endCxn()}}
 \item \href{#method-CT_Connector-clone}{\code{CT_Connector$clone()}}
 }
 }
@@ -41,6 +45,42 @@ CT_Connector XML element
 </ul>
 </details>
 }}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CT_Connector-set_stCxn"></a>}}
+\if{latex}{\out{\hypertarget{method-CT_Connector-set_stCxn}{}}}
+\subsection{Method \code{set_stCxn()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CT_Connector$set_stCxn(shape_id, site_idx)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CT_Connector-set_endCxn"></a>}}
+\if{latex}{\out{\hypertarget{method-CT_Connector-set_endCxn}{}}}
+\subsection{Method \code{set_endCxn()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CT_Connector$set_endCxn(shape_id, site_idx)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CT_Connector-remove_stCxn"></a>}}
+\if{latex}{\out{\hypertarget{method-CT_Connector-remove_stCxn}{}}}
+\subsection{Method \code{remove_stCxn()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CT_Connector$remove_stCxn()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CT_Connector-remove_endCxn"></a>}}
+\if{latex}{\out{\hypertarget{method-CT_Connector-remove_endCxn}{}}}
+\subsection{Method \code{remove_endCxn()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CT_Connector$remove_endCxn()}\if{html}{\out{</div>}}
+}
+
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CT_Connector-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-CT_Connector-clone}{}}}

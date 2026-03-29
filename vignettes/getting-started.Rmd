@@ -46,6 +46,15 @@ Cm(2.54)      # 914400L
 Pt(72)        # 914400L
 ```
 
+To convert back from EMU to a readable unit use `as_inches()`, `as_cm()`,
+`as_mm()`, or `as_pt()`:
+
+```{r}
+as_inches(prs$slide_width)   # 10
+as_cm(prs$slide_width)       # 25.4
+as_pt(Pt(18))                # 18
+```
+
 ## Adding slides
 
 Slides are added through the `Slides` collection using a slide layout as a template.

@@ -19,8 +19,11 @@ Font <- R6::R6Class(
   "Font",
 
   public = list(
-    initialize = function(rPr) {
+    # rPr: CT_TextCharacterProperties element.
+    # run: optional parent Run object for effective-value walk-up.
+    initialize = function(rPr, run = NULL) {
       private$.rPr <- rPr
+      private$.run <- run
     },
 
     # Underlying CT_TextCharacterProperties element.
@@ -90,10 +93,203 @@ Font <- R6::R6Class(
       if (!missing(value)) return(invisible(NULL))
       solidFill <- private$.rPr$get_or_add_solidFill()
       ColorFormat$new(solidFill)
+    },
+
+    # ---- Effective (inherited) read-only properties -------------------------
+    # These cascade: run rPr → paragraph defRPr → txBody lstStyle →
+    # layout placeholder lstStyle → master placeholder lstStyle.
+
+    # Effective bold value resolving the inheritance chain. NULL = not set anywhere.
+    effective_bold = function() private$.effective_bool("b"),
+
+    # Effective italic value resolving the inheritance chain.
+    effective_italic = function() private$.effective_bool("i"),
+
+    # Effective font size resolving the inheritance chain.
+    effective_size = function() {
+      sz <- private$.rPr$sz
+      if (!is.null(sz)) return(Centipoints(sz))
+      val <- private$.effective_attr("sz")
+      if (is.null(val)) return(NULL)
+      Centipoints(as.integer(val))
+    },
+
+    # Effective font name resolving the inheritance chain.
+    effective_name = function() {
+      latin <- private$.rPr$latin
+      if (!is.null(latin)) return(latin$typeface)
+      private$.effective_latin_typeface()
     }
   ),
 
-  private = list(.rPr = NULL)
+  private = list(
+    .rPr = NULL,
+    .run = NULL,
+
+    # Walk the inheritance chain for a simple boolean-or-NULL attribute.
+    .effective_bool = function(attr_name) {
+      val <- private$.rPr[[attr_name]]
+      if (!is.null(val)) return(val)
+      private$.effective_attr(attr_name)
+    },
+
+    # Walk the inheritance chain for a raw attribute value (returned as string).
+    # Returns NULL if not found anywhere.
+    .effective_attr = function(attr_name) {
+      if (is.null(private$.run)) return(NULL)
+      para <- tryCatch(private$.run$.__enclos_env__$private$.parent,
+                       error = function(e) NULL)
+      if (is.null(para)) return(NULL)
+
+      # 1. Paragraph's defRPr
+      p_elm <- tryCatch(para$.__enclos_env__$private$.p, error = function(e) NULL)
+      if (!is.null(p_elm)) {
+        pPr <- p_elm$pPr
+        if (!is.null(pPr)) {
+          defRPr <- pPr$defRPr
+          if (!is.null(defRPr)) {
+            val <- defRPr[[attr_name]]
+            if (!is.null(val)) return(val)
+          }
+        }
+      }
+
+      # 2. txBody lstStyle (paragraph level 1)
+      tf <- tryCatch(para$.__enclos_env__$private$.parent, error = function(e) NULL)
+      if (!is.null(tf)) {
+        txBody <- tryCatch(tf$.__enclos_env__$private$.txBody, error = function(e) NULL)
+        if (!is.null(txBody)) {
+          val <- private$.attr_from_lstStyle(txBody, 1L, attr_name)
+          if (!is.null(val)) return(val)
+        }
+
+        # 3. Layout placeholder lstStyle
+        shape <- tryCatch(tf$.__enclos_env__$private$.parent, error = function(e) NULL)
+        if (!is.null(shape)) {
+          layout_ph <- tryCatch(
+            shape$.__enclos_env__$private$.base_placeholder(),
+            error = function(e) NULL
+          )
+          if (!is.null(layout_ph)) {
+            lph_tf <- tryCatch(layout_ph$text_frame, error = function(e) NULL)
+            if (!is.null(lph_tf)) {
+              lph_txBody <- tryCatch(
+                lph_tf$.__enclos_env__$private$.txBody,
+                error = function(e) NULL
+              )
+              if (!is.null(lph_txBody)) {
+                val <- private$.attr_from_lstStyle(lph_txBody, 1L, attr_name)
+                if (!is.null(val)) return(val)
+              }
+            }
+
+            # 4. Master placeholder lstStyle
+            master_ph <- tryCatch(
+              layout_ph$.__enclos_env__$private$.base_placeholder(),
+              error = function(e) NULL
+            )
+            if (!is.null(master_ph)) {
+              mph_tf <- tryCatch(master_ph$text_frame, error = function(e) NULL)
+              if (!is.null(mph_tf)) {
+                mph_txBody <- tryCatch(
+                  mph_tf$.__enclos_env__$private$.txBody,
+                  error = function(e) NULL
+                )
+                if (!is.null(mph_txBody)) {
+                  val <- private$.attr_from_lstStyle(mph_txBody, 1L, attr_name)
+                  if (!is.null(val)) return(val)
+                }
+              }
+            }
+          }
+        }
+      }
+      NULL
+    },
+
+    # Extract attr_name from lstStyle/lvl{level}pPr/defRPr.
+    .attr_from_lstStyle = function(txBody, level, attr_name) {
+      lstStyle <- tryCatch(txBody$lstStyle, error = function(e) NULL)
+      if (is.null(lstStyle)) return(NULL)
+      lvl_tag <- sprintf("a:lvl%dpPr", level)
+      lvlPr_nd <- xml2::xml_find_first(
+        lstStyle$get_node(), lvl_tag, ns = c(a = .nsmap[["a"]])
+      )
+      if (inherits(lvlPr_nd, "xml_missing")) return(NULL)
+      defRPr_nd <- xml2::xml_find_first(
+        lvlPr_nd, "a:defRPr", ns = c(a = .nsmap[["a"]])
+      )
+      if (inherits(defRPr_nd, "xml_missing")) return(NULL)
+      val <- xml2::xml_attr(defRPr_nd, attr_name)
+      if (is.na(val)) return(NULL)
+      # For boolean attributes (b, i, strike) coerce to logical
+      if (attr_name %in% c("b", "i", "strike", "u")) {
+        if (val == "1" || val == "true")  return(TRUE)
+        if (val == "0" || val == "false") return(FALSE)
+      }
+      val
+    },
+
+    # Effective latin typeface, walking lstStyle latin elements.
+    .effective_latin_typeface = function() {
+      if (is.null(private$.run)) return(NULL)
+      para <- tryCatch(private$.run$.__enclos_env__$private$.parent,
+                       error = function(e) NULL)
+      if (is.null(para)) return(NULL)
+      tf <- tryCatch(para$.__enclos_env__$private$.parent, error = function(e) NULL)
+      if (is.null(tf)) return(NULL)
+      txBody <- tryCatch(tf$.__enclos_env__$private$.txBody, error = function(e) NULL)
+      if (!is.null(txBody)) {
+        val <- private$.latin_from_lstStyle(txBody, 1L)
+        if (!is.null(val)) return(val)
+      }
+      shape <- tryCatch(tf$.__enclos_env__$private$.parent, error = function(e) NULL)
+      if (is.null(shape)) return(NULL)
+      layout_ph <- tryCatch(shape$.__enclos_env__$private$.base_placeholder(),
+                            error = function(e) NULL)
+      if (!is.null(layout_ph)) {
+        lph_tf <- tryCatch(layout_ph$text_frame, error = function(e) NULL)
+        if (!is.null(lph_tf)) {
+          lph_body <- tryCatch(lph_tf$.__enclos_env__$private$.txBody,
+                               error = function(e) NULL)
+          if (!is.null(lph_body)) {
+            val <- private$.latin_from_lstStyle(lph_body, 1L)
+            if (!is.null(val)) return(val)
+          }
+        }
+        master_ph <- tryCatch(layout_ph$.__enclos_env__$private$.base_placeholder(),
+                              error = function(e) NULL)
+        if (!is.null(master_ph)) {
+          mph_tf <- tryCatch(master_ph$text_frame, error = function(e) NULL)
+          if (!is.null(mph_tf)) {
+            mph_body <- tryCatch(mph_tf$.__enclos_env__$private$.txBody,
+                                 error = function(e) NULL)
+            if (!is.null(mph_body)) {
+              val <- private$.latin_from_lstStyle(mph_body, 1L)
+              if (!is.null(val)) return(val)
+            }
+          }
+        }
+      }
+      NULL
+    },
+
+    .latin_from_lstStyle = function(txBody, level) {
+      lstStyle <- tryCatch(txBody$lstStyle, error = function(e) NULL)
+      if (is.null(lstStyle)) return(NULL)
+      lvl_tag <- sprintf("a:lvl%dpPr", level)
+      lvlPr_nd <- xml2::xml_find_first(
+        lstStyle$get_node(), lvl_tag, ns = c(a = .nsmap[["a"]])
+      )
+      if (inherits(lvlPr_nd, "xml_missing")) return(NULL)
+      latin_nd <- xml2::xml_find_first(
+        lvlPr_nd, "a:defRPr/a:latin", ns = c(a = .nsmap[["a"]])
+      )
+      if (inherits(latin_nd, "xml_missing")) return(NULL)
+      tf <- xml2::xml_attr(latin_nd, "typeface")
+      if (is.na(tf)) NULL else tf
+    }
+  )
 )
 
 
@@ -200,7 +396,7 @@ Run <- R6::R6Class(
     font = function(value) {
       if (!missing(value)) return(invisible(NULL))
       rPr <- private$.r$get_or_add_rPr()
-      Font$new(rPr)
+      Font$new(rPr, run = self)
     },
 
     # Hyperlink on this run. Assign NULL to remove.

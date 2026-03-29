@@ -22,7 +22,7 @@ assigning NULL removes the override and inherits from the style hierarchy.
 \if{latex}{\out{\hypertarget{method-Font-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Font$new(rPr)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Font$new(rPr, run = NULL)}\if{html}{\out{</div>}}
 }
 
 }

@@ -541,8 +541,73 @@ Connector <- R6::R6Class(
   "Connector",
   inherit = BaseShape,
 
+  public = list(
+    # Connect the begin (start) endpoint of this connector to a shape.
+    # shape: target shape object.
+    # connection_site_idx: 0-based OOXML connection site index.
+    #   Standard four-point shapes: 0=top, 1=right, 2=bottom, 3=left.
+    # Returns self invisibly for chaining.
+    begin_connect = function(shape, connection_site_idx = 0L) {
+      private$.element$set_stCxn(shape$shape_id, as.integer(connection_site_idx))
+      invisible(self)
+    },
+
+    # Connect the end endpoint of this connector to a shape.
+    # Returns self invisibly for chaining.
+    end_connect = function(shape, connection_site_idx = 0L) {
+      private$.element$set_endCxn(shape$shape_id, as.integer(connection_site_idx))
+      invisible(self)
+    },
+
+    # Disconnect the begin endpoint.
+    begin_disconnect = function() {
+      private$.element$remove_stCxn()
+      invisible(self)
+    },
+
+    # Disconnect the end endpoint.
+    end_disconnect = function() {
+      private$.element$remove_endCxn()
+      invisible(self)
+    }
+  ),
+
   active = list(
-    shape_type = function() MSO_SHAPE_TYPE$LINE
+    shape_type = function() MSO_SHAPE_TYPE$LINE,
+
+    # Shape id of the begin-connected shape, or NULL if not connected.
+    begin_connected_shape_id = function() {
+      st <- private$.element$stCxn
+      if (is.null(st)) return(NULL)
+      as.integer(xml2::xml_attr(st, "id"))
+    },
+
+    # Site index of the begin connection, or NULL.
+    begin_connection_site_index = function() {
+      st <- private$.element$stCxn
+      if (is.null(st)) return(NULL)
+      as.integer(xml2::xml_attr(st, "idx"))
+    },
+
+    # Shape id of the end-connected shape, or NULL.
+    end_connected_shape_id = function() {
+      en <- private$.element$endCxn
+      if (is.null(en)) return(NULL)
+      as.integer(xml2::xml_attr(en, "id"))
+    },
+
+    # Site index of the end connection, or NULL.
+    end_connection_site_index = function() {
+      en <- private$.element$endCxn
+      if (is.null(en)) return(NULL)
+      as.integer(xml2::xml_attr(en, "idx"))
+    },
+
+    # LineFormat for this connector.
+    line = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      LineFormat$new(private$.element)
+    }
   )
 )
 

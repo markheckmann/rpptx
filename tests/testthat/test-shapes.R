@@ -483,3 +483,88 @@ describe("Slide → Layout → Master inheritance chain", {
     expect_s3_class(ph$width, "Length")
   })
 })
+
+# ============================================================================
+# Connector routing — begin_connect / end_connect
+# ============================================================================
+
+new_slide_with_shapes <- function() {
+  prs    <- pptx_presentation(system.file("test_files", "no-slides.pptx", package = "rpptx"))
+  layout <- prs$slide_masters[[1]]$slide_layouts[[6]]
+  slide  <- prs$slides$add_slide(layout)
+  r1 <- slide$shapes$add_shape(MSO_AUTO_SHAPE_TYPE$RECTANGLE,
+          Inches(1), Inches(1), Inches(2), Inches(1))
+  r2 <- slide$shapes$add_shape(MSO_AUTO_SHAPE_TYPE$RECTANGLE,
+          Inches(5), Inches(1), Inches(2), Inches(1))
+  conn <- slide$shapes$add_connector(MSO_CONNECTOR_TYPE$STRAIGHT,
+            Inches(3), Inches(1.5), Inches(5), Inches(1.5))
+  list(slide = slide, r1 = r1, r2 = r2, conn = conn)
+}
+
+describe("Connector$begin_connect / end_connect", {
+  it("sets begin connection to a shape", {
+    s <- new_slide_with_shapes()
+    s$conn$begin_connect(s$r1, 1L)  # right side (idx 1)
+    expect_equal(s$conn$begin_connected_shape_id, s$r1$shape_id)
+    expect_equal(s$conn$begin_connection_site_index, 1L)
+  })
+
+  it("sets end connection to a shape", {
+    s <- new_slide_with_shapes()
+    s$conn$end_connect(s$r2, 3L)   # left side (idx 3)
+    expect_equal(s$conn$end_connected_shape_id, s$r2$shape_id)
+    expect_equal(s$conn$end_connection_site_index, 3L)
+  })
+
+  it("unconnected connector returns NULL for all ids/indices", {
+    s <- new_slide_with_shapes()
+    expect_null(s$conn$begin_connected_shape_id)
+    expect_null(s$conn$begin_connection_site_index)
+    expect_null(s$conn$end_connected_shape_id)
+    expect_null(s$conn$end_connection_site_index)
+  })
+
+  it("disconnects begin endpoint", {
+    s <- new_slide_with_shapes()
+    s$conn$begin_connect(s$r1, 0L)
+    s$conn$begin_disconnect()
+    expect_null(s$conn$begin_connected_shape_id)
+  })
+
+  it("disconnects end endpoint", {
+    s <- new_slide_with_shapes()
+    s$conn$end_connect(s$r2, 2L)
+    s$conn$end_disconnect()
+    expect_null(s$conn$end_connected_shape_id)
+  })
+
+  it("round-trips through save/reopen", {
+    s <- new_slide_with_shapes()
+    s$conn$begin_connect(s$r1, 1L)
+    s$conn$end_connect(s$r2, 3L)
+    r1_id <- s$r1$shape_id
+    r2_id <- s$r2$shape_id
+    tmp <- tempfile(fileext = ".pptx")
+    on.exit(unlink(tmp))
+    prs2 <- pptx_presentation(system.file("test_files", "no-slides.pptx", package = "rpptx"))
+    layout <- prs2$slide_masters[[1]]$slide_layouts[[6]]
+    slide2 <- prs2$slides$add_slide(layout)
+    r1b <- slide2$shapes$add_shape(MSO_AUTO_SHAPE_TYPE$RECTANGLE, Inches(1), Inches(1), Inches(2), Inches(1))
+    r2b <- slide2$shapes$add_shape(MSO_AUTO_SHAPE_TYPE$RECTANGLE, Inches(5), Inches(1), Inches(2), Inches(1))
+    conn2 <- slide2$shapes$add_connector(MSO_CONNECTOR_TYPE$STRAIGHT, Inches(3), Inches(1.5), Inches(5), Inches(1.5))
+    conn2$begin_connect(r1b, 1L)
+    conn2$end_connect(r2b, 3L)
+    prs2$save(tmp)
+    prs3 <- pptx_presentation(tmp)
+    shapes3 <- prs3$slides[[1]]$shapes$to_list()
+    conn3 <- Filter(function(s) s$shape_type == MSO_SHAPE_TYPE$LINE, shapes3)[[1]]
+    expect_equal(conn3$begin_connected_shape_id, r1b$shape_id)
+    expect_equal(conn3$end_connected_shape_id,   r2b$shape_id)
+  })
+
+  it("Connector$line returns a LineFormat", {
+    s <- new_slide_with_shapes()
+    expect_s3_class(s$conn$line, "R6")
+    expect_true(inherits(s$conn$line, "LineFormat"))
+  })
+})

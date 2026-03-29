@@ -410,7 +410,8 @@ BaseAxisElement <- R6::R6Class(
       wrap_element(nd)
     },
     get_or_add_numFmt = function() {
-      .get_or_add_child(self$get_node(), "c:numFmt", .nsmap[["c"]])
+      nd <- .get_or_add_child(self$get_node(), "c:numFmt", .nsmap[["c"]])
+      wrap_element(nd)
     },
     .add_majorTickMark = function(val = NULL) {
       nd <- xml2::xml_add_child(self$get_node(), "c:majorTickMark", xmlns = .nsmap[["c"]])
@@ -1001,8 +1002,8 @@ CT_ManualLayout <- R6::R6Class(
     },
     horz_offset = function(value) {
       if (!missing(value)) {
-        self$get_or_add_xMode()$val <- "factor"
-        self$get_or_add_x()$val    <- value
+        xm <- self$get_or_add_xMode(); xm$val <- "factor"
+        xv <- self$get_or_add_x();     xv$val <- value
         return(invisible(value))
       }
       x     <- self$x

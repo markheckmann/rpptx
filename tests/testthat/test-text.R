@@ -674,3 +674,74 @@ describe("TextFrame$auto_size", {
     expect_equal(tf2$auto_size, MSO_AUTO_SIZE$TEXT_TO_FIT_SHAPE)
   })
 })
+
+# ============================================================================
+# Font effective properties — inheritance chain
+# ============================================================================
+
+blank_text_slide <- function() {
+  prs    <- pptx_presentation()
+  layout <- prs$slide_layouts[[6]]  # blank
+  prs$slides$add_slide(layout)
+}
+
+describe("Font effective properties", {
+  it("effective_bold returns explicit value when set", {
+    slide <- blank_text_slide()
+    shape <- slide$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    run   <- shape$text_frame$paragraphs[[1]]$add_run()
+    run$text       <- "bold"
+    run$font$bold  <- TRUE
+    expect_true(run$font$effective_bold)
+  })
+
+  it("effective_bold returns NULL when not set at any level (non-placeholder)", {
+    slide <- blank_text_slide()
+    shape <- slide$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    run   <- shape$text_frame$paragraphs[[1]]$add_run()
+    run$text <- "unset"
+    expect_null(run$font$effective_bold)
+  })
+
+  it("effective_size returns explicit value when set", {
+    slide <- blank_text_slide()
+    shape <- slide$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    run   <- shape$text_frame$paragraphs[[1]]$add_run()
+    run$text      <- "big"
+    run$font$size <- Pt(24)
+    expect_equal(run$font$effective_size, Pt(24))
+  })
+
+  it("effective_size returns NULL when not set anywhere (non-placeholder)", {
+    slide <- blank_text_slide()
+    shape <- slide$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    run   <- shape$text_frame$paragraphs[[1]]$add_run()
+    run$text <- "unset"
+    expect_null(run$font$effective_size)
+  })
+
+  it("effective_italic returns FALSE when italic is explicitly FALSE", {
+    slide <- blank_text_slide()
+    shape <- slide$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    run   <- shape$text_frame$paragraphs[[1]]$add_run()
+    run$font$italic <- FALSE
+    expect_false(run$font$effective_italic)
+  })
+
+  it("effective_name returns explicit name when set", {
+    slide <- blank_text_slide()
+    shape <- slide$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    run   <- shape$text_frame$paragraphs[[1]]$add_run()
+    run$font$name <- "Arial"
+    expect_equal(run$font$effective_name, "Arial")
+  })
+
+  it("paragraph-level font has no run parent — effective_bold still works", {
+    slide <- blank_text_slide()
+    shape <- slide$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    para  <- shape$text_frame$paragraphs[[1]]
+    para$font$bold <- TRUE
+    expect_true(para$font$bold)
+    expect_true(para$font$effective_bold)
+  })
+})

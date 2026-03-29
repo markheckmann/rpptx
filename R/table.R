@@ -117,7 +117,7 @@ TableCell <- R6::R6Class(
     # Left margin in EMU (read/write). NULL uses PowerPoint default.
     margin_left = function(value) {
       if (!missing(value)) {
-        private$.tc$get_or_add_tcPr()$marL <- value
+        { pr <- private$.tc$get_or_add_tcPr(); pr$marL <- value }
         return(invisible(value))
       }
       tcPr <- private$.tc$tcPr
@@ -128,7 +128,7 @@ TableCell <- R6::R6Class(
     # Right margin in EMU (read/write).
     margin_right = function(value) {
       if (!missing(value)) {
-        private$.tc$get_or_add_tcPr()$marR <- value
+        { pr <- private$.tc$get_or_add_tcPr(); pr$marR <- value }
         return(invisible(value))
       }
       tcPr <- private$.tc$tcPr
@@ -139,7 +139,7 @@ TableCell <- R6::R6Class(
     # Top margin in EMU (read/write).
     margin_top = function(value) {
       if (!missing(value)) {
-        private$.tc$get_or_add_tcPr()$marT <- value
+        { pr <- private$.tc$get_or_add_tcPr(); pr$marT <- value }
         return(invisible(value))
       }
       tcPr <- private$.tc$tcPr
@@ -150,7 +150,7 @@ TableCell <- R6::R6Class(
     # Bottom margin in EMU (read/write).
     margin_bottom = function(value) {
       if (!missing(value)) {
-        private$.tc$get_or_add_tcPr()$marB <- value
+        { pr <- private$.tc$get_or_add_tcPr(); pr$marB <- value }
         return(invisible(value))
       }
       tcPr <- private$.tc$tcPr

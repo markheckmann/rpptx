@@ -15,6 +15,10 @@ Shape proxy for p:cxnSp elements
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
+\item \href{#method-Connector-begin_connect}{\code{Connector$begin_connect()}}
+\item \href{#method-Connector-end_connect}{\code{Connector$end_connect()}}
+\item \href{#method-Connector-begin_disconnect}{\code{Connector$begin_disconnect()}}
+\item \href{#method-Connector-end_disconnect}{\code{Connector$end_disconnect()}}
 \item \href{#method-Connector-clone}{\code{Connector$clone()}}
 }
 }
@@ -25,6 +29,42 @@ Shape proxy for p:cxnSp elements
 </ul>
 </details>
 }}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Connector-begin_connect"></a>}}
+\if{latex}{\out{\hypertarget{method-Connector-begin_connect}{}}}
+\subsection{Method \code{begin_connect()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Connector$begin_connect(shape, connection_site_idx = 0L)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Connector-end_connect"></a>}}
+\if{latex}{\out{\hypertarget{method-Connector-end_connect}{}}}
+\subsection{Method \code{end_connect()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Connector$end_connect(shape, connection_site_idx = 0L)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Connector-begin_disconnect"></a>}}
+\if{latex}{\out{\hypertarget{method-Connector-begin_disconnect}{}}}
+\subsection{Method \code{begin_disconnect()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Connector$begin_disconnect()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Connector-end_disconnect"></a>}}
+\if{latex}{\out{\hypertarget{method-Connector-end_disconnect}{}}}
+\subsection{Method \code{end_disconnect()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Connector$end_disconnect()}\if{html}{\out{</div>}}
+}
+
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Connector-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-Connector-clone}{}}}

@@ -249,7 +249,7 @@ DataLabel <- R6::R6Class(
           dLbl <- private$.ser$get_dLbl(private$.idx)
           if (!is.null(dLbl)) dLbl$.remove_dLblPos()
         } else {
-          self$.get_or_add_dLbl()$get_or_add_dLblPos()$val <- value
+          { dl <- self$.get_or_add_dLbl(); dp <- dl$get_or_add_dLblPos(); dp$val <- value }
         }
         return(invisible(value))
       }
@@ -451,7 +451,7 @@ BarSeries <- R6::R6Class(
     invert_if_negative = function(value) {
       ifn <- private$.element$invertIfNegative
       if (!missing(value)) {
-        private$.element$get_or_add_invertIfNegative()$val <- isTRUE(value)
+        { ifn <- private$.element$get_or_add_invertIfNegative(); ifn$val <- isTRUE(value) }
         return(invisible(value))
       }
       if (is.null(ifn)) return(TRUE)
@@ -474,7 +474,7 @@ LineSeries <- R6::R6Class(
     smooth = function(value) {
       sm <- private$.element$smooth
       if (!missing(value)) {
-        private$.element$get_or_add_smooth()$val <- isTRUE(value)
+        { sm <- private$.element$get_or_add_smooth(); sm$val <- isTRUE(value) }
         return(invisible(value))
       }
       if (is.null(sm)) return(TRUE)
@@ -652,7 +652,7 @@ BasePlot <- R6::R6Class(
     vary_by_categories = function(value) {
       vc <- private$.element$varyColors
       if (!missing(value)) {
-        private$.element$get_or_add_varyColors()$val <- isTRUE(value)
+        { vc <- private$.element$get_or_add_varyColors(); vc$val <- isTRUE(value) }
         return(invisible(value))
       }
       if (is.null(vc)) return(TRUE)
@@ -682,7 +682,7 @@ BarPlot <- R6::R6Class(
     gap_width = function(value) {
       gw <- private$.element$gapWidth
       if (!missing(value)) {
-        private$.element$get_or_add_gapWidth()$val <- value
+        { gw <- private$.element$get_or_add_gapWidth(); gw$val <- value }
         return(invisible(value))
       }
       if (is.null(gw)) return(150L)
@@ -694,7 +694,7 @@ BarPlot <- R6::R6Class(
         if (value == 0L) {
           private$.element$.remove_overlap()
         } else {
-          private$.element$get_or_add_overlap()$val <- value
+          { ov <- private$.element$get_or_add_overlap(); ov$val <- value }
         }
         return(invisible(value))
       }
@@ -1283,7 +1283,7 @@ TickLabels <- R6::R6Class(
 
     number_format = function(value) {
       if (!missing(value)) {
-        private$.element$get_or_add_numFmt()$formatCode <- value
+        { nm <- private$.element$get_or_add_numFmt(); nm$formatCode <- value }
         self$number_format_is_linked <- FALSE
         return(invisible(value))
       }
@@ -1294,7 +1294,7 @@ TickLabels <- R6::R6Class(
 
     number_format_is_linked = function(value) {
       if (!missing(value)) {
-        private$.element$get_or_add_numFmt()$sourceLinked <- value
+        { nm <- private$.element$get_or_add_numFmt(); nm$sourceLinked <- value }
         return(invisible(value))
       }
       numFmt <- private$.element$numFmt
