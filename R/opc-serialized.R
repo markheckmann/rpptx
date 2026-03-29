@@ -12,7 +12,7 @@
 #' Provides dict-like access to the binary blobs of each part in the package.
 #'
 #' @include opc-packuri.R opc-oxml.R opc-constants.R opc-spec.R
-#' @keywords internal
+#' @noRd
 #' @export
 PackageReader <- R6::R6Class(
   "PackageReader",
@@ -73,7 +73,7 @@ PackageReader <- R6::R6Class(
 
 #' Write an OPC package (ZIP file)
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 PackageWriter <- R6::R6Class(
   "PackageWriter",
@@ -131,7 +131,7 @@ PackageWriter <- R6::R6Class(
 #' Read all blobs from a ZIP file
 #' @param pkg_file Path to a .pptx file or a raw connection.
 #' @return Named list mapping PackURI strings to raw vectors.
-#' @keywords internal
+#' @noRd
 .read_zip_blobs <- function(pkg_file) {
   if (is.character(pkg_file)) {
     if (!file.exists(pkg_file)) {
@@ -162,7 +162,7 @@ PackageWriter <- R6::R6Class(
 #' Write items to a ZIP file
 #' @param pkg_file Path to output file.
 #' @param items A list of lists with `membername` and `blob` elements.
-#' @keywords internal
+#' @noRd
 .write_zip_package <- function(pkg_file, items) {
   tmpdir <- tempfile("rpptx_write_")
   dir.create(tmpdir, recursive = TRUE)
@@ -200,7 +200,7 @@ PackageWriter <- R6::R6Class(
 #' Generate \[Content_Types\].xml bytes for a set of parts
 #' @param parts A list of Part objects.
 #' @return Raw bytes of the content types XML.
-#' @keywords internal
+#' @noRd
 .content_types_xml_for <- function(parts) {
   # Separate into defaults (by extension) and overrides (by partname)
   defaults <- list(rels = CT$OPC_RELATIONSHIPS, xml = CT$XML)
@@ -241,7 +241,7 @@ PackageWriter <- R6::R6Class(
 #' A simple case-insensitive named list
 #' @param ... Key-value pairs.
 #' @return An environment with case-insensitive access.
-#' @keywords internal
+#' @noRd
 CaseInsensitiveDict <- function(...) {
   items <- list(...)
   result <- list()

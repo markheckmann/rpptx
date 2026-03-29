@@ -13,7 +13,7 @@
 #' @param element A BaseOxmlElement.
 #' @return A raw vector of XML bytes.
 #' @include oxml-init.R oxml-simpletypes.R
-#' @keywords internal
+#' @noRd
 serialize_part_xml <- function(element) {
   node <- if (inherits(element, "BaseOxmlElement")) element$get_node() else element
   xml_str <- as.character(node)
@@ -125,7 +125,7 @@ CT_Relationships <- define_oxml_element(
 
 #' Create a new empty <Relationships> element
 #' @return A CT_Relationships instance.
-#' @keywords internal
+#' @noRd
 new_ct_relationships <- function() {
   ns_uri <- .nsmap[["pr"]]
   xml_str <- sprintf('<Relationships xmlns="%s"/>', ns_uri)
@@ -163,7 +163,7 @@ CT_Types <- define_oxml_element(
 
 #' Create a new empty <Types> element
 #' @return A CT_Types instance.
-#' @keywords internal
+#' @noRd
 new_ct_types <- function() {
   ns_uri <- .nsmap[["ct"]]
   xml_str <- sprintf('<Types xmlns="%s"/>', ns_uri)

@@ -8,7 +8,7 @@
 #' Integer constants identifying the type of action associated with a mouse
 #' click or hover on a shape or text run.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 PP_ACTION_TYPE <- list(
   END_SHOW         =   6L,

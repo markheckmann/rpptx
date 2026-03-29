@@ -11,7 +11,7 @@
 #' Provides access to the shadow effect for a shape. Obtain via `shape$shadow`.
 #'
 #' @include oxml-shapes.R
-#' @keywords internal
+#' @noRd
 #' @export
 ShadowFormat <- R6::R6Class(
   "ShadowFormat",

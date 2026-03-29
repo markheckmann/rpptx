@@ -7,7 +7,7 @@
 # ============================================================================
 
 #' CT_CoreProperties XML element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_CoreProperties <- R6::R6Class(
   "CT_CoreProperties",
@@ -229,7 +229,7 @@ CT_CoreProperties <- R6::R6Class(
 # ============================================================================
 
 #' Create a new empty cp:coreProperties element
-#' @keywords internal
+#' @noRd
 new_ct_coreProperties <- function() {
   xml_str <- sprintf(
     '<cp:coreProperties %s/>',

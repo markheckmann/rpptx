@@ -15,7 +15,7 @@
 #' access, insertion, removal, and attribute manipulation.
 #'
 #' @include oxml-ns.R
-#' @keywords internal
+#' @noRd
 #' @export
 BaseOxmlElement <- R6::R6Class(
   "BaseOxmlElement",
@@ -259,7 +259,7 @@ BaseOxmlElement <- R6::R6Class(
 #' @param nsptag_str Namespace-prefixed tag, e.g. `"a:tbl"`.
 #' @param nsmap Optional named character vector of additional namespace mappings.
 #' @return A wrapped BaseOxmlElement (or appropriate subclass).
-#' @keywords internal
+#' @noRd
 #' @export
 OxmlElement <- function(nsptag_str, nsmap = NULL) {
   parts <- strsplit(nsptag_str, ":", fixed = TRUE)[[1]]
@@ -287,7 +287,7 @@ OxmlElement <- function(nsptag_str, nsmap = NULL) {
 #' @param nsptagname Namespace-prefixed tag, e.g. `"p:sldIdLst"`.
 #' @param successors Character vector of successor tag names for ordering.
 #' @return A list describing the child element spec.
-#' @keywords internal
+#' @noRd
 #' @export
 zero_or_one <- function(nsptagname, successors = character(0)) {
   list(type = "zero_or_one", nsptagname = nsptagname, successors = successors)
@@ -296,7 +296,7 @@ zero_or_one <- function(nsptagname, successors = character(0)) {
 #' Define a ZeroOrMore child element specification
 #' @inheritParams zero_or_one
 #' @return A list describing the child element spec.
-#' @keywords internal
+#' @noRd
 #' @export
 zero_or_more <- function(nsptagname, successors = character(0)) {
   list(type = "zero_or_more", nsptagname = nsptagname, successors = successors)
@@ -305,7 +305,7 @@ zero_or_more <- function(nsptagname, successors = character(0)) {
 #' Define a OneOrMore child element specification
 #' @inheritParams zero_or_one
 #' @return A list describing the child element spec.
-#' @keywords internal
+#' @noRd
 #' @export
 one_or_more <- function(nsptagname, successors = character(0)) {
   list(type = "one_or_more", nsptagname = nsptagname, successors = successors)
@@ -314,7 +314,7 @@ one_or_more <- function(nsptagname, successors = character(0)) {
 #' Define a OneAndOnlyOne child element specification
 #' @param nsptagname Namespace-prefixed tag.
 #' @return A list describing the child element spec.
-#' @keywords internal
+#' @noRd
 #' @export
 one_and_only_one <- function(nsptagname) {
   list(type = "one_and_only_one", nsptagname = nsptagname, successors = character(0))
@@ -325,7 +325,7 @@ one_and_only_one <- function(nsptagname) {
 #' @param simple_type A list with `from_xml` and `to_xml` functions.
 #' @param default Default value when attribute is absent (default NULL).
 #' @return A list describing the attribute spec.
-#' @keywords internal
+#' @noRd
 #' @export
 optional_attribute <- function(attr_name, simple_type, default = NULL) {
   list(
@@ -340,7 +340,7 @@ optional_attribute <- function(attr_name, simple_type, default = NULL) {
 #' @param attr_name Attribute name (may be namespace-prefixed).
 #' @param simple_type A list with `from_xml` and `to_xml` functions.
 #' @return A list describing the attribute spec.
-#' @keywords internal
+#' @noRd
 #' @export
 required_attribute <- function(attr_name, simple_type) {
   list(
@@ -363,15 +363,15 @@ required_attribute <- function(attr_name, simple_type) {
 #'
 #' @param classname Name for the R6 class.
 #' @param tag Namespace-prefixed tag, e.g. `"p:presentation"`.
-#' @param children Named list of child element specs created with [zero_or_one()],
-#'   [zero_or_more()], [one_or_more()], or [one_and_only_one()].
+#' @param children Named list of child element specs created with `zero_or_one()`,
+#'   `zero_or_more()`, `one_or_more()`, or `one_and_only_one()`.
 #' @param attributes Named list of attribute specs created with
-#'   [optional_attribute()] or [required_attribute()].
+#'   `optional_attribute()` or `required_attribute()`.
 #' @param methods Named list of additional public methods (as functions).
 #' @param active Named list of additional active bindings.
 #' @param inherit R6 class to inherit from (default: BaseOxmlElement).
 #' @return An R6ClassGenerator.
-#' @keywords internal
+#' @noRd
 #' @export
 define_oxml_element <- function(classname,
                                  tag,

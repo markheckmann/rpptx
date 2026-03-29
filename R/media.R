@@ -20,7 +20,7 @@
 #' Wraps a video bytestream and its MIME type. Used by `SlideShapes$add_movie()`.
 #'
 #' @importFrom digest digest
-#' @keywords internal
+#' @noRd
 #' @export
 Video <- R6::R6Class(
   "Video",

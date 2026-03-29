@@ -7,7 +7,7 @@
 # ============================================================================
 
 #' @include oxml-xmlchemy.R oxml-simpletypes.R
-#' @keywords internal
+#' @noRd
 CT_PresetLineDashProperties <- define_oxml_element(
   classname  = "CT_PresetLineDashProperties",
   tag        = "a:prstDash",
@@ -21,7 +21,7 @@ CT_PresetLineDashProperties <- define_oxml_element(
 # CT_LineProperties — <a:ln>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_LineProperties <- R6::R6Class(
   "CT_LineProperties",
   inherit = BaseOxmlElement,

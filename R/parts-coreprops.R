@@ -12,7 +12,7 @@
 #' read/write access to Dublin Core document metadata.
 #'
 #' @include opc-package.R oxml-coreprops.R
-#' @keywords internal
+#' @noRd
 #' @export
 CorePropertiesPart <- R6::R6Class(
   "CorePropertiesPart",
@@ -118,7 +118,7 @@ CorePropertiesPart <- R6::R6Class(
 # ============================================================================
 
 #' Create a default CorePropertiesPart
-#' @keywords internal
+#' @noRd
 CorePropertiesPart_default <- function(package) {
   core_props_elm <- new_ct_coreProperties()
   part <- CorePropertiesPart$new(

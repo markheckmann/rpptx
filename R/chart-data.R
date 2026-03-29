@@ -10,7 +10,7 @@
 # ============================================================================
 
 #' A single chart category label
-#' @keywords internal
+#' @noRd
 #' @export
 Category <- R6::R6Class(
   "Category",
@@ -94,7 +94,7 @@ Category <- R6::R6Class(
 
 
 #' Ordered collection of category labels for a chart
-#' @keywords internal
+#' @noRd
 #' @export
 Categories <- R6::R6Class(
   "Categories",
@@ -199,7 +199,7 @@ length.Categories <- function(x) length(x$.__enclos_env__$private$.cats)
 # ============================================================================
 
 #' Base class for chart data objects
-#' @keywords internal
+#' @noRd
 #' @export
 BaseChartData <- R6::R6Class(
   "BaseChartData",
@@ -269,7 +269,7 @@ length.BaseChartData <- function(x) length(x$.__enclos_env__$private$.series)
 
 
 #' Base class for series data objects
-#' @keywords internal
+#' @noRd
 #' @export
 BaseSeriesData <- R6::R6Class(
   "BaseSeriesData",
@@ -331,7 +331,7 @@ BaseSeriesData <- R6::R6Class(
 #' cd$categories <- c("Q1", "Q2", "Q3")
 #' cd$add_series("Sales", c(100, 200, 150))
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 CategoryChartData <- R6::R6Class(
   "CategoryChartData",
@@ -374,13 +374,13 @@ CategoryChartData <- R6::R6Class(
   )
 )
 
-#' Alias: ChartData == CategoryChartData
+#' @noRd
 #' @export
 ChartData <- CategoryChartData
 
 
 #' Series data for a category chart
-#' @keywords internal
+#' @noRd
 #' @export
 CategorySeriesData <- R6::R6Class(
   "CategorySeriesData",
@@ -408,7 +408,7 @@ CategorySeriesData <- R6::R6Class(
   )
 )
 
-#' @keywords internal
+#' @noRd
 CategoryDataPoint <- R6::R6Class(
   "CategoryDataPoint",
 
@@ -441,7 +441,7 @@ CategoryDataPoint <- R6::R6Class(
 # ============================================================================
 
 #' Chart data container for XY (scatter) charts
-#' @keywords internal
+#' @noRd
 #' @export
 XyChartData <- R6::R6Class(
   "XyChartData",
@@ -465,7 +465,7 @@ XyChartData <- R6::R6Class(
 )
 
 #' Series data for an XY chart
-#' @keywords internal
+#' @noRd
 #' @export
 XySeriesData <- R6::R6Class(
   "XySeriesData",
@@ -485,7 +485,7 @@ XySeriesData <- R6::R6Class(
   )
 )
 
-#' @keywords internal
+#' @noRd
 XyDataPoint <- R6::R6Class(
   "XyDataPoint",
   public = list(
@@ -518,7 +518,7 @@ XyDataPoint <- R6::R6Class(
 # ============================================================================
 
 #' Chart data container for bubble charts
-#' @keywords internal
+#' @noRd
 #' @export
 BubbleChartData <- R6::R6Class(
   "BubbleChartData",
@@ -538,7 +538,7 @@ BubbleChartData <- R6::R6Class(
 )
 
 #' Series data for a bubble chart
-#' @keywords internal
+#' @noRd
 #' @export
 BubbleSeriesData <- R6::R6Class(
   "BubbleSeriesData",
@@ -560,7 +560,7 @@ BubbleSeriesData <- R6::R6Class(
   )
 )
 
-#' @keywords internal
+#' @noRd
 BubbleDataPoint <- R6::R6Class(
   "BubbleDataPoint",
   inherit = XyDataPoint,

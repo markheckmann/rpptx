@@ -9,7 +9,7 @@
 #' Base class for slide parts (slides, layouts, masters)
 #'
 #' @include opc-package.R oxml-slide.R
-#' @keywords internal
+#' @noRd
 #' @export
 BaseSlidePart <- R6::R6Class(
   "BaseSlidePart",
@@ -31,7 +31,7 @@ BaseSlidePart <- R6::R6Class(
 
 #' Slide part
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 SlidePart <- R6::R6Class(
   "SlidePart",
@@ -130,7 +130,7 @@ SlidePart_new <- function(partname, package, slide_layout_part) {
 
 #' Slide layout part
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 SlideLayoutPart <- R6::R6Class(
   "SlideLayoutPart",
@@ -170,7 +170,7 @@ SlideLayoutPart <- R6::R6Class(
 
 #' Slide master part
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 SlideMasterPart <- R6::R6Class(
   "SlideMasterPart",
@@ -205,7 +205,7 @@ SlideMasterPart <- R6::R6Class(
 
 #' Notes master part
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 NotesMasterPart <- R6::R6Class(
   "NotesMasterPart",
@@ -250,7 +250,7 @@ NotesMasterPart_create_default <- function(package) {
 
 #' Notes slide part
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 NotesSlidePart <- R6::R6Class(
   "NotesSlidePart",

@@ -12,7 +12,7 @@
 #' Provides `fill` and `line` properties for chart sub-elements like axes,
 #' series, markers, and gridlines.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 ChartFormat <- R6::R6Class(
   "ChartFormat",
@@ -49,7 +49,7 @@ ChartFormat <- R6::R6Class(
 #'
 #' Controls size and style of markers on line-type chart series.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 Marker <- R6::R6Class(
   "Marker",
@@ -103,7 +103,7 @@ Marker <- R6::R6Class(
 #'
 #' Controls display properties of all data labels in a plot or series.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 DataLabels <- R6::R6Class(
   "DataLabels",
@@ -200,7 +200,7 @@ DataLabels <- R6::R6Class(
 # ============================================================================
 
 #' Individual data point label object
-#' @keywords internal
+#' @noRd
 #' @export
 DataLabel <- R6::R6Class(
   "DataLabel",
@@ -276,7 +276,7 @@ DataLabel <- R6::R6Class(
 # ============================================================================
 
 #' Individual data point in a series
-#' @keywords internal
+#' @noRd
 #' @export
 Point <- R6::R6Class(
   "Point",
@@ -306,7 +306,7 @@ Point <- R6::R6Class(
 )
 
 #' Point collection for category-based series
-#' @keywords internal
+#' @noRd
 #' @export
 CategoryPoints <- R6::R6Class(
   "CategoryPoints",
@@ -328,7 +328,7 @@ length.CategoryPoints <- function(x) x$.__enclos_env__$private$.ser$cat_ptCount_
 `[[.CategoryPoints` <- function(x, i) x$get(i - 1L)  # 1-based to 0-based
 
 #' Point collection for XY (scatter) series
-#' @keywords internal
+#' @noRd
 #' @export
 XyPoints <- R6::R6Class(
   "XyPoints",
@@ -353,7 +353,7 @@ length.XyPoints <- function(x) {
 `[[.XyPoints` <- function(x, i) x$get(i - 1L)
 
 #' Point collection for bubble series
-#' @keywords internal
+#' @noRd
 #' @export
 BubblePoints <- R6::R6Class(
   "BubblePoints",
@@ -384,7 +384,7 @@ length.BubblePoints <- function(x) {
 # ============================================================================
 
 #' Base class for chart series objects
-#' @keywords internal
+#' @noRd
 #' @export
 BaseSeries <- R6::R6Class(
   "BaseSeries",
@@ -410,7 +410,7 @@ BaseSeries <- R6::R6Class(
 )
 
 #' Base class for category-type series (bar, line, pie, area, radar)
-#' @keywords internal
+#' @noRd
 #' @export
 BaseCategorySeries <- R6::R6Class(
   "BaseCategorySeries",
@@ -437,12 +437,12 @@ BaseCategorySeries <- R6::R6Class(
 )
 
 #' Area series
-#' @keywords internal
+#' @noRd
 #' @export
 AreaSeries <- R6::R6Class("AreaSeries", inherit = BaseCategorySeries)
 
 #' Bar series
-#' @keywords internal
+#' @noRd
 #' @export
 BarSeries <- R6::R6Class(
   "BarSeries",
@@ -461,7 +461,7 @@ BarSeries <- R6::R6Class(
 )
 
 #' Line series
-#' @keywords internal
+#' @noRd
 #' @export
 LineSeries <- R6::R6Class(
   "LineSeries",
@@ -484,12 +484,12 @@ LineSeries <- R6::R6Class(
 )
 
 #' Pie series
-#' @keywords internal
+#' @noRd
 #' @export
 PieSeries <- R6::R6Class("PieSeries", inherit = BaseCategorySeries)
 
 #' Radar series
-#' @keywords internal
+#' @noRd
 #' @export
 RadarSeries <- R6::R6Class(
   "RadarSeries",
@@ -503,7 +503,7 @@ RadarSeries <- R6::R6Class(
 )
 
 #' XY scatter series
-#' @keywords internal
+#' @noRd
 #' @export
 XySeries <- R6::R6Class(
   "XySeries",
@@ -530,7 +530,7 @@ XySeries <- R6::R6Class(
 )
 
 #' Bubble series
-#' @keywords internal
+#' @noRd
 #' @export
 BubbleSeries <- R6::R6Class(
   "BubbleSeries",
@@ -548,7 +548,7 @@ BubbleSeries <- R6::R6Class(
 #'
 #' @param ser A CT_SeriesComposite wrapped element.
 #' @return A series domain object.
-#' @keywords internal
+#' @noRd
 #' @export
 series_factory <- function(ser) {
   # ser's parent determines the plot type
@@ -578,7 +578,7 @@ series_factory <- function(ser) {
 # ============================================================================
 
 #' Collection of series in a chart or plot
-#' @keywords internal
+#' @noRd
 #' @export
 SeriesCollection <- R6::R6Class(
   "SeriesCollection",
@@ -609,7 +609,7 @@ length.SeriesCollection <- function(x) length(x$.__enclos_env__$private$.element
 # ============================================================================
 
 #' Base class for chart plot objects
-#' @keywords internal
+#' @noRd
 #' @export
 BasePlot <- R6::R6Class(
   "BasePlot",
@@ -663,17 +663,17 @@ BasePlot <- R6::R6Class(
 )
 
 #' Area chart plot
-#' @keywords internal
+#' @noRd
 #' @export
 AreaPlot <- R6::R6Class("AreaPlot", inherit = BasePlot)
 
 #' 3-D area chart plot
-#' @keywords internal
+#' @noRd
 #' @export
 Area3DPlot <- R6::R6Class("Area3DPlot", inherit = BasePlot)
 
 #' Bar or column chart plot
-#' @keywords internal
+#' @noRd
 #' @export
 BarPlot <- R6::R6Class(
   "BarPlot",
@@ -705,32 +705,32 @@ BarPlot <- R6::R6Class(
 )
 
 #' Bubble chart plot
-#' @keywords internal
+#' @noRd
 #' @export
 BubblePlot <- R6::R6Class("BubblePlot", inherit = BasePlot)
 
 #' Doughnut chart plot
-#' @keywords internal
+#' @noRd
 #' @export
 DoughnutPlot <- R6::R6Class("DoughnutPlot", inherit = BasePlot)
 
 #' Line chart plot
-#' @keywords internal
+#' @noRd
 #' @export
 LinePlot <- R6::R6Class("LinePlot", inherit = BasePlot)
 
 #' Pie chart plot
-#' @keywords internal
+#' @noRd
 #' @export
 PiePlot <- R6::R6Class("PiePlot", inherit = BasePlot)
 
 #' Radar chart plot
-#' @keywords internal
+#' @noRd
 #' @export
 RadarPlot <- R6::R6Class("RadarPlot", inherit = BasePlot)
 
 #' XY (scatter) chart plot
-#' @keywords internal
+#' @noRd
 #' @export
 XyPlot <- R6::R6Class("XyPlot", inherit = BasePlot)
 
@@ -739,7 +739,7 @@ XyPlot <- R6::R6Class("XyPlot", inherit = BasePlot)
 #' @param xChart A CT_xChart wrapped element.
 #' @param chart The Chart domain object.
 #' @return A plot domain object.
-#' @keywords internal
+#' @noRd
 #' @export
 plot_factory <- function(xChart, chart) {
   nd <- xChart$get_node()
@@ -764,7 +764,7 @@ plot_factory <- function(xChart, chart) {
 
 
 #' Determine chart type of a plot
-#' @keywords internal
+#' @noRd
 #' @export
 plot_type_inspector <- function(plot) {
   XL <- XL_CHART_TYPE
@@ -891,7 +891,7 @@ plot_type_inspector <- function(plot) {
 # ============================================================================
 
 #' Base class for chart axis domain objects
-#' @keywords internal
+#' @noRd
 #' @export
 BaseAxis <- R6::R6Class(
   "BaseAxis",
@@ -1041,7 +1041,7 @@ BaseAxis <- R6::R6Class(
 )
 
 #' Category axis domain object
-#' @keywords internal
+#' @noRd
 #' @export
 CategoryAxis <- R6::R6Class(
   "CategoryAxis",
@@ -1052,7 +1052,7 @@ CategoryAxis <- R6::R6Class(
 )
 
 #' Date axis domain object
-#' @keywords internal
+#' @noRd
 #' @export
 DateAxis <- R6::R6Class(
   "DateAxis",
@@ -1063,7 +1063,7 @@ DateAxis <- R6::R6Class(
 )
 
 #' Value axis domain object
-#' @keywords internal
+#' @noRd
 #' @export
 ValueAxis <- R6::R6Class(
   "ValueAxis",
@@ -1156,7 +1156,7 @@ ValueAxis <- R6::R6Class(
 # ============================================================================
 
 #' Axis title domain object
-#' @keywords internal
+#' @noRd
 #' @export
 AxisTitle <- R6::R6Class(
   "AxisTitle",
@@ -1197,7 +1197,7 @@ AxisTitle <- R6::R6Class(
 )
 
 #' Chart title domain object
-#' @keywords internal
+#' @noRd
 #' @export
 ChartTitle <- R6::R6Class(
   "ChartTitle",
@@ -1239,7 +1239,7 @@ ChartTitle <- R6::R6Class(
 # ============================================================================
 
 #' Major gridlines domain object
-#' @keywords internal
+#' @noRd
 #' @export
 MajorGridlines <- R6::R6Class(
   "MajorGridlines",
@@ -1264,7 +1264,7 @@ MajorGridlines <- R6::R6Class(
 # ============================================================================
 
 #' Tick label formatting object for a chart axis
-#' @keywords internal
+#' @noRd
 #' @export
 TickLabels <- R6::R6Class(
   "TickLabels",
@@ -1330,7 +1330,7 @@ TickLabels <- R6::R6Class(
 # ============================================================================
 
 #' Chart legend domain object
-#' @keywords internal
+#' @noRd
 #' @export
 Legend <- R6::R6Class(
   "Legend",
@@ -1394,7 +1394,7 @@ Legend <- R6::R6Class(
 #' Provides access to chart properties, title, legend, plots, series, and axes.
 #' Access via `graphic_frame$chart`.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 Chart <- R6::R6Class(
   "Chart",

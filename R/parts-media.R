@@ -4,7 +4,7 @@
 
 #' Media part (audio/video OPC part)
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 MediaPart <- R6::R6Class(
   "MediaPart",

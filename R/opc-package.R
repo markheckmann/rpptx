@@ -15,7 +15,7 @@
 #' to a package file (.pptx).
 #'
 #' @include opc-oxml.R opc-serialized.R opc-constants.R opc-packuri.R opc-spec.R
-#' @keywords internal
+#' @noRd
 #' @export
 OpcPackage <- R6::R6Class(
   "OpcPackage",
@@ -165,7 +165,7 @@ OpcPackage <- R6::R6Class(
 #' Open an OPC package file
 #' @param pkg_file Path to a .pptx file.
 #' @return An OpcPackage instance.
-#' @keywords internal
+#' @noRd
 #' @export
 OpcPackage_open <- function(pkg_file) {
   pkg <- OpcPackage$new(pkg_file)
@@ -178,7 +178,7 @@ OpcPackage_open <- function(pkg_file) {
 # PackageLoader — loads a package from disk
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 PackageLoader <- R6::R6Class(
   "PackageLoader",
 
@@ -303,7 +303,7 @@ PackageLoader <- R6::R6Class(
 #'
 #' Provides common properties and methods for all part types.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 Part <- R6::R6Class(
   "Part",
@@ -428,7 +428,7 @@ Part <- R6::R6Class(
 #' Provides additional methods for parsing/reserializing XML and managing
 #' relationships. Most package parts are XmlParts.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 XmlPart <- R6::R6Class(
   "XmlPart",
@@ -494,7 +494,7 @@ XmlPart <- R6::R6Class(
 #' @param package The package.
 #' @param blob Raw bytes of XML.
 #' @return An XmlPart instance.
-#' @keywords internal
+#' @noRd
 XmlPart_load <- function(cls, partname, content_type, package, blob) {
   element <- rpptx_parse_xml(blob)
   cls$new(partname, content_type, package, element)
@@ -511,7 +511,7 @@ XmlPart_load <- function(cls, partname, content_type, package, blob) {
 #' Register a Part subclass for a content type
 #' @param content_type Content type string.
 #' @param part_cls An R6 class generator.
-#' @keywords internal
+#' @noRd
 #' @export
 register_part_type <- function(content_type, part_cls) {
   .part_type_registry[[content_type]] <- part_cls
@@ -523,7 +523,7 @@ register_part_type <- function(content_type, part_cls) {
 #' @param package The package.
 #' @param blob Raw bytes.
 #' @return A Part instance.
-#' @keywords internal
+#' @noRd
 #' @export
 PartFactory_create <- function(partname, content_type, package, blob) {
   part_cls <- .part_type_registry[[content_type]]
@@ -550,7 +550,7 @@ PartFactory_create <- function(partname, content_type, package, blob) {
 # ============================================================================
 
 #' Resolves partname to content type from \[Content_Types\].xml
-#' @keywords internal
+#' @noRd
 ContentTypeMap <- R6::R6Class(
   "ContentTypeMap",
 
@@ -588,7 +588,7 @@ ContentTypeMap <- R6::R6Class(
 #' Create a ContentTypeMap from \[Content_Types\].xml bytes
 #' @param content_types_xml Raw bytes of \[Content_Types\].xml.
 #' @return A ContentTypeMap instance.
-#' @keywords internal
+#' @noRd
 ContentTypeMap$from_xml <- function(content_types_xml) {
   types_elm <- rpptx_parse_xml(content_types_xml)
 
@@ -616,7 +616,7 @@ ContentTypeMap$from_xml <- function(content_types_xml) {
 #'
 #' Keyed by rId. Supports dict-like access.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 Relationships <- R6::R6Class(
   "Relationships",
@@ -794,7 +794,7 @@ length.Relationships <- function(x) {
 # ============================================================================
 
 #' Value object describing a link from a part or package to another part
-#' @keywords internal
+#' @noRd
 #' @export
 Relationship <- R6::R6Class(
   "Relationship",
@@ -873,7 +873,7 @@ Relationship <- R6::R6Class(
 #' @param rel A CT_Relationship element.
 #' @param parts Named list mapping partname -> Part.
 #' @return A Relationship object.
-#' @keywords internal
+#' @noRd
 Relationship_from_xml <- function(base_uri, rel, parts) {
   if (rel$targetMode == RTM$EXTERNAL) {
     target <- rel$target_ref

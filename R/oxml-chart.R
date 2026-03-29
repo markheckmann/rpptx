@@ -21,7 +21,7 @@
 # ============================================================================
 
 #' Boolean chart element (val defaults to TRUE)
-#' @keywords internal
+#' @noRd
 #' @export
 CT_Boolean <- R6::R6Class(
   "CT_Boolean",
@@ -45,7 +45,7 @@ CT_Boolean <- R6::R6Class(
 # ============================================================================
 
 #' Numeric val chart element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_Double <- R6::R6Class(
   "CT_Double",
@@ -67,7 +67,7 @@ CT_Double <- R6::R6Class(
 # ============================================================================
 
 #' Unsigned integer val chart element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_UnsignedInt <- R6::R6Class(
   "CT_UnsignedInt",
@@ -89,7 +89,7 @@ CT_UnsignedInt <- R6::R6Class(
 # ============================================================================
 
 #' Axis unit element (numeric val)
-#' @keywords internal
+#' @noRd
 #' @export
 CT_AxisUnit <- R6::R6Class(
   "CT_AxisUnit",
@@ -111,7 +111,7 @@ CT_AxisUnit <- R6::R6Class(
 # ============================================================================
 
 #' Number format element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_NumFmt <- R6::R6Class(
   "CT_NumFmt",
@@ -142,7 +142,7 @@ CT_NumFmt <- R6::R6Class(
 # ============================================================================
 
 #' Axis scaling element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_Scaling <- R6::R6Class(
   "CT_Scaling",
@@ -232,7 +232,7 @@ CT_Scaling <- R6::R6Class(
 # ============================================================================
 
 #' Axis orientation element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_Orientation <- R6::R6Class(
   "CT_Orientation",
@@ -256,7 +256,7 @@ CT_Orientation <- R6::R6Class(
 # ============================================================================
 
 #' Label offset element (default 100)
-#' @keywords internal
+#' @noRd
 #' @export
 CT_LblOffset <- R6::R6Class(
   "CT_LblOffset",
@@ -280,7 +280,7 @@ CT_LblOffset <- R6::R6Class(
 # ============================================================================
 
 #' Tick label position element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_TickLblPos <- R6::R6Class(
   "CT_TickLblPos",
@@ -302,7 +302,7 @@ CT_TickLblPos <- R6::R6Class(
 # ============================================================================
 
 #' Tick mark element (cross/in/none/out)
-#' @keywords internal
+#' @noRd
 #' @export
 CT_TickMark <- R6::R6Class(
   "CT_TickMark",
@@ -326,7 +326,7 @@ CT_TickMark <- R6::R6Class(
 # ============================================================================
 
 #' Axis crossing element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_Crosses <- R6::R6Class(
   "CT_Crosses",
@@ -348,7 +348,7 @@ CT_Crosses <- R6::R6Class(
 # ============================================================================
 
 #' Axis crosses-at element (numeric)
-#' @keywords internal
+#' @noRd
 #' @export
 CT_CrossesAt <- R6::R6Class(
   "CT_CrossesAt",
@@ -370,7 +370,7 @@ CT_CrossesAt <- R6::R6Class(
 # ============================================================================
 
 #' Base class for chart axis XML elements
-#' @keywords internal
+#' @noRd
 #' @export
 BaseAxisElement <- R6::R6Class(
   "BaseAxisElement",
@@ -619,7 +619,7 @@ BaseAxisElement <- R6::R6Class(
 # ============================================================================
 
 #' Category axis XML element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_CatAx <- R6::R6Class(
   "CT_CatAx",
@@ -660,7 +660,7 @@ CT_CatAx <- R6::R6Class(
 # ============================================================================
 
 #' Date axis XML element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_DateAx <- R6::R6Class(
   "CT_DateAx",
@@ -673,7 +673,7 @@ CT_DateAx <- R6::R6Class(
 # ============================================================================
 
 #' Value axis XML element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_ValAx <- R6::R6Class(
   "CT_ValAx",
@@ -724,7 +724,7 @@ CT_ValAx <- R6::R6Class(
 # ============================================================================
 
 #' Chart gridlines XML element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_ChartLines <- R6::R6Class(
   "CT_ChartLines",
@@ -742,7 +742,7 @@ CT_ChartLines <- R6::R6Class(
 # ============================================================================
 
 #' Chart text element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_Tx <- R6::R6Class(
   "CT_Tx",
@@ -789,7 +789,7 @@ CT_Tx <- R6::R6Class(
 # ============================================================================
 
 #' Chart title element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_Title <- R6::R6Class(
   "CT_Title",
@@ -841,7 +841,7 @@ CT_Title <- R6::R6Class(
 # ============================================================================
 
 #' Legend position element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_LegendPos <- R6::R6Class(
   "CT_LegendPos",
@@ -865,7 +865,7 @@ CT_LegendPos <- R6::R6Class(
 # ============================================================================
 
 #' Chart legend XML element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_Legend <- R6::R6Class(
   "CT_Legend",
@@ -938,7 +938,7 @@ CT_Legend <- R6::R6Class(
 # ============================================================================
 
 #' Chart layout XML element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_Layout <- R6::R6Class(
   "CT_Layout",
@@ -974,7 +974,7 @@ CT_Layout <- R6::R6Class(
 )
 
 #' Chart manual layout XML element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_ManualLayout <- R6::R6Class(
   "CT_ManualLayout",
@@ -1015,7 +1015,7 @@ CT_ManualLayout <- R6::R6Class(
 )
 
 #' XML element wrapper for c:layoutMode
-#' @keywords internal
+#' @noRd
 #' @export
 CT_LayoutMode <- R6::R6Class(
   "CT_LayoutMode",
@@ -1039,7 +1039,7 @@ CT_LayoutMode <- R6::R6Class(
 # ============================================================================
 
 #' Data label position element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_DLblPos <- R6::R6Class(
   "CT_DLblPos",
@@ -1061,7 +1061,7 @@ CT_DLblPos <- R6::R6Class(
 # ============================================================================
 
 #' Data labels container element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_DLbls <- R6::R6Class(
   "CT_DLbls",
@@ -1181,7 +1181,7 @@ CT_DLbls <- R6::R6Class(
 # ============================================================================
 
 #' Individual data label element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_DLbl <- R6::R6Class(
   "CT_DLbl",
@@ -1258,7 +1258,7 @@ CT_DLbl <- R6::R6Class(
 # ============================================================================
 
 #' Marker element for line/xy/radar charts
-#' @keywords internal
+#' @noRd
 #' @export
 CT_Marker <- R6::R6Class(
   "CT_Marker",
@@ -1316,7 +1316,7 @@ CT_Marker <- R6::R6Class(
 )
 
 #' Marker style element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_MarkerStyle <- R6::R6Class(
   "CT_MarkerStyle",
@@ -1333,7 +1333,7 @@ CT_MarkerStyle <- R6::R6Class(
 )
 
 #' Marker size element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_MarkerSize <- R6::R6Class(
   "CT_MarkerSize",
@@ -1355,7 +1355,7 @@ CT_MarkerSize <- R6::R6Class(
 # ============================================================================
 
 #' Data point element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_DPt <- R6::R6Class(
   "CT_DPt",
@@ -1394,7 +1394,7 @@ CT_DPt <- R6::R6Class(
 # ============================================================================
 
 #' Chart series element (composite; all series use the same c:ser tag)
-#' @keywords internal
+#' @noRd
 #' @export
 CT_SeriesComposite <- R6::R6Class(
   "CT_SeriesComposite",
@@ -1532,7 +1532,7 @@ CT_SeriesComposite <- R6::R6Class(
 # ============================================================================
 
 #' Numeric data source element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_NumDataSource <- R6::R6Class(
   "CT_NumDataSource",
@@ -1580,7 +1580,7 @@ CT_NumDataSource <- R6::R6Class(
 )
 
 #' Plot area XML element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_PlotArea <- R6::R6Class(
   "CT_PlotArea",
@@ -1646,7 +1646,7 @@ CT_PlotArea <- R6::R6Class(
 # ============================================================================
 
 #' Chart element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_Chart <- R6::R6Class(
   "CT_Chart",
@@ -1711,7 +1711,7 @@ CT_Chart <- R6::R6Class(
 # ============================================================================
 
 #' Chart space XML element (root of chart part)
-#' @keywords internal
+#' @noRd
 #' @export
 CT_ChartSpace <- R6::R6Class(
   "CT_ChartSpace",
@@ -1762,7 +1762,7 @@ CT_ChartSpace <- R6::R6Class(
 # ============================================================================
 
 #' Chart style element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_Style <- R6::R6Class(
   "CT_Style",
@@ -1784,7 +1784,7 @@ CT_Style <- R6::R6Class(
 # ============================================================================
 
 #' Generic xChart element (barChart, lineChart, etc.)
-#' @keywords internal
+#' @noRd
 #' @export
 CT_xChart <- R6::R6Class(
   "CT_xChart",
@@ -1888,7 +1888,7 @@ CT_xChart <- R6::R6Class(
 # ============================================================================
 
 #' Gap width / overlap integer element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_IntegerElement <- R6::R6Class(
   "CT_IntegerElement",
@@ -1910,7 +1910,7 @@ CT_IntegerElement <- R6::R6Class(
 # ============================================================================
 
 #' Bar direction element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_BarDir <- R6::R6Class(
   "CT_BarDir",

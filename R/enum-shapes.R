@@ -7,7 +7,7 @@
 #'
 #' Integer constants classifying shapes by type, mirroring MSO_SHAPE_TYPE.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 MSO_SHAPE_TYPE <- list(
   AUTO_SHAPE      = 1L,
@@ -40,7 +40,7 @@ MSO_SHAPE_TYPE <- list(
 
 # Re-export as MSO for backward compat / convenience
 #' MSO shape type enum (alias for MSO_SHAPE_TYPE)
-#' @keywords internal
+#' @noRd
 #' @export
 MSO <- MSO_SHAPE_TYPE
 
@@ -52,7 +52,7 @@ MSO <- MSO_SHAPE_TYPE
 #'
 #' Alias: `MSO_SHAPE`
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 MSO_AUTO_SHAPE_TYPE <- list(
   ACTION_BUTTON_BACK_OR_PREVIOUS  = list(value = 129L, prst = "actionButtonBackPrevious"),
@@ -164,7 +164,7 @@ MSO_AUTO_SHAPE_TYPE <- list(
   WAVE                            = list(value = 105L, prst = "wave")
 )
 
-#' @rdname MSO_AUTO_SHAPE_TYPE
+#' @noRd
 #' @export
 MSO_SHAPE <- MSO_AUTO_SHAPE_TYPE
 
@@ -173,7 +173,7 @@ MSO_SHAPE <- MSO_AUTO_SHAPE_TYPE
 #'
 #' String values for the `type` attribute of a `<p:ph>` element.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 PP_PLACEHOLDER <- list(
   TITLE         = "title",
@@ -199,7 +199,7 @@ PP_PLACEHOLDER <- list(
 #' Members have `$value` (integer) and `$prst` (XML preset name).
 #' Alias: `MSO_CONNECTOR`.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 MSO_CONNECTOR_TYPE <- list(
   STRAIGHT = list(value = 1L, prst = "line"),
@@ -209,6 +209,6 @@ MSO_CONNECTOR_TYPE <- list(
 )
 
 #' MSO connector type enum (alias for MSO_CONNECTOR_TYPE)
-#' @keywords internal
+#' @noRd
 #' @export
 MSO_CONNECTOR <- MSO_CONNECTOR_TYPE

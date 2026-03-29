@@ -9,7 +9,7 @@
 #' presentation-specific behavior.
 #'
 #' @include opc-package.R parts-coreprops.R parts-image.R
-#' @keywords internal
+#' @noRd
 #' @export
 Package <- R6::R6Class(
   "Package",
@@ -129,7 +129,7 @@ Package <- R6::R6Class(
 #' Open a Package from a .pptx file
 #' @param pkg_file Path to a .pptx file.
 #' @return A Package instance.
-#' @keywords internal
+#' @noRd
 #' @export
 Package_open <- function(pkg_file) {
   pkg <- Package$new(pkg_file)

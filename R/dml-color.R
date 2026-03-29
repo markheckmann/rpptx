@@ -16,7 +16,7 @@
 #' @param b Integer 0–255 blue component.
 #' @return An `RGBColor` object.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 RGBColor <- function(r, g, b) {
   r <- as.integer(r); g <- as.integer(g); b <- as.integer(b)
@@ -47,7 +47,7 @@ as.character.RGBColor <- function(x, ...) {
 #'
 #' @param hex_str A 6-character hex string like "FF0000" or "#FF0000".
 #' @return An `RGBColor` object.
-#' @keywords internal
+#' @noRd
 #' @export
 RGBColor_from_str <- function(hex_str) {
   hex_str <- toupper(sub("^#", "", hex_str))
@@ -71,7 +71,7 @@ RGBColor_from_str <- function(hex_str) {
 #' Access via `FillFormat$fore_color`, `FillFormat$back_color`, or
 #' `LineFormat$color`.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 ColorFormat <- R6::R6Class(
   "ColorFormat",

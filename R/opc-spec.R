@@ -45,14 +45,14 @@
 #' @param ext File extension (lowercase).
 #' @param content_type Content type string.
 #' @return Logical.
-#' @keywords internal
+#' @noRd
 is_default_content_type <- function(ext, content_type) {
   dct <- .init_default_content_types()
   pair <- c(tolower(ext), content_type)
   any(vapply(dct, function(x) identical(x, pair), logical(1)))
 }
 
-#' @keywords internal
+#' @noRd
 image_content_types <- list(
   bmp  = "image/bmp",
   emf  = "image/x-emf",

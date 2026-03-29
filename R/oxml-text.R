@@ -3,14 +3,14 @@
 # Ported from python-pptx/src/pptx/oxml/text.py.
 
 #' @include utils.R oxml-xmlchemy.R oxml-simpletypes.R
-#' @keywords internal
+#' @noRd
 
 
 # ============================================================================
 # CT_TextFont — <a:latin>, <a:ea>, <a:cs>, <a:sym>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_TextFont <- define_oxml_element(
   classname = "CT_TextFont",
   tag = "a:latin",
@@ -24,7 +24,7 @@ CT_TextFont <- define_oxml_element(
 # CT_TextCharacterProperties — <a:rPr>, <a:defRPr>, <a:endParaRPr>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_TextCharacterProperties <- define_oxml_element(
   classname = "CT_TextCharacterProperties",
   tag = "a:rPr",
@@ -58,7 +58,7 @@ CT_TextCharacterProperties <- define_oxml_element(
 # ============================================================================
 
 #' CT_Hyperlink XML element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_Hyperlink <- R6::R6Class(
   "CT_Hyperlink",
@@ -122,7 +122,7 @@ CT_Hyperlink <- R6::R6Class(
 # CT_TextLineBreak — <a:br>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_TextLineBreak <- define_oxml_element(
   classname = "CT_TextLineBreak",
   tag = "a:br",
@@ -143,7 +143,7 @@ CT_TextLineBreak <- define_oxml_element(
 # CT_TextSpacingPercent — <a:spcPct>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_TextSpacingPercent <- define_oxml_element(
   classname = "CT_TextSpacingPercent",
   tag = "a:spcPct",
@@ -157,7 +157,7 @@ CT_TextSpacingPercent <- define_oxml_element(
 # CT_TextSpacingPoint — <a:spcPts>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_TextSpacingPoint <- define_oxml_element(
   classname = "CT_TextSpacingPoint",
   tag = "a:spcPts",
@@ -171,7 +171,7 @@ CT_TextSpacingPoint <- define_oxml_element(
 # CT_TextSpacing — <a:lnSpc>, <a:spcBef>, <a:spcAft>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_TextSpacing <- define_oxml_element(
   classname = "CT_TextSpacing",
   tag = "a:lnSpc",
@@ -200,7 +200,7 @@ CT_TextSpacing <- define_oxml_element(
 # CT_TextParagraphProperties — <a:pPr>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_TextParagraphProperties <- define_oxml_element(
   classname = "CT_TextParagraphProperties",
   tag = "a:pPr",
@@ -261,7 +261,7 @@ CT_TextParagraphProperties <- define_oxml_element(
 # CT_RegularTextRun — <a:r>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_RegularTextRun <- define_oxml_element(
   classname = "CT_RegularTextRun",
   tag = "a:r",
@@ -287,7 +287,7 @@ CT_RegularTextRun <- define_oxml_element(
 # CT_TextParagraph — <a:p>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_TextParagraph <- define_oxml_element(
   classname = "CT_TextParagraph",
   tag = "a:p",
@@ -361,7 +361,7 @@ CT_TextParagraph$set("public", "_new_r", function() {
   "{http://schemas.openxmlformats.org/drawingml/2006/main}normAutofit"
 )
 
-#' @keywords internal
+#' @noRd
 CT_TextBodyProperties <- R6::R6Class(
   "CT_TextBodyProperties",
   inherit = BaseOxmlElement,
@@ -441,7 +441,7 @@ CT_TextBodyProperties <- R6::R6Class(
 
 #' Custom element class for p:txBody and a:txBody elements.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 CT_TextBody <- R6::R6Class(
   "CT_TextBody",

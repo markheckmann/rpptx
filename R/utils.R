@@ -128,7 +128,7 @@ format.Length <- function(x, ...) {
 #' @param fn A function taking `self` that computes the value.
 #' @param cache_field Name of the private field to use for caching.
 #' @return A function suitable for R6 active bindings.
-#' @keywords internal
+#' @noRd
 lazy_active_binding <- function(fn, cache_field) {
   # R6 replaces active binding function environments, so closures break.
   # We bake the values directly into the function AST using bquote().

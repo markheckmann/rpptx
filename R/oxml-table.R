@@ -7,7 +7,7 @@
 # ============================================================================
 
 #' @include oxml-xmlchemy.R oxml-simpletypes.R
-#' @keywords internal
+#' @noRd
 CT_TableProperties <- define_oxml_element(
   classname  = "CT_TableProperties",
   tag        = "a:tblPr",
@@ -29,7 +29,7 @@ CT_TableProperties <- define_oxml_element(
 # CT_TableGrid — <a:tblGrid>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_TableGrid <- define_oxml_element(
   classname = "CT_TableGrid",
   tag       = "a:tblGrid",
@@ -53,7 +53,7 @@ CT_TableGrid$set("public", "add_gridCol", function(width) {
 # CT_TableCol — <a:gridCol>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_TableCol <- define_oxml_element(
   classname  = "CT_TableCol",
   tag        = "a:gridCol",
@@ -67,7 +67,7 @@ CT_TableCol <- define_oxml_element(
 # CT_TableCellProperties — <a:tcPr>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_TableCellProperties <- define_oxml_element(
   classname  = "CT_TableCellProperties",
   tag        = "a:tcPr",
@@ -86,7 +86,7 @@ CT_TableCellProperties <- define_oxml_element(
 # ============================================================================
 
 #' CT_TableCell XML element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_TableCell <- R6::R6Class(
   "CT_TableCell",
@@ -212,7 +212,7 @@ CT_TableCell <- R6::R6Class(
 # ============================================================================
 
 #' CT_TableRow XML element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_TableRow <- R6::R6Class(
   "CT_TableRow",
@@ -255,7 +255,7 @@ CT_TableRow <- R6::R6Class(
 # ============================================================================
 
 #' CT_Table XML element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_Table <- R6::R6Class(
   "CT_Table",
@@ -324,7 +324,7 @@ CT_Table <- R6::R6Class(
 # ============================================================================
 
 #' Create a new <a:tbl> element
-#' @keywords internal
+#' @noRd
 CT_Table_new_tbl <- function(rows, cols, width, height) {
   a <- .nsmap[["a"]]
   xml_str <- sprintf(paste0(
@@ -428,7 +428,7 @@ CT_GraphicalObjectFrame$set("active", "tbl", function() {
 # ============================================================================
 
 #' Create a new <p:graphicFrame> wrapping a table
-#' @keywords internal
+#' @noRd
 CT_GraphicalObjectFrame_new_table_graphicFrame <- function(id, name, rows, cols,
                                                             x, y, cx, cy) {
   p <- .nsmap[["p"]]; a <- .nsmap[["a"]]

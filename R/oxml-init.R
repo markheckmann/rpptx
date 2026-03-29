@@ -16,9 +16,9 @@
 #' in an instance of `cls` instead of the default BaseOxmlElement.
 #'
 #' @param nsptagname Namespace-prefixed tag, e.g. `"p:presentation"`.
-#' @param cls An R6ClassGenerator (e.g. the result of [define_oxml_element()]).
+#' @param cls An R6ClassGenerator (e.g. the result of `define_oxml_element()`).
 #' @include oxml-xmlchemy.R
-#' @keywords internal
+#' @noRd
 #' @export
 register_element_cls <- function(nsptagname, cls) {
   clark_name <- qn(nsptagname)
@@ -33,7 +33,7 @@ register_element_cls <- function(nsptagname, cls) {
 #'
 #' @param node An xml2 xml_node.
 #' @return A BaseOxmlElement (or subclass) instance.
-#' @keywords internal
+#' @noRd
 #' @export
 wrap_element <- function(node) {
   if (is.null(node) || inherits(node, "xml_missing")) return(NULL)
@@ -54,7 +54,7 @@ wrap_element <- function(node) {
 #'
 #' @param xml A raw vector, character string, or connection containing XML.
 #' @return A wrapped BaseOxmlElement (or registered subclass) for the root.
-#' @keywords internal
+#' @noRd
 #' @export
 rpptx_parse_xml <- function(xml) {
   if (is.raw(xml)) {
@@ -71,7 +71,7 @@ rpptx_parse_xml <- function(xml) {
 #'
 #' @param template_name Name of the template (without .xml extension).
 #' @return A wrapped element for the template root.
-#' @keywords internal
+#' @noRd
 #' @export
 parse_from_template <- function(template_name) {
   filename <- system.file("templates", paste0(template_name, ".xml"),
@@ -92,7 +92,7 @@ parse_from_template <- function(template_name) {
 #'
 #' @param node An xml2 xml_node.
 #' @return A Clark-notation tag string.
-#' @keywords internal
+#' @noRd
 .get_clark_name <- function(node) {
   # First try: xml_name with namespace context gives prefixed name
   doc_ns <- tryCatch(xml2::xml_ns(node), error = function(e) NULL)

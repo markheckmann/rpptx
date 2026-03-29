@@ -7,7 +7,7 @@
 # ============================================================================
 
 #' @include oxml-xmlchemy.R oxml-simpletypes.R oxml-init.R
-#' @keywords internal
+#' @noRd
 CT_CommonSlideData <- define_oxml_element(
   classname = "CT_CommonSlideData",
   tag = "p:cSld",
@@ -56,7 +56,7 @@ CT_CommonSlideData$set("private", ".change_to_noFill_bg", function() {
 # CT_Background — <p:bg>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_Background <- R6::R6Class(
   "CT_Background",
   inherit = BaseOxmlElement,
@@ -77,7 +77,7 @@ CT_Background <- R6::R6Class(
 # CT_BackgroundProperties — <p:bgPr>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_BackgroundProperties <- R6::R6Class(
   "CT_BackgroundProperties",
   inherit = BaseOxmlElement
@@ -107,7 +107,7 @@ CT_BackgroundProperties <- R6::R6Class(
 # CT_Slide — <p:sld>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_Slide <- define_oxml_element(
   classname = "CT_Slide",
   tag = "p:sld",
@@ -156,7 +156,7 @@ new_ct_slide <- function() {
 # CT_SlideLayout — <p:sldLayout>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_SlideLayout <- define_oxml_element(
   classname = "CT_SlideLayout",
   tag = "p:sldLayout",
@@ -171,7 +171,7 @@ CT_SlideLayout <- .add_slide_element_methods(CT_SlideLayout)
 # CT_SlideLayoutIdListEntry — <p:sldLayoutId>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_SlideLayoutIdListEntry <- define_oxml_element(
   classname = "CT_SlideLayoutIdListEntry",
   tag = "p:sldLayoutId",
@@ -185,7 +185,7 @@ CT_SlideLayoutIdListEntry <- define_oxml_element(
 # CT_SlideLayoutIdList — <p:sldLayoutIdLst>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_SlideLayoutIdList <- define_oxml_element(
   classname = "CT_SlideLayoutIdList",
   tag = "p:sldLayoutIdLst",
@@ -199,7 +199,7 @@ CT_SlideLayoutIdList <- define_oxml_element(
 # CT_SlideMaster — <p:sldMaster>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_SlideMaster <- define_oxml_element(
   classname = "CT_SlideMaster",
   tag = "p:sldMaster",
@@ -218,7 +218,7 @@ CT_SlideMaster <- .add_slide_element_methods(CT_SlideMaster)
 # CT_NotesSlide — <p:notes>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_NotesSlide <- define_oxml_element(
   classname = "CT_NotesSlide",
   tag = "p:notes",
@@ -237,7 +237,7 @@ CT_NotesSlide <- .add_slide_element_methods(CT_NotesSlide)
 # CT_NotesMaster — <p:notesMaster>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_NotesMaster <- define_oxml_element(
   classname = "CT_NotesMaster",
   tag = "p:notesMaster",

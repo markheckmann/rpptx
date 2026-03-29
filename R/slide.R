@@ -10,7 +10,7 @@
 #' Base class for slide objects (slides, layouts, masters)
 #'
 #' @include shared.R
-#' @keywords internal
+#' @noRd
 #' @export
 .BaseSlide <- R6::R6Class(
   ".BaseSlide",
@@ -71,7 +71,7 @@
 #'
 #' Provides access to slide properties.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 Slide <- R6::R6Class(
   "Slide",
@@ -138,7 +138,7 @@ Slide <- R6::R6Class(
 #'
 #' Provides access to notes content for a slide, including the notes text frame.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 NotesSlide <- R6::R6Class(
   "NotesSlide",
@@ -186,7 +186,7 @@ NotesSlide <- R6::R6Class(
 
 #' Notes master proxy object
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 NotesMaster <- R6::R6Class(
   "NotesMaster",
@@ -224,7 +224,7 @@ NotesMaster <- R6::R6Class(
 #' Provides access to placeholder shapes on a slide. Supports indexed access
 #' by placeholder `idx` via `[[`, `length()`, and `to_list()`.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 SlidePlaceholders <- R6::R6Class(
   "SlidePlaceholders",
@@ -287,7 +287,7 @@ length.SlidePlaceholders <- function(x) {
 #' Like SlidePlaceholders but `get()` accepts a placeholder type string
 #' (e.g. "title", "body") rather than an integer idx.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 SlideMasterPlaceholders <- R6::R6Class(
   "SlideMasterPlaceholders",
@@ -319,7 +319,7 @@ length.SlideMasterPlaceholders <- function(x) length(x$to_list())
 
 #' Slide layout object
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 SlideLayout <- R6::R6Class(
   "SlideLayout",
@@ -373,7 +373,7 @@ SlideLayout <- R6::R6Class(
 
 #' Slide master object
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 SlideMaster <- R6::R6Class(
   "SlideMaster",
@@ -420,7 +420,7 @@ SlideMaster <- R6::R6Class(
 #'
 #' Supports indexed access (1-based), `length()`, and iteration via `to_list()`.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 Slides <- R6::R6Class(
   "Slides",
@@ -555,7 +555,7 @@ length.Slides <- function(x) {
 
 #' Sequence of slide layouts for a slide master
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 SlideLayouts <- R6::R6Class(
   "SlideLayouts",
@@ -633,7 +633,7 @@ length.SlideLayouts <- function(x) {
 
 #' Sequence of slide masters in a presentation
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 SlideMasters <- R6::R6Class(
   "SlideMasters",
@@ -801,7 +801,7 @@ length.SlideMasters <- function(x) {
 #' Supports indexed access (1-based), `length()`, and iteration via `to_list()`.
 #'
 #' @include shapes-base.R
-#' @keywords internal
+#' @noRd
 #' @export
 SlideShapes <- R6::R6Class(
   "SlideShapes",

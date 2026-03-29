@@ -70,7 +70,7 @@ qn <- function(nsptag) {
 #' @param clark_name A Clark-notation tag, e.g.
 #'   `"{http://schemas.openxmlformats.org/presentationml/2006/main}cSld"`.
 #' @return A namespace-prefixed tag string, e.g. `"p:cSld"`.
-#' @keywords internal
+#' @noRd
 clark_to_nsptag <- function(clark_name) {
   # Parse "{uri}localname"
   m <- regmatches(clark_name, regexec("^\\{(.+?)\\}(.+)$", clark_name))[[1]]
@@ -91,7 +91,7 @@ clark_to_nsptag <- function(clark_name) {
 #'
 #' @param nspfx A namespace prefix string, e.g. `"p"`.
 #' @return The namespace URI string.
-#' @keywords internal
+#' @noRd
 nsuri <- function(nspfx) {
   uri <- .nsmap[[nspfx]]
   if (is.null(uri)) {
@@ -105,7 +105,7 @@ nsuri <- function(nspfx) {
 #'
 #' @param ... Namespace prefixes as character strings.
 #' @return A named character vector mapping prefixes to URIs.
-#' @keywords internal
+#' @noRd
 namespaces <- function(...) {
   prefixes <- c(...)
   unlist(.nsmap[prefixes])
@@ -117,7 +117,7 @@ namespaces <- function(...) {
 #' @param ... Namespace prefixes as character strings.
 #' @return A single string with xmlns declarations, e.g.
 #'   `'xmlns:p="http://..."'`.
-#' @keywords internal
+#' @noRd
 nsdecls <- function(...) {
   prefixes <- c(...)
   decls <- vapply(prefixes, function(pfx) {
@@ -134,7 +134,7 @@ nsdecls <- function(...) {
 #'
 #' @param node An xml2 xml_node.
 #' @return A string in Clark notation, or the plain tag name if no namespace.
-#' @keywords internal
+#' @noRd
 xml_clark_name <- function(node) {
   ns <- xml2::xml_ns(xml2::xml_root(node))
   name <- xml2::xml_name(node)

@@ -7,7 +7,7 @@
 #' OPC part for the presentation XML (/ppt/presentation.xml).
 #'
 #' @include opc-package.R oxml-presentation.R presentation.R parts-slide.R
-#' @keywords internal
+#' @noRd
 #' @export
 PresentationPart <- R6::R6Class(
   "PresentationPart",

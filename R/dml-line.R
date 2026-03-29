@@ -12,7 +12,7 @@
 #' Wraps the shape-properties element (`<p:spPr>`) and exposes border/line
 #' properties. Access via `shape$line`.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 LineFormat <- R6::R6Class(
   "LineFormat",

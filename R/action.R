@@ -13,7 +13,7 @@
 #' Provides read/write access to a URL hyperlink on a shape.
 #' Access via `shape$click_action$hyperlink`.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 ShapeHyperlink <- R6::R6Class(
   "ShapeHyperlink",
@@ -94,7 +94,7 @@ ShapeHyperlink <- R6::R6Class(
 #' Provides access to click and hover action properties of a shape, including
 #' hyperlink URL and action type. Access via `shape$click_action`.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 ActionSetting <- R6::R6Class(
   "ActionSetting",

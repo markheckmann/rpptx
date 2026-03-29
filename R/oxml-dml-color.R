@@ -7,7 +7,7 @@
 # ============================================================================
 
 #' @include oxml-xmlchemy.R oxml-simpletypes.R
-#' @keywords internal
+#' @noRd
 CT_Percentage <- define_oxml_element(
   classname  = "CT_Percentage",
   tag        = "a:lumMod",
@@ -16,7 +16,7 @@ CT_Percentage <- define_oxml_element(
   )
 )
 
-#' @keywords internal
+#' @noRd
 CT_LumOff <- define_oxml_element(
   classname  = "CT_LumOff",
   tag        = "a:lumOff",
@@ -25,7 +25,7 @@ CT_LumOff <- define_oxml_element(
   )
 )
 
-#' @keywords internal
+#' @noRd
 CT_Alpha <- define_oxml_element(
   classname  = "CT_Alpha",
   tag        = "a:alpha",
@@ -39,7 +39,7 @@ CT_Alpha <- define_oxml_element(
 # CT_SRgbColor — <a:srgbClr>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_SRgbColor <- define_oxml_element(
   classname  = "CT_SRgbColor",
   tag        = "a:srgbClr",
@@ -53,7 +53,7 @@ CT_SRgbColor <- define_oxml_element(
 # CT_SchemeColor — <a:schemeClr>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_SchemeColor <- define_oxml_element(
   classname  = "CT_SchemeColor",
   tag        = "a:schemeClr",
@@ -72,7 +72,7 @@ CT_SchemeColor <- define_oxml_element(
 # CT_HslColor — <a:hslClr>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_HslColor <- define_oxml_element(
   classname  = "CT_HslColor",
   tag        = "a:hslClr",
@@ -88,7 +88,7 @@ CT_HslColor <- define_oxml_element(
 # CT_ScRgbColor — <a:scrgbClr>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_ScRgbColor <- define_oxml_element(
   classname  = "CT_ScRgbColor",
   tag        = "a:scrgbClr",
@@ -104,7 +104,7 @@ CT_ScRgbColor <- define_oxml_element(
 # CT_PresetColor — <a:prstClr>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_PresetColor <- define_oxml_element(
   classname  = "CT_PresetColor",
   tag        = "a:prstClr",
@@ -118,7 +118,7 @@ CT_PresetColor <- define_oxml_element(
 # CT_SystemColor — <a:sysClr>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_SystemColor <- define_oxml_element(
   classname  = "CT_SystemColor",
   tag        = "a:sysClr",
@@ -216,25 +216,25 @@ ColorChoiceParent <- R6::R6Class(
 # Concrete color-choice-parent elements
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_SolidColorFillProperties <- R6::R6Class(
   "CT_SolidColorFillProperties",
   inherit = ColorChoiceParent
 )
 
-#' @keywords internal
+#' @noRd
 CT_ForegroundColor <- R6::R6Class(
   "CT_ForegroundColor",
   inherit = ColorChoiceParent
 )
 
-#' @keywords internal
+#' @noRd
 CT_BackgroundColor <- R6::R6Class(
   "CT_BackgroundColor",
   inherit = ColorChoiceParent
 )
 
-#' @keywords internal
+#' @noRd
 CT_GradientStop <- R6::R6Class(
   "CT_GradientStop",
   inherit = ColorChoiceParent,

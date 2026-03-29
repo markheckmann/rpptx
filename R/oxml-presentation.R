@@ -7,7 +7,7 @@
 # ============================================================================
 
 #' @include oxml-xmlchemy.R oxml-simpletypes.R oxml-init.R
-#' @keywords internal
+#' @noRd
 CT_SlideSize <- define_oxml_element(
   classname = "CT_SlideSize",
   tag = "p:sldSz",
@@ -22,7 +22,7 @@ CT_SlideSize <- define_oxml_element(
 # CT_SlideId — <p:sldId>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_SlideId <- define_oxml_element(
   classname = "CT_SlideId",
   tag = "p:sldId",
@@ -37,7 +37,7 @@ CT_SlideId <- define_oxml_element(
 # CT_SlideIdList — <p:sldIdLst>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_SlideIdList <- define_oxml_element(
   classname = "CT_SlideIdList",
   tag = "p:sldIdLst",
@@ -85,7 +85,7 @@ CT_SlideIdList$set("private", ".next_id", function() {
 # CT_SlideMasterIdListEntry — <p:sldMasterId>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_SlideMasterIdListEntry <- define_oxml_element(
   classname = "CT_SlideMasterIdListEntry",
   tag = "p:sldMasterId",
@@ -99,7 +99,7 @@ CT_SlideMasterIdListEntry <- define_oxml_element(
 # CT_SlideMasterIdList — <p:sldMasterIdLst>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_SlideMasterIdList <- define_oxml_element(
   classname = "CT_SlideMasterIdList",
   tag = "p:sldMasterIdLst",
@@ -113,7 +113,7 @@ CT_SlideMasterIdList <- define_oxml_element(
 # CT_Presentation — <p:presentation>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_Presentation <- define_oxml_element(
   classname = "CT_Presentation",
   tag = "p:presentation",

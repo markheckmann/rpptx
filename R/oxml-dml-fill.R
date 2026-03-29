@@ -7,13 +7,13 @@
 # ============================================================================
 
 #' @include oxml-xmlchemy.R oxml-simpletypes.R oxml-dml-color.R
-#' @keywords internal
+#' @noRd
 CT_NoFill <- define_oxml_element(
   classname = "CT_NoFill",
   tag       = "a:noFill"
 )
 
-#' @keywords internal
+#' @noRd
 CT_GroupFillProperties <- define_oxml_element(
   classname = "CT_GroupFillProperties",
   tag       = "a:grpFill"
@@ -24,7 +24,7 @@ CT_GroupFillProperties <- define_oxml_element(
 # CT_GradientStopList — <a:gsLst>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_GradientStopList <- define_oxml_element(
   classname = "CT_GradientStopList",
   tag       = "a:gsLst",
@@ -39,7 +39,7 @@ CT_GradientStopList <- define_oxml_element(
 # NOTE: "a:lin" here is a:lin inside a:gradFill — NOT a:ln (line properties)
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_LinearShadeProperties <- define_oxml_element(
   classname  = "CT_LinearShadeProperties",
   tag        = "a:lin",
@@ -54,7 +54,7 @@ CT_LinearShadeProperties <- define_oxml_element(
 # CT_GradientFillProperties — <a:gradFill>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_GradientFillProperties <- define_oxml_element(
   classname = "CT_GradientFillProperties",
   tag       = "a:gradFill",
@@ -71,7 +71,7 @@ CT_GradientFillProperties <- define_oxml_element(
 # CT_PatternFillProperties — <a:pattFill>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_PatternFillProperties <- R6::R6Class(
   "CT_PatternFillProperties",
   inherit = BaseOxmlElement,
@@ -134,7 +134,7 @@ CT_PatternFillProperties <- R6::R6Class(
 # CT_BlipFillProperties — <a:blipFill> (picture fill)
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_BlipFillProperties <- define_oxml_element(
   classname = "CT_BlipFillProperties",
   tag       = "a:blipFill",
@@ -152,7 +152,7 @@ CT_BlipFillProperties <- define_oxml_element(
 # ============================================================================
 
 #' Tags for fill choice elements within spPr/ln (Clark notation)
-#' @keywords internal
+#' @noRd
 .fill_choice_tags <- c(
   qn("a:noFill"), qn("a:solidFill"), qn("a:gradFill"),
   qn("a:blipFill"), qn("a:pattFill"), qn("a:grpFill")

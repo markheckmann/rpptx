@@ -3,7 +3,7 @@
 # Ported from python-pptx/src/pptx/parts/image.py.
 
 #' @include opc-package.R
-#' @keywords internal
+#' @noRd
 
 
 # ============================================================================
@@ -43,7 +43,7 @@
 #' Immutable wrapper around raw image bytes that exposes ext, content_type,
 #' sha1, size (pixels) and dpi.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 Image <- R6::R6Class(
   "Image",
@@ -248,7 +248,7 @@ Image_from_file <- function(image_file) {
 #'
 #' Stores the raw bytes of an image and provides dimension scaling.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 ImagePart <- R6::R6Class(
   "ImagePart",

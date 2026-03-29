@@ -17,7 +17,7 @@
 #' @param parent The parent ProvidesPart object (e.g. a Slide).
 #' @return An R6 shape proxy.
 #' @include enum-shapes.R oxml-shapes.R
-#' @keywords internal
+#' @noRd
 #' @export
 shape_factory <- function(shape_elm, parent) {
   if (inherits(shape_elm, "CT_Picture"))              return(Picture$new(shape_elm, parent))
@@ -70,7 +70,7 @@ shape_factory <- function(shape_elm, parent) {
 #' Provides access to placeholder properties such as `idx` and `type`.
 #' Accessed via `shape$placeholder_format` on a placeholder shape.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 PlaceholderFormat <- R6::R6Class(
   "PlaceholderFormat",
@@ -106,7 +106,7 @@ PlaceholderFormat <- R6::R6Class(
 #'
 #' Subclasses include Shape, Picture, Connector, GroupShape, GraphicFrame.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 BaseShape <- R6::R6Class(
   "BaseShape",
@@ -246,7 +246,7 @@ BaseShape <- R6::R6Class(
 #'
 #' Covers autoshapes, text boxes, and placeholders.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 Shape <- R6::R6Class(
   "Shape",
@@ -345,7 +345,7 @@ Shape <- R6::R6Class(
 #' Inherits dimensions from the corresponding layout placeholder when not
 #' explicitly set on the slide element.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 SlidePlaceholder <- R6::R6Class(
   "SlidePlaceholder",
@@ -364,7 +364,7 @@ SlidePlaceholder <- R6::R6Class(
 #' Inherits dimensions from the corresponding master placeholder when not
 #' explicitly set on the layout element.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 LayoutPlaceholder <- R6::R6Class(
   "LayoutPlaceholder",
@@ -398,7 +398,7 @@ LayoutPlaceholder <- R6::R6Class(
 #' Top of the inheritance chain — dimensions are taken directly from the
 #' element; no further inheritance.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 MasterPlaceholder <- R6::R6Class(
   "MasterPlaceholder",
@@ -425,7 +425,7 @@ MasterPlaceholder <- R6::R6Class(
 #' picture. A value of 0.1 means 10% of the edge is cropped.
 #' Access via `picture$crop`.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 PictureCrop <- R6::R6Class(
   "PictureCrop",
@@ -508,7 +508,7 @@ PictureCrop <- R6::R6Class(
 
 #' Shape proxy for p:pic elements
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 Picture <- R6::R6Class(
   "Picture",
@@ -535,7 +535,7 @@ Picture <- R6::R6Class(
 
 #' Shape proxy for p:cxnSp elements
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 Connector <- R6::R6Class(
   "Connector",
@@ -618,7 +618,7 @@ Connector <- R6::R6Class(
 
 #' Shape proxy for p:grpSp (group shape) elements
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 GroupShape <- R6::R6Class(
   "GroupShape",
@@ -648,7 +648,7 @@ GroupShape <- R6::R6Class(
 
 #' Shape proxy for p:graphicFrame elements
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 GraphicFrame <- R6::R6Class(
   "GraphicFrame",
@@ -716,7 +716,7 @@ GraphicFrame <- R6::R6Class(
 
 #' Shape collection for a group shape
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 GroupShapes <- R6::R6Class(
   "GroupShapes",

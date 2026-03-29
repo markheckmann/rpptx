@@ -7,7 +7,7 @@
 #' User-facing object for a PowerPoint presentation.
 #'
 #' @include shared.R slide.R
-#' @keywords internal
+#' @noRd
 #' @export
 Presentation <- R6::R6Class(
   "Presentation",

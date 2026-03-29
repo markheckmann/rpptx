@@ -3,14 +3,14 @@
 # Ported from python-pptx/src/pptx/oxml/theme.py.
 
 #' @include oxml-xmlchemy.R
-#' @keywords internal
+#' @noRd
 
 
 # ============================================================================
 # CT_OfficeStyleSheet — <a:theme>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_OfficeStyleSheet <- R6::R6Class(
   "CT_OfficeStyleSheet",
   inherit = BaseOxmlElement,

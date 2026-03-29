@@ -8,7 +8,7 @@
 # ============================================================================
 
 #' @include oxml-xmlchemy.R oxml-simpletypes.R oxml-init.R
-#' @keywords internal
+#' @noRd
 CT_NonVisualDrawingProps <- define_oxml_element(
   classname = "CT_NonVisualDrawingProps",
   tag = "p:cNvPr",
@@ -72,7 +72,7 @@ CT_NonVisualDrawingProps <- define_oxml_element(
 # CT_ApplicationNonVisualDrawingProps — <p:nvPr>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_ApplicationNonVisualDrawingProps <- define_oxml_element(
   classname = "CT_ApplicationNonVisualDrawingProps",
   tag = "p:nvPr",
@@ -90,7 +90,7 @@ CT_ApplicationNonVisualDrawingProps <- define_oxml_element(
 # CT_Placeholder — <p:ph>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_Placeholder <- define_oxml_element(
   classname = "CT_Placeholder",
   tag = "p:ph",
@@ -107,7 +107,7 @@ CT_Placeholder <- define_oxml_element(
 # CT_Point2D — <a:off>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_Point2D <- define_oxml_element(
   classname = "CT_Point2D",
   tag = "a:off",
@@ -122,7 +122,7 @@ CT_Point2D <- define_oxml_element(
 # CT_PositiveSize2D — <a:ext>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_PositiveSize2D <- define_oxml_element(
   classname = "CT_PositiveSize2D",
   tag = "a:ext",
@@ -137,7 +137,7 @@ CT_PositiveSize2D <- define_oxml_element(
 # CT_Transform2D — <a:xfrm>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_Transform2D <- define_oxml_element(
   classname = "CT_Transform2D",
   tag = "a:xfrm",
@@ -187,7 +187,7 @@ CT_Transform2D <- define_oxml_element(
 # CT_ShapeProperties — <p:spPr>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_ShapeProperties <- define_oxml_element(
   classname = "CT_ShapeProperties",
   tag = "p:spPr",
@@ -228,7 +228,7 @@ CT_ShapeProperties <- define_oxml_element(
 # CT_GroupShapeProperties — <p:grpSpPr>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_GroupShapeProperties <- define_oxml_element(
   classname = "CT_GroupShapeProperties",
   tag = "p:grpSpPr",
@@ -252,7 +252,7 @@ CT_GroupShapeProperties <- define_oxml_element(
 #' Provides position, size, rotation, shape ID/name, and placeholder detection
 #' via active bindings that delegate through the element's shape properties.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 BaseShapeElement <- R6::R6Class(
   "BaseShapeElement",
@@ -404,7 +404,7 @@ BaseShapeElement <- R6::R6Class(
 # ============================================================================
 
 #' Create a new textbox <p:sp> element
-#' @keywords internal
+#' @noRd
 CT_Shape_new_textbox_sp <- function(id, name, x, y, cx, cy) {
   xmlns_a <- .nsmap[["a"]]
   xmlns_p <- .nsmap[["p"]]
@@ -436,7 +436,7 @@ CT_Shape_new_textbox_sp <- function(id, name, x, y, cx, cy) {
 }
 
 #' Create a new autoshape <p:sp> element
-#' @keywords internal
+#' @noRd
 CT_Shape_new_autoshape_sp <- function(id, name, prst, x, y, cx, cy) {
   xmlns_a <- .nsmap[["a"]]
   xmlns_p <- .nsmap[["p"]]
@@ -474,7 +474,7 @@ CT_Shape_new_autoshape_sp <- function(id, name, prst, x, y, cx, cy) {
 }
 
 #' Create a new placeholder <p:sp> element
-#' @keywords internal
+#' @noRd
 CT_Shape_new_placeholder_sp <- function(id, name, ph_type, orient, sz, idx) {
   xmlns_a <- .nsmap[["a"]]
   xmlns_p <- .nsmap[["p"]]
@@ -522,7 +522,7 @@ CT_Shape_new_placeholder_sp <- function(id, name, ph_type, orient, sz, idx) {
 
 
 #' Create a new freeform <p:sp> element with custom geometry
-#' @keywords internal
+#' @noRd
 CT_Shape_new_freeform_sp <- function(id, name, x, y, cx, cy) {
   xmlns_a <- .nsmap[["a"]]
   xmlns_p <- .nsmap[["p"]]
@@ -567,7 +567,7 @@ CT_Shape_new_freeform_sp <- function(id, name, x, y, cx, cy) {
 
 
 #' Create a new <p:cxnSp> connector element
-#' @keywords internal
+#' @noRd
 CT_Connector_new_cxnSp <- function(shape_id, name, prst, x, y, cx, cy,
                                    flipH = FALSE, flipV = FALSE) {
   a_uri <- .nsmap[["a"]]
@@ -609,7 +609,7 @@ CT_Connector_new_cxnSp <- function(shape_id, name, prst, x, y, cx, cy,
 
 
 #' Create a new <p:pic> picture element
-#' @keywords internal
+#' @noRd
 CT_Picture_new_pic <- function(shape_id, name, desc, rId, x, y, cx, cy) {
   a_uri <- .nsmap[["a"]]
   p_uri <- .nsmap[["p"]]
@@ -648,7 +648,7 @@ CT_Picture_new_pic <- function(shape_id, name, desc, rId, x, y, cx, cy) {
 # CT_AdjPoint2D — <a:pt>  (used inside moveTo / lnTo)
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_AdjPoint2D <- define_oxml_element(
   classname = "CT_AdjPoint2D",
   tag = "a:pt",
@@ -663,7 +663,7 @@ CT_AdjPoint2D <- define_oxml_element(
 # CT_Path2DClose — <a:close>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_Path2DClose <- R6::R6Class("CT_Path2DClose", inherit = BaseOxmlElement)
 
 
@@ -671,7 +671,7 @@ CT_Path2DClose <- R6::R6Class("CT_Path2DClose", inherit = BaseOxmlElement)
 # CT_Path2DLineTo — <a:lnTo>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_Path2DLineTo <- define_oxml_element(
   classname = "CT_Path2DLineTo",
   tag = "a:lnTo",
@@ -685,7 +685,7 @@ CT_Path2DLineTo <- define_oxml_element(
 # CT_Path2DMoveTo — <a:moveTo>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_Path2DMoveTo <- define_oxml_element(
   classname = "CT_Path2DMoveTo",
   tag = "a:moveTo",
@@ -699,7 +699,7 @@ CT_Path2DMoveTo <- define_oxml_element(
 # CT_Path2D — <a:path>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_Path2D <- R6::R6Class(
   "CT_Path2D",
   inherit = BaseOxmlElement,
@@ -765,7 +765,7 @@ CT_Path2D <- R6::R6Class(
 # CT_Path2DList — <a:pathLst>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_Path2DList <- R6::R6Class(
   "CT_Path2DList",
   inherit = BaseOxmlElement,
@@ -787,7 +787,7 @@ CT_Path2DList <- R6::R6Class(
 # CT_CustomGeometry2D — <a:custGeom>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_CustomGeometry2D <- R6::R6Class(
   "CT_CustomGeometry2D",
   inherit = BaseOxmlElement,
@@ -828,7 +828,7 @@ CT_CustomGeometry2D <- R6::R6Class(
 
 #' Custom element class for p:spTree and p:grpSp elements
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 CT_GroupShape <- R6::R6Class(
   "CT_GroupShape",
@@ -964,7 +964,7 @@ CT_GroupShape <- R6::R6Class(
 # ============================================================================
 
 #' CT_Shape XML element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_Shape <- define_oxml_element(
   classname = "CT_Shape",
@@ -996,7 +996,7 @@ CT_Shape$set("active", "has_custom_geometry", function() {
 # CT_SrcRect — <a:srcRect> — per-edge crop percentages on a blipFill
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_SrcRect <- R6::R6Class(
   "CT_SrcRect",
   inherit = BaseOxmlElement,
@@ -1041,7 +1041,7 @@ CT_SrcRect <- R6::R6Class(
 # CT_BlipFill — <p:blipFill>
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 CT_BlipFill <- R6::R6Class(
   "CT_BlipFill",
   inherit = BaseOxmlElement,
@@ -1091,7 +1091,7 @@ CT_BlipFill <- R6::R6Class(
 # ============================================================================
 
 #' CT_Picture XML element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_Picture <- R6::R6Class(
   "CT_Picture",
@@ -1108,7 +1108,7 @@ CT_Picture <- R6::R6Class(
 )
 
 #' CT_Connector XML element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_Connector <- R6::R6Class(
   "CT_Connector",
@@ -1194,7 +1194,7 @@ CT_Connector <- R6::R6Class(
 )
 
 #' CT_GraphicalObjectFrame XML element
-#' @keywords internal
+#' @noRd
 #' @export
 CT_GraphicalObjectFrame <- R6::R6Class("CT_GraphicalObjectFrame", inherit = BaseShapeElement)
 
@@ -1206,7 +1206,7 @@ CT_GraphicalObjectFrame <- R6::R6Class("CT_GraphicalObjectFrame", inherit = Base
 .GRAPHIC_DATA_URI_CHART <- "http://schemas.openxmlformats.org/drawingml/2006/chart"
 
 #' Create a new <p:graphicFrame> referencing a chart part via rId
-#' @keywords internal
+#' @noRd
 CT_GraphicalObjectFrame_new_chart_graphicFrame <- function(id, name, rId, x, y, cx, cy) {
   p <- .nsmap[["p"]]; a <- .nsmap[["a"]]
   c_ns <- "http://schemas.openxmlformats.org/drawingml/2006/chart"
@@ -1243,7 +1243,7 @@ CT_GraphicalObjectFrame_new_chart_graphicFrame <- function(id, name, rId, x, y, 
 # ============================================================================
 
 #' Create a new empty <p:grpSp> with bounding-box transform
-#' @keywords internal
+#' @noRd
 CT_GroupShape_new_grpSp <- function(id, name, x, y, cx, cy) {
   p <- .nsmap[["p"]]; a <- .nsmap[["a"]]
   xml_str <- sprintf(paste0(

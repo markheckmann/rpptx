@@ -11,7 +11,7 @@
 
 #' Base proxy wrapping an XML element
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 ElementProxy <- R6::R6Class(
   "ElementProxy",
@@ -44,7 +44,7 @@ ElementProxy <- R6::R6Class(
 #'
 #' The parent is used to resolve the `part` property by delegation.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 ParentedElementProxy <- R6::R6Class(
   "ParentedElementProxy",
@@ -86,7 +86,7 @@ ParentedElementProxy <- R6::R6Class(
 #' Used for domain objects that correspond directly to an OPC part
 #' (e.g. Presentation wraps the root element of PresentationPart).
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 PartElementProxy <- R6::R6Class(
   "PartElementProxy",

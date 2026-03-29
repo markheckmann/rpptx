@@ -20,9 +20,9 @@
 #' Return the appropriate chart XML writer for chart_type
 #'
 #' @param chart_type An integer from XL_CHART_TYPE, e.g. `XL_CHART_TYPE$COLUMN_CLUSTERED`.
-#' @param chart_data A [CategoryChartData], [XyChartData], or [BubbleChartData] object.
+#' @param chart_data A `CategoryChartData`, `XyChartData`, or `BubbleChartData` object.
 #' @return An R6 writer object with an `$xml` active binding returning the XML string.
-#' @keywords internal
+#' @noRd
 #' @export
 chart_xml_writer <- function(chart_type, chart_data) {
   XL <- XL_CHART_TYPE

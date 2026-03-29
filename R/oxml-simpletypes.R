@@ -10,7 +10,7 @@
 #' @param from_xml Function(str) -> R value.
 #' @param to_xml Function(R value) -> str.
 #' @return A list with `from_xml` and `to_xml` elements.
-#' @keywords internal
+#' @noRd
 simple_type <- function(from_xml, to_xml) {
   list(from_xml = from_xml, to_xml = to_xml)
 }
@@ -20,13 +20,13 @@ simple_type <- function(from_xml, to_xml) {
 # XSD base types
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 XsdString <- simple_type(
   from_xml = function(x) x,
   to_xml = function(x) as.character(x)
 )
 
-#' @keywords internal
+#' @noRd
 XsdBoolean <- simple_type(
   from_xml = function(x) {
     if (!(x %in% c("1", "0", "true", "false"))) {
@@ -39,49 +39,49 @@ XsdBoolean <- simple_type(
   to_xml = function(x) if (isTRUE(x)) "1" else "0"
 )
 
-#' @keywords internal
+#' @noRd
 XsdInt <- simple_type(
   from_xml = function(x) as.integer(x),
   to_xml = function(x) as.character(as.integer(x))
 )
 
-#' @keywords internal
+#' @noRd
 XsdUnsignedInt <- simple_type(
   from_xml = function(x) as.integer(x),
   to_xml = function(x) as.character(as.integer(x))
 )
 
-#' @keywords internal
+#' @noRd
 XsdUnsignedByte <- simple_type(
   from_xml = function(x) as.integer(x),
   to_xml = function(x) as.character(as.integer(x))
 )
 
-#' @keywords internal
+#' @noRd
 XsdUnsignedShort <- simple_type(
   from_xml = function(x) as.integer(x),
   to_xml = function(x) as.character(as.integer(x))
 )
 
-#' @keywords internal
+#' @noRd
 XsdLong <- simple_type(
   from_xml = function(x) as.numeric(x),
   to_xml = function(x) format(x, scientific = FALSE)
 )
 
-#' @keywords internal
+#' @noRd
 XsdDouble <- simple_type(
   from_xml = function(x) as.numeric(x),
   to_xml = function(x) as.character(as.numeric(x))
 )
 
-#' @keywords internal
+#' @noRd
 XsdAnyUri <- XsdString
 
-#' @keywords internal
+#' @noRd
 XsdId <- XsdString
 
-#' @keywords internal
+#' @noRd
 XsdToken <- XsdString
 
 
@@ -89,16 +89,16 @@ XsdToken <- XsdString
 # ST_* types used across the library
 # ============================================================================
 
-#' @keywords internal
+#' @noRd
 ST_RelationshipId <- XsdString
 
-#' @keywords internal
+#' @noRd
 ST_ContentType <- XsdString
 
-#' @keywords internal
+#' @noRd
 ST_Extension <- XsdString
 
-#' @keywords internal
+#' @noRd
 ST_TargetMode <- simple_type(
   from_xml = function(x) x,
   to_xml = function(x) {
@@ -109,7 +109,7 @@ ST_TargetMode <- simple_type(
   }
 )
 
-#' @keywords internal
+#' @noRd
 ST_Coordinate <- simple_type(
   from_xml = function(x) {
     if (grepl("[impc]", x)) {
@@ -120,7 +120,7 @@ ST_Coordinate <- simple_type(
   to_xml = function(x) as.character(as.integer(x))
 )
 
-#' @keywords internal
+#' @noRd
 ST_Coordinate32 <- simple_type(
   from_xml = function(x) {
     if (grepl("[impc]", x)) {
@@ -131,25 +131,25 @@ ST_Coordinate32 <- simple_type(
   to_xml = function(x) as.character(as.integer(x))
 )
 
-#' @keywords internal
+#' @noRd
 ST_PositiveCoordinate <- simple_type(
   from_xml = function(x) Emu(as.integer(x)),
   to_xml = function(x) as.character(as.integer(x))
 )
 
-#' @keywords internal
+#' @noRd
 ST_SlideSizeCoordinate <- simple_type(
   from_xml = function(x) Emu(as.integer(x)),
   to_xml = function(x) as.character(as.integer(x))
 )
 
-#' @keywords internal
+#' @noRd
 ST_SlideId <- XsdUnsignedInt
 
-#' @keywords internal
+#' @noRd
 ST_DrawingElementId <- XsdUnsignedInt
 
-#' @keywords internal
+#' @noRd
 ST_Angle <- simple_type(
   from_xml = function(x) {
     rot <- as.integer(x) %% (360L * 60000L)
@@ -161,19 +161,19 @@ ST_Angle <- simple_type(
   }
 )
 
-#' @keywords internal
+#' @noRd
 ST_LineWidth <- simple_type(
   from_xml = function(x) Emu(as.integer(x)),
   to_xml = function(x) as.character(as.integer(x))
 )
 
-#' @keywords internal
+#' @noRd
 ST_HexColorRGB <- simple_type(
   from_xml = function(x) toupper(x),
   to_xml = function(x) toupper(x)
 )
 
-#' @keywords internal
+#' @noRd
 ST_Percentage <- simple_type(
   from_xml = function(x) {
     if (grepl("%", x, fixed = TRUE)) {
@@ -184,34 +184,34 @@ ST_Percentage <- simple_type(
   to_xml = function(x) as.character(as.integer(round(x * 100000.0)))
 )
 
-#' @keywords internal
+#' @noRd
 ST_PositiveFixedPercentage <- simple_type(
   from_xml = function(x) ST_Percentage$from_xml(x),
   to_xml = function(x) ST_Percentage$to_xml(x)
 )
 
-#' @keywords internal
+#' @noRd
 ST_TextFontSize <- simple_type(
   from_xml = function(x) as.integer(x),
   to_xml = function(x) as.character(as.integer(x))
 )
 
-#' @keywords internal
+#' @noRd
 ST_TextIndentLevelType <- simple_type(
   from_xml = function(x) as.integer(x),
   to_xml = function(x) as.character(as.integer(x))
 )
 
-#' @keywords internal
+#' @noRd
 ST_TextTypeface <- XsdString
 
-#' @keywords internal
+#' @noRd
 ST_TextWrappingType <- simple_type(
   from_xml = function(x) x,
   to_xml = function(x) x
 )
 
-#' @keywords internal
+#' @noRd
 ST_TextFontScalePercentOrPercentString <- simple_type(
   from_xml = function(x) {
     if (endsWith(x, "%")) return(as.numeric(sub("%", "", x)))
@@ -220,7 +220,7 @@ ST_TextFontScalePercentOrPercentString <- simple_type(
   to_xml = function(x) as.character(as.integer(x * 1000.0))
 )
 
-#' @keywords internal
+#' @noRd
 ST_TextSpacingPercentOrPercentString <- simple_type(
   from_xml = function(x) {
     if (endsWith(x, "%")) {
@@ -231,25 +231,25 @@ ST_TextSpacingPercentOrPercentString <- simple_type(
   to_xml = function(x) as.character(as.integer(round(x * 100000.0)))
 )
 
-#' @keywords internal
+#' @noRd
 ST_TextSpacingPoint <- simple_type(
   from_xml = function(x) Centipoints(as.integer(x)),
   to_xml = function(x) as.character(as_centipoints(x))
 )
 
-#' @keywords internal
+#' @noRd
 ST_PlaceholderSize <- simple_type(
   from_xml = function(x) x,
   to_xml = function(x) x
 )
 
-#' @keywords internal
+#' @noRd
 ST_Direction <- simple_type(
   from_xml = function(x) x,
   to_xml = function(x) x
 )
 
-#' @keywords internal
+#' @noRd
 ST_UniversalMeasure <- simple_type(
   from_xml = function(x) {
     float_part <- substr(x, 1, nchar(x) - 2)
@@ -267,22 +267,22 @@ ST_UniversalMeasure <- simple_type(
 
 # Chart-related simple types
 
-#' @keywords internal
+#' @noRd
 ST_BarDir <- simple_type(from_xml = function(x) x, to_xml = function(x) x)
 
-#' @keywords internal
+#' @noRd
 ST_Grouping <- simple_type(from_xml = function(x) x, to_xml = function(x) x)
 
-#' @keywords internal
+#' @noRd
 ST_Orientation <- simple_type(from_xml = function(x) x, to_xml = function(x) x)
 
-#' @keywords internal
+#' @noRd
 ST_AxisUnit <- simple_type(
   from_xml = function(x) as.numeric(x),
   to_xml = function(x) as.character(as.numeric(x))
 )
 
-#' @keywords internal
+#' @noRd
 ST_BubbleScale <- simple_type(
   from_xml = function(x) {
     if (grepl("%", x, fixed = TRUE)) return(as.integer(sub("%", "", x)))
@@ -291,10 +291,10 @@ ST_BubbleScale <- simple_type(
   to_xml = function(x) as.character(as.integer(x))
 )
 
-#' @keywords internal
+#' @noRd
 ST_GapAmount <- ST_BubbleScale
 
-#' @keywords internal
+#' @noRd
 ST_Overlap <- simple_type(
   from_xml = function(x) {
     if (grepl("%", x, fixed = TRUE)) return(as.integer(sub("%", "", x)))
@@ -303,7 +303,7 @@ ST_Overlap <- simple_type(
   to_xml = function(x) as.character(as.integer(x))
 )
 
-#' @keywords internal
+#' @noRd
 ST_LblOffset <- simple_type(
   from_xml = function(x) {
     if (endsWith(x, "%")) return(as.integer(sub("%", "", x)))
@@ -312,38 +312,38 @@ ST_LblOffset <- simple_type(
   to_xml = function(x) as.character(as.integer(x))
 )
 
-#' @keywords internal
+#' @noRd
 ST_LayoutMode <- simple_type(from_xml = function(x) x, to_xml = function(x) x)
 
-#' @keywords internal
+#' @noRd
 ST_MarkerSize <- XsdUnsignedByte
 
-#' @keywords internal
+#' @noRd
 ST_Style <- XsdUnsignedByte
 
 # Simple pass-through types for chart XML string enums
 # These read/write the XML string value directly. The enum list constants
 # (XL_AXIS_CROSSES, XL_LEGEND_POSITION, etc.) use the same string values.
 
-#' @keywords internal
+#' @noRd
 ST_AxisCrosses <- simple_type(from_xml = function(x) x, to_xml = function(x) as.character(x))
 
-#' @keywords internal
+#' @noRd
 ST_DataLabelPosition <- simple_type(from_xml = function(x) x, to_xml = function(x) as.character(x))
 
-#' @keywords internal
+#' @noRd
 ST_LegendPosition <- simple_type(from_xml = function(x) x, to_xml = function(x) as.character(x))
 
-#' @keywords internal
+#' @noRd
 ST_MarkerStyle <- simple_type(from_xml = function(x) x, to_xml = function(x) as.character(x))
 
-#' @keywords internal
+#' @noRd
 ST_TickLabelPosition <- simple_type(from_xml = function(x) x, to_xml = function(x) as.character(x))
 
-#' @keywords internal
+#' @noRd
 ST_TickMark <- simple_type(from_xml = function(x) x, to_xml = function(x) as.character(x))
 
-#' @keywords internal
+#' @noRd
 ST_PositiveFixedAngle <- simple_type(
   from_xml = function(x) ST_Angle$from_xml(x),
   to_xml = function(x) {

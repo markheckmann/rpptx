@@ -8,7 +8,7 @@
 #' String values for the `val` attribute on `<a:schemeClr>`. Assign to
 #' `color_format$theme_color`.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 MSO_THEME_COLOR <- list(
   NOT_THEME_COLOR    = NULL,
@@ -29,7 +29,7 @@ MSO_THEME_COLOR <- list(
 
 #' MSO_COLOR_TYPE — color source type strings
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 MSO_COLOR_TYPE <- list(
   RGB    = "rgb",
@@ -43,7 +43,7 @@ MSO_COLOR_TYPE <- list(
 
 #' MSO_FILL — fill type strings
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 MSO_FILL <- list(
   BACKGROUND = "background",
@@ -57,7 +57,7 @@ MSO_FILL <- list(
 
 #' MSO_LINE_DASH_STYLE — preset dash pattern strings for `<a:prstDash val="..."/>`
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 MSO_LINE_DASH_STYLE <- list(
   DASH          = "dash",
@@ -73,7 +73,7 @@ MSO_LINE_DASH_STYLE <- list(
 
 #' MSO_PATTERN_TYPE — preset pattern fill type strings
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 MSO_PATTERN_TYPE <- list(
   CROSS                    = "cross",

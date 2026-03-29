@@ -31,7 +31,7 @@
 #' Provides access to cell text, fill, margins, and merge state.
 #' Access via `table$cell(row, col)` or `table$rows[[i]]$cells[[j]]`.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 TableCell <- R6::R6Class(
   "TableCell",
@@ -180,7 +180,7 @@ TableCell <- R6::R6Class(
 # ============================================================================
 
 #' Cell collection for a table row
-#' @keywords internal
+#' @noRd
 #' @export
 TableCells <- R6::R6Class(
   "TableCells",
@@ -226,7 +226,7 @@ length.TableCells <- function(x) {
 #' Provides access to row height and cells.
 #' Access via `table$rows[[i]]`.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 TableRow <- R6::R6Class(
   "TableRow",
@@ -261,7 +261,7 @@ TableRow <- R6::R6Class(
 # ============================================================================
 
 #' Row collection for a table
-#' @keywords internal
+#' @noRd
 #' @export
 TableRows <- R6::R6Class(
   "TableRows",
@@ -307,7 +307,7 @@ length.TableRows <- function(x) {
 #' Provides access to column width.
 #' Access via `table$columns[[i]]`.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 TableColumn <- R6::R6Class(
   "TableColumn",
@@ -336,7 +336,7 @@ TableColumn <- R6::R6Class(
 # ============================================================================
 
 #' Column collection for a table
-#' @keywords internal
+#' @noRd
 #' @export
 TableColumns <- R6::R6Class(
   "TableColumns",
@@ -382,7 +382,7 @@ length.TableColumns <- function(x) {
 #' Provides access to table cells, rows, columns, and formatting flags.
 #' Access via `graphic_frame$table`.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 Table <- R6::R6Class(
   "Table",

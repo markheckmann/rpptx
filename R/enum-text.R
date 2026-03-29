@@ -7,7 +7,7 @@
 #'
 #' XML string values for `a:pPr/@algn`. Use with paragraph `alignment` property.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 PP_PARAGRAPH_ALIGNMENT <- list(
   CENTER           = "ctr",
@@ -20,7 +20,7 @@ PP_PARAGRAPH_ALIGNMENT <- list(
   MIXED            = ""
 )
 
-#' @keywords internal
+#' @noRd
 PP_ALIGN <- PP_PARAGRAPH_ALIGNMENT
 
 
@@ -28,7 +28,7 @@ PP_ALIGN <- PP_PARAGRAPH_ALIGNMENT
 #'
 #' Integer constants for `a:bodyPr/@autofit` / spAutoFit / normAutofit.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 MSO_AUTO_SIZE <- list(
   NONE             = 0L,
@@ -42,7 +42,7 @@ MSO_AUTO_SIZE <- list(
 #'
 #' XML string values for `a:bodyPr/@anchor`. Use with `text_frame$vertical_anchor`.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 MSO_VERTICAL_ANCHOR <- list(
   TOP   = "t",

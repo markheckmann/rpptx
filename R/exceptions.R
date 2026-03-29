@@ -10,7 +10,7 @@
 #' @param call The call to include in the error.
 #' @param ... Additional fields for the condition object.
 #' @return No return value; raises a condition.
-#' @keywords internal
+#' @noRd
 rpptx_error <- function(message, class = NULL, call = NULL, ...) {
   stop(
     structure(
@@ -25,7 +25,7 @@ rpptx_error <- function(message, class = NULL, call = NULL, ...) {
 #' Raised when a .pptx package cannot be found at the specified path.
 #'
 #' @param path The file path that was not found.
-#' @keywords internal
+#' @noRd
 package_not_found_error <- function(path) {
   rpptx_error(
     message = sprintf("Package not found: '%s'", path),
@@ -39,7 +39,7 @@ package_not_found_error <- function(path) {
 #' Raised when a value in the XML is not valid according to the schema.
 #'
 #' @param message Description of the invalid XML.
-#' @keywords internal
+#' @noRd
 invalid_xml_error <- function(message) {
   rpptx_error(
     message = message,

@@ -58,7 +58,7 @@
 # ============================================================================
 
 #' Gradient stop proxy
-#' @keywords internal
+#' @noRd
 #' @export
 GradientStop <- R6::R6Class(
   "GradientStop",
@@ -99,7 +99,7 @@ GradientStop <- R6::R6Class(
 # ============================================================================
 
 #' Gradient stops collection
-#' @keywords internal
+#' @noRd
 #' @export
 GradientStops <- R6::R6Class(
   "GradientStops",
@@ -146,7 +146,7 @@ length.GradientStops <- function(x) {
 #' Wraps the shape-properties element (`<p:spPr>`) and exposes fill properties.
 #' Access via `shape$fill`.
 #'
-#' @keywords internal
+#' @noRd
 #' @export
 FillFormat <- R6::R6Class(
   "FillFormat",
