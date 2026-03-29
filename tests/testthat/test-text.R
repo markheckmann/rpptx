@@ -546,3 +546,71 @@ describe("Shape text_frame and text", {
     expect_s3_class(title_shape$text_frame, "TextFrame")
   })
 })
+
+
+# ============================================================================
+# Hyperlink on Run
+# ============================================================================
+
+describe("Run$hyperlink", {
+  it("returns a Hyperlink object", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    txb    <- slide$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    run    <- txb$text_frame$paragraphs[[1]]$add_run()
+    run$text <- "Click me"
+    expect_s3_class(run$hyperlink, "Hyperlink")
+  })
+
+  it("address is NULL when no hyperlink is set", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    txb    <- slide$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    run    <- txb$text_frame$paragraphs[[1]]$add_run()
+    expect_null(run$hyperlink$address)
+  })
+
+  it("address can be set and read back", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    txb    <- slide$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    run    <- txb$text_frame$paragraphs[[1]]$add_run()
+    run$text <- "Link"
+    run$hyperlink$address <- "https://example.com"
+    expect_equal(run$hyperlink$address, "https://example.com")
+  })
+
+  it("address round-trips through save/load", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    txb    <- slide$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    run    <- txb$text_frame$paragraphs[[1]]$add_run()
+    run$text <- "Link"
+    run$hyperlink$address <- "https://rpkg.dev"
+    tmp <- tempfile(fileext = ".pptx")
+    on.exit(unlink(tmp))
+    prs$save(tmp)
+    prs2   <- pptx_presentation(tmp)
+    slide2 <- prs2$slides[[1]]
+    # textbox is the last shape (placeholders come first)
+    n      <- length(slide2$shapes)
+    txb2   <- slide2$shapes[[n]]
+    run2   <- txb2$text_frame$paragraphs[[1]]$runs[[1]]
+    expect_equal(run2$hyperlink$address, "https://rpkg.dev")
+  })
+
+  it("address can be removed by setting to NULL", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    txb    <- slide$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    run    <- txb$text_frame$paragraphs[[1]]$add_run()
+    run$hyperlink$address <- "https://example.com"
+    run$hyperlink$address <- NULL
+    expect_null(run$hyperlink$address)
+  })
+})

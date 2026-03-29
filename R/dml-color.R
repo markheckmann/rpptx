@@ -136,6 +136,48 @@ ColorFormat <- R6::R6Class(
       scheme$val
     },
 
+    # Tint: fraction by which the color is lightened toward white (0.0–1.0).
+    # NULL when no tint is set; only valid on theme (scheme) colors.
+    tint = function(value) {
+      if (!missing(value)) {
+        scheme <- private$.xPr$schemeClr
+        if (is.null(scheme)) stop("tint only applies to scheme (theme) colors", call. = FALSE)
+        scheme[["_remove_lumMod"]]()
+        scheme[["_remove_lumOff"]]()
+        if (!is.null(value) && value > 0.0) {
+          lm <- scheme$get_or_add_lumMod(); lm$val <- 1.0 - value
+          lo <- scheme$get_or_add_lumOff(); lo$val <- value
+        }
+        return(invisible(value))
+      }
+      scheme <- private$.xPr$schemeClr
+      if (is.null(scheme)) return(NULL)
+      lumOff <- scheme$lumOff
+      if (!is.null(lumOff)) return(lumOff$val)
+      NULL
+    },
+
+    # Shade: fraction by which the color is darkened toward black (0.0–1.0).
+    # NULL when no shade is set; only valid on theme (scheme) colors.
+    shade = function(value) {
+      if (!missing(value)) {
+        scheme <- private$.xPr$schemeClr
+        if (is.null(scheme)) stop("shade only applies to scheme (theme) colors", call. = FALSE)
+        scheme[["_remove_lumMod"]]()
+        scheme[["_remove_lumOff"]]()
+        if (!is.null(value) && value > 0.0) {
+          lm <- scheme$get_or_add_lumMod(); lm$val <- 1.0 - value
+        }
+        return(invisible(value))
+      }
+      scheme <- private$.xPr$schemeClr
+      if (is.null(scheme)) return(NULL)
+      lumMod <- scheme$lumMod
+      lumOff <- scheme$lumOff
+      if (!is.null(lumMod) && is.null(lumOff)) return(1.0 - lumMod$val)
+      NULL
+    },
+
     # Brightness adjustment as a float in -1.0..1.0 range.
     # Positive values add lightness (lumOff), negative values reduce (lumMod).
     # NULL means no brightness adjustment or not a scheme color.

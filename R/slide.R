@@ -810,6 +810,55 @@ SlideShapes <- R6::R6Class(
       FreeformBuilder$new(private$.spTree, self, start_x, start_y, x_scale, y_scale)
     },
 
+    # Copy a shape (possibly from another slide) into this slide.
+    # For picture shapes the image relationship is re-used or copied.
+    # Returns the new shape proxy.
+    add_shape_copy = function(shape) {
+      src_elm <- shape$.__enclos_env__$private$.element
+      # Deep-copy XML
+      node_xml   <- xml2::xml_serialize(src_elm$get_node(), NULL)
+      cloned_doc <- xml2::xml_unserialize(node_xml)
+      cloned_node <- xml2::xml_root(cloned_doc)
+
+      # For pictures, transfer the image relationship
+      if (inherits(src_elm, "CT_Picture")) {
+        blip_nd <- xml2::xml_find_first(
+          cloned_node, ".//a:blip", ns = c(a = .nsmap[["a"]])
+        )
+        if (!inherits(blip_nd, "xml_missing")) {
+          r_uri <- .nsmap[["r"]]
+          old_rId <- xml2::xml_attr(blip_nd, paste0("{", r_uri, "}embed"))
+          if (!is.null(old_rId) && !is.na(old_rId)) {
+            src_part <- tryCatch(shape$part, error = function(e) NULL)
+            if (!is.null(src_part)) {
+              img_part <- tryCatch(src_part$related_part(old_rId), error = function(e) NULL)
+              if (!is.null(img_part)) {
+                new_rId <- self$part$relate_to(img_part, RT$IMAGE)
+                xml2::xml_set_attr(blip_nd, paste0("{", r_uri, "}embed"), new_rId)
+              }
+            }
+          }
+        }
+      }
+
+      # Assign a fresh shape ID
+      new_id <- private$.spTree$next_shape_id()
+      cNvPr_nd <- xml2::xml_find_first(
+        cloned_node, ".//p:cNvPr", ns = c(p = .nsmap[["p"]])
+      )
+      if (!inherits(cNvPr_nd, "xml_missing")) {
+        xml2::xml_set_attr(cNvPr_nd, "id", as.character(new_id))
+      }
+
+      # Append to spTree and return wrapped proxy
+      xml2::xml_add_child(private$.spTree$get_node(), cloned_node)
+      last_nd <- xml2::xml_child(
+        private$.spTree$get_node(),
+        xml2::xml_length(private$.spTree$get_node())
+      )
+      shape_factory(wrap_element(last_nd), self)
+    },
+
     # Clone layout placeholders onto this slide.
     # Excluded: date (dt), footer (ftr), slide number (sldNum) — latent placeholders.
     clone_layout_placeholders = function(slide_layout) {

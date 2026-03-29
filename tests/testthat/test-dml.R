@@ -499,3 +499,78 @@ describe("ShadowFormat", {
     expect_false(shape$shadow$inherit)
   })
 })
+
+
+# ============================================================================
+# ColorFormat tint and shade
+# ============================================================================
+
+# Helper: shape with a theme-color fill
+new_theme_color_shape <- function() {
+  shape <- new_shape_with_empty_spPr()
+  shape$fill$solid()
+  shape$fill$fore_color$theme_color <- MSO_THEME_COLOR$ACCENT_1
+  shape
+}
+
+describe("ColorFormat$tint", {
+  it("is NULL when no theme color is set", {
+    shape <- new_shape_with_empty_spPr()
+    shape$fill$solid()
+    shape$fill$fore_color$rgb <- RGBColor(255L, 0L, 0L)
+    expect_null(shape$fill$fore_color$tint)
+  })
+
+  it("is NULL when no tint has been applied", {
+    shape <- new_theme_color_shape()
+    expect_null(shape$fill$fore_color$tint)
+  })
+
+  it("can be set and read back on a theme color", {
+    shape <- new_theme_color_shape()
+    shape$fill$fore_color$tint <- 0.5
+    expect_equal(shape$fill$fore_color$tint, 0.5)
+  })
+
+  it("setting to 0 removes the tint", {
+    shape <- new_theme_color_shape()
+    shape$fill$fore_color$tint <- 0.5
+    shape$fill$fore_color$tint <- 0.0
+    expect_null(shape$fill$fore_color$tint)
+  })
+
+  it("errors on non-scheme color", {
+    shape <- new_shape_with_empty_spPr()
+    shape$fill$solid()
+    shape$fill$fore_color$rgb <- RGBColor(255L, 0L, 0L)
+    expect_error(shape$fill$fore_color$tint <- 0.5, "scheme")
+  })
+})
+
+describe("ColorFormat$shade", {
+  it("is NULL when no shade has been applied", {
+    shape <- new_theme_color_shape()
+    expect_null(shape$fill$fore_color$shade)
+  })
+
+  it("can be set and read back", {
+    shape <- new_theme_color_shape()
+    shape$fill$fore_color$shade <- 0.5
+    expect_equal(shape$fill$fore_color$shade, 0.5)
+  })
+
+  it("setting to 0 removes the shade", {
+    shape <- new_theme_color_shape()
+    shape$fill$fore_color$shade <- 0.5
+    shape$fill$fore_color$shade <- 0.0
+    expect_null(shape$fill$fore_color$shade)
+  })
+
+  it("tint and shade are mutually exclusive: setting shade clears tint", {
+    shape <- new_theme_color_shape()
+    shape$fill$fore_color$tint  <- 0.3
+    shape$fill$fore_color$shade <- 0.4
+    expect_null(shape$fill$fore_color$tint)
+    expect_equal(shape$fill$fore_color$shade, 0.4)
+  })
+})

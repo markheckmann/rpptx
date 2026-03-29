@@ -19,6 +19,7 @@ Supports indexed access (1-based), \code{length()}, and iteration via \code{to_l
 \item \href{#method-Slides-get_by_id}{\code{Slides$get_by_id()}}
 \item \href{#method-Slides-index}{\code{Slides$index()}}
 \item \href{#method-Slides-to_list}{\code{Slides$to_list()}}
+\item \href{#method-Slides-duplicate_slide}{\code{Slides$duplicate_slide()}}
 \item \href{#method-Slides-delete}{\code{Slides$delete()}}
 \item \href{#method-Slides-move}{\code{Slides$move()}}
 \item \href{#method-Slides-clone}{\code{Slides$clone()}}
@@ -75,6 +76,15 @@ Supports indexed access (1-based), \code{length()}, and iteration via \code{to_l
 \subsection{Method \code{to_list()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Slides$to_list()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Slides-duplicate_slide"></a>}}
+\if{latex}{\out{\hypertarget{method-Slides-duplicate_slide}{}}}
+\subsection{Method \code{duplicate_slide()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Slides$duplicate_slide(slide)}\if{html}{\out{</div>}}
 }
 
 }

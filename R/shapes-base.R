@@ -415,6 +415,97 @@ MasterPlaceholder <- R6::R6Class(
 # Picture — p:pic
 # ============================================================================
 
+# ============================================================================
+# PictureCrop — controls the a:srcRect crop on a picture's blipFill
+# ============================================================================
+
+#' Picture crop descriptor
+#'
+#' Provides read/write access to the per-edge crop fractions (0.0–1.0) of a
+#' picture. A value of 0.1 means 10% of the edge is cropped.
+#' Access via `picture$crop`.
+#'
+#' @keywords internal
+#' @export
+PictureCrop <- R6::R6Class(
+  "PictureCrop",
+
+  public = list(
+    initialize = function(blipFill) private$.blipFill <- blipFill
+  ),
+
+  active = list(
+    # Fraction cropped from the left edge (0.0-1.0, default 0.0)
+    left = function(value) {
+      if (!missing(value)) {
+        if (value == 0.0 && private$.all_zero_except("l")) {
+          private$.blipFill$remove_srcRect()
+        } else {
+          private$.blipFill$get_or_add_srcRect()$l <- value
+        }
+        return(invisible(value))
+      }
+      sr <- private$.blipFill$srcRect
+      if (is.null(sr)) 0.0 else sr$l
+    },
+
+    # Fraction cropped from the right edge (0.0-1.0, default 0.0)
+    right = function(value) {
+      if (!missing(value)) {
+        if (value == 0.0 && private$.all_zero_except("r")) {
+          private$.blipFill$remove_srcRect()
+        } else {
+          private$.blipFill$get_or_add_srcRect()$r <- value
+        }
+        return(invisible(value))
+      }
+      sr <- private$.blipFill$srcRect
+      if (is.null(sr)) 0.0 else sr$r
+    },
+
+    # Fraction cropped from the top edge (0.0-1.0, default 0.0)
+    top = function(value) {
+      if (!missing(value)) {
+        if (value == 0.0 && private$.all_zero_except("t")) {
+          private$.blipFill$remove_srcRect()
+        } else {
+          private$.blipFill$get_or_add_srcRect()$t <- value
+        }
+        return(invisible(value))
+      }
+      sr <- private$.blipFill$srcRect
+      if (is.null(sr)) 0.0 else sr$t
+    },
+
+    # Fraction cropped from the bottom edge (0.0-1.0, default 0.0)
+    bottom = function(value) {
+      if (!missing(value)) {
+        if (value == 0.0 && private$.all_zero_except("b")) {
+          private$.blipFill$remove_srcRect()
+        } else {
+          private$.blipFill$get_or_add_srcRect()$b <- value
+        }
+        return(invisible(value))
+      }
+      sr <- private$.blipFill$srcRect
+      if (is.null(sr)) 0.0 else sr$b
+    }
+  ),
+
+  private = list(
+    .blipFill = NULL,
+
+    # Return TRUE if all edges EXCEPT `skip` are zero (used to decide cleanup)
+    .all_zero_except = function(skip) {
+      sr <- private$.blipFill$srcRect
+      if (is.null(sr)) return(TRUE)
+      edges <- c(l = sr$l, r = sr$r, t = sr$t, b = sr$b)
+      all(edges[setdiff(names(edges), skip)] == 0.0)
+    }
+  )
+)
+
+
 #' Shape proxy for p:pic elements
 #'
 #' @keywords internal
@@ -424,7 +515,16 @@ Picture <- R6::R6Class(
   inherit = BaseShape,
 
   active = list(
-    shape_type = function() MSO_SHAPE_TYPE$PICTURE
+    shape_type = function() MSO_SHAPE_TYPE$PICTURE,
+
+    # PictureCrop controlling per-edge crop fractions.
+    # No-op setter enables R assignment-chain write-back.
+    crop = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      blipFill <- private$.element$blipFill
+      if (is.null(blipFill)) return(NULL)
+      PictureCrop$new(blipFill)
+    }
   )
 )
 

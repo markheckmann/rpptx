@@ -462,6 +462,26 @@ Table <- R6::R6Class(
       if (is.null(tblPr)) return(FALSE)
       if (!missing(value)) { tblPr$bandCol <- value; return(invisible(value)) }
       isTRUE(tblPr$bandCol)
+    },
+
+    # Table style GUID string, e.g. "{5C22544A-7EE6-4342-B048-85BDC9FD1C3A}".
+    # NULL when no tblPr or tableStyleId element exists.
+    style_id = function(value) {
+      tblPr <- private$.tbl$tblPr
+      if (is.null(tblPr)) {
+        if (!missing(value)) {
+          stop("cannot set style_id: table has no tblPr element", call. = FALSE)
+        }
+        return(NULL)
+      }
+      if (!missing(value)) {
+        ts_elm <- tblPr$get_or_add_tableStyleId()
+        xml2::xml_set_text(ts_elm$get_node(), as.character(value))
+        return(invisible(value))
+      }
+      ts_elm <- tblPr$tableStyleId
+      if (is.null(ts_elm)) return(NULL)
+      ts_elm$text
     }
   ),
 

@@ -992,10 +992,120 @@ CT_Shape$set("active", "has_custom_geometry", function() {
   !is.null(spPr$custGeom)
 }, overwrite = TRUE)
 
+# ============================================================================
+# CT_SrcRect — <a:srcRect> — per-edge crop percentages on a blipFill
+# ============================================================================
+
+#' @keywords internal
+CT_SrcRect <- R6::R6Class(
+  "CT_SrcRect",
+  inherit = BaseOxmlElement,
+  active = list(
+    l = function(value) {
+      if (!missing(value)) {
+        v <- as.integer(round(as.numeric(value) * 100000.0))
+        if (v == 0L) self$remove_attr("l") else self$set_attr("l", as.character(v))
+        return(invisible(value))
+      }
+      v <- self$get_attr("l"); if (is.null(v)) 0.0 else as.integer(v) / 100000.0
+    },
+    r = function(value) {
+      if (!missing(value)) {
+        v <- as.integer(round(as.numeric(value) * 100000.0))
+        if (v == 0L) self$remove_attr("r") else self$set_attr("r", as.character(v))
+        return(invisible(value))
+      }
+      v <- self$get_attr("r"); if (is.null(v)) 0.0 else as.integer(v) / 100000.0
+    },
+    t = function(value) {
+      if (!missing(value)) {
+        v <- as.integer(round(as.numeric(value) * 100000.0))
+        if (v == 0L) self$remove_attr("t") else self$set_attr("t", as.character(v))
+        return(invisible(value))
+      }
+      v <- self$get_attr("t"); if (is.null(v)) 0.0 else as.integer(v) / 100000.0
+    },
+    b = function(value) {
+      if (!missing(value)) {
+        v <- as.integer(round(as.numeric(value) * 100000.0))
+        if (v == 0L) self$remove_attr("b") else self$set_attr("b", as.character(v))
+        return(invisible(value))
+      }
+      v <- self$get_attr("b"); if (is.null(v)) 0.0 else as.integer(v) / 100000.0
+    }
+  )
+)
+
+
+# ============================================================================
+# CT_BlipFill — <p:blipFill>
+# ============================================================================
+
+#' @keywords internal
+CT_BlipFill <- R6::R6Class(
+  "CT_BlipFill",
+  inherit = BaseOxmlElement,
+
+  public = list(
+    # Return or create <a:srcRect>
+    get_or_add_srcRect = function() {
+      existing <- self$srcRect
+      if (!is.null(existing)) return(existing)
+      # Insert before a:stretch (or append)
+      stretch_nd <- xml2::xml_find_first(
+        self$get_node(), "a:stretch", ns = c(a = .nsmap[["a"]])
+      )
+      new_nd <- xml2::read_xml(sprintf('<a:srcRect xmlns:a="%s"/>', .nsmap[["a"]]))
+      if (!inherits(stretch_nd, "xml_missing")) {
+        xml2::xml_add_sibling(stretch_nd, xml2::xml_root(new_nd), .where = "before")
+      } else {
+        xml2::xml_add_child(self$get_node(), xml2::xml_root(new_nd))
+      }
+      self$srcRect
+    },
+
+    # Remove <a:srcRect> if present
+    remove_srcRect = function() {
+      nd <- xml2::xml_find_first(
+        self$get_node(), "a:srcRect", ns = c(a = .nsmap[["a"]])
+      )
+      if (!inherits(nd, "xml_missing")) xml2::xml_remove(nd)
+      invisible(NULL)
+    }
+  ),
+
+  active = list(
+    srcRect = function() {
+      nd <- xml2::xml_find_first(
+        self$get_node(), "a:srcRect", ns = c(a = .nsmap[["a"]])
+      )
+      if (inherits(nd, "xml_missing")) return(NULL)
+      wrap_element(nd)
+    }
+  )
+)
+
+
+# ============================================================================
+# CT_Picture XML element
+# ============================================================================
+
 #' CT_Picture XML element
 #' @keywords internal
 #' @export
-CT_Picture <- R6::R6Class("CT_Picture", inherit = BaseShapeElement)
+CT_Picture <- R6::R6Class(
+  "CT_Picture",
+  inherit = BaseShapeElement,
+  active = list(
+    blipFill = function() {
+      nd <- xml2::xml_find_first(
+        self$get_node(), "p:blipFill", ns = c(p = .nsmap[["p"]])
+      )
+      if (inherits(nd, "xml_missing")) return(NULL)
+      wrap_element(nd)
+    }
+  )
+)
 
 #' CT_Connector XML element
 #' @keywords internal
@@ -1097,6 +1207,8 @@ CT_GroupShape_new_grpSp <- function(id, name, x, y, cx, cy) {
   register_element_cls("p:spTree",       CT_GroupShape)
   register_element_cls("p:grpSp",        CT_GroupShape)
   register_element_cls("p:sp",           CT_Shape)
+  register_element_cls("p:blipFill",      CT_BlipFill)
+  register_element_cls("a:srcRect",      CT_SrcRect)
   register_element_cls("p:pic",          CT_Picture)
   register_element_cls("p:cxnSp",        CT_Connector)
   register_element_cls("p:graphicFrame", CT_GraphicalObjectFrame)

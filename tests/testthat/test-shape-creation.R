@@ -482,3 +482,151 @@ describe("FreeformBuilder", {
     expect_equal(as.integer(ff$shape_offset_y()), 200L)
   })
 })
+
+
+# ============================================================================
+# Picture crop
+# ============================================================================
+
+describe("Picture$crop", {
+  it("returns NULL for a newly added picture (no crop)", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    img    <- system.file("test_files/python-pptx.png", package = "rpptx")
+    if (img == "") skip("test image not found")
+    pic    <- slide$shapes$add_picture(img, Inches(1), Inches(1))
+    crop   <- pic$crop
+    expect_s3_class(crop, "PictureCrop")
+  })
+
+  it("crop edges default to 0.0", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    img    <- system.file("test_files/python-pptx.png", package = "rpptx")
+    if (img == "") skip("test image not found")
+    pic  <- slide$shapes$add_picture(img, Inches(1), Inches(1))
+    crop <- pic$crop
+    expect_equal(crop$left,   0.0)
+    expect_equal(crop$right,  0.0)
+    expect_equal(crop$top,    0.0)
+    expect_equal(crop$bottom, 0.0)
+  })
+
+  it("left crop can be set and read back", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    img    <- system.file("test_files/python-pptx.png", package = "rpptx")
+    if (img == "") skip("test image not found")
+    pic  <- slide$shapes$add_picture(img, Inches(1), Inches(1))
+    pic$crop$left <- 0.1
+    expect_equal(pic$crop$left, 0.1)
+  })
+
+  it("all edges can be set independently", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    img    <- system.file("test_files/python-pptx.png", package = "rpptx")
+    if (img == "") skip("test image not found")
+    pic  <- slide$shapes$add_picture(img, Inches(1), Inches(1))
+    pic$crop$left   <- 0.10
+    pic$crop$right  <- 0.05
+    pic$crop$top    <- 0.15
+    pic$crop$bottom <- 0.20
+    expect_equal(pic$crop$left,   0.10)
+    expect_equal(pic$crop$right,  0.05)
+    expect_equal(pic$crop$top,    0.15)
+    expect_equal(pic$crop$bottom, 0.20)
+  })
+
+  it("crop round-trips through save/load", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    img    <- system.file("test_files/python-pptx.png", package = "rpptx")
+    if (img == "") skip("test image not found")
+    pic  <- slide$shapes$add_picture(img, Inches(1), Inches(1))
+    pic$crop$left <- 0.25
+    pic$crop$top  <- 0.10
+    tmp <- tempfile(fileext = ".pptx")
+    on.exit(unlink(tmp))
+    prs$save(tmp)
+    prs2   <- pptx_presentation(tmp)
+    pics2  <- Filter(function(s) inherits(s, "Picture"),
+                     prs2$slides[[1]]$shapes$to_list())
+    expect_equal(pics2[[1]]$crop$left, 0.25)
+    expect_equal(pics2[[1]]$crop$top,  0.10)
+  })
+})
+
+
+# ============================================================================
+# SlideShapes$add_shape_copy
+# ============================================================================
+
+describe("SlideShapes$add_shape_copy", {
+  it("increases shape count by one", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    s1 <- prs$slides$add_slide(layout)
+    s2 <- prs$slides$add_slide(layout)
+    txb <- s1$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    txb$text_frame$text <- "Original"
+    n_before <- length(s2$shapes)
+    s2$shapes$add_shape_copy(txb)
+    expect_equal(length(s2$shapes), n_before + 1L)
+  })
+
+  it("returns a shape proxy", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    s1 <- prs$slides$add_slide(layout)
+    s2 <- prs$slides$add_slide(layout)
+    txb <- s1$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    result <- s2$shapes$add_shape_copy(txb)
+    expect_s3_class(result, "Shape")
+  })
+
+  it("copy preserves text content", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    s1 <- prs$slides$add_slide(layout)
+    s2 <- prs$slides$add_slide(layout)
+    txb <- s1$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    txb$text_frame$text <- "Copied text"
+    copy <- s2$shapes$add_shape_copy(txb)
+    expect_equal(copy$text_frame$text, "Copied text")
+  })
+
+  it("copy within the same slide works", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    txb    <- slide$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    txb$text_frame$text <- "Same slide"
+    n_before <- length(slide$shapes)
+    slide$shapes$add_shape_copy(txb)
+    expect_equal(length(slide$shapes), n_before + 1L)
+  })
+
+  it("round-trips through save/load", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    s1 <- prs$slides$add_slide(layout)
+    s2 <- prs$slides$add_slide(layout)
+    txb <- s1$shapes$add_textbox(Inches(1), Inches(1), Inches(3), Inches(1))
+    txb$text_frame$text <- "Roundtrip"
+    s2$shapes$add_shape_copy(txb)
+    tmp <- tempfile(fileext = ".pptx")
+    on.exit(unlink(tmp))
+    prs$save(tmp)
+    prs2 <- pptx_presentation(tmp)
+    texts <- sapply(prs2$slides[[2]]$shapes$to_list(), function(s) {
+      tryCatch(s$text_frame$text, error = function(e) "")
+    })
+    expect_true(any(grepl("Roundtrip", texts)))
+  })
+})

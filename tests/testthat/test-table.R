@@ -455,3 +455,45 @@ describe("Table round-trip (save/reload)", {
     })
   })
 })
+
+
+# ============================================================================
+# Table$style_id
+# ============================================================================
+
+describe("Table$style_id", {
+  it("returns a non-NULL GUID for a newly created table", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    gf     <- slide$shapes$add_table(2L, 2L, Inches(1), Inches(1), Inches(4), Inches(2))
+    sid    <- gf$table$style_id
+    expect_type(sid, "character")
+    expect_true(grepl("\\{", sid))
+  })
+
+  it("style_id can be changed", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    gf     <- slide$shapes$add_table(2L, 2L, Inches(1), Inches(1), Inches(4), Inches(2))
+    new_id <- "{2D5ABB26-0587-4C30-8999-92F81FD0307C}"
+    gf$table$style_id <- new_id
+    expect_equal(gf$table$style_id, new_id)
+  })
+
+  it("style_id round-trips through save/load", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    gf     <- slide$shapes$add_table(2L, 2L, Inches(1), Inches(1), Inches(4), Inches(2))
+    custom_id <- "{2D5ABB26-0587-4C30-8999-92F81FD0307C}"
+    gf$table$style_id <- custom_id
+    tmp <- tempfile(fileext = ".pptx")
+    on.exit(unlink(tmp))
+    prs$save(tmp)
+    prs2   <- pptx_presentation(tmp)
+    gf2    <- Filter(function(s) isTRUE(s$has_table), prs2$slides[[1]]$shapes$to_list())[[1]]
+    expect_equal(gf2$table$style_id, custom_id)
+  })
+})

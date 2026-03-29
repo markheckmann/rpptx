@@ -20,6 +20,7 @@ OPC part for the presentation XML (/ppt/presentation.xml).
 \item \href{#method-PresentationPart-related_slide_master}{\code{PresentationPart$related_slide_master()}}
 \item \href{#method-PresentationPart-save}{\code{PresentationPart$save()}}
 \item \href{#method-PresentationPart-slide_id}{\code{PresentationPart$slide_id()}}
+\item \href{#method-PresentationPart-duplicate_slide}{\code{PresentationPart$duplicate_slide()}}
 \item \href{#method-PresentationPart-rename_slide_parts}{\code{PresentationPart$rename_slide_parts()}}
 \item \href{#method-PresentationPart-clone}{\code{PresentationPart$clone()}}
 }
@@ -99,6 +100,15 @@ OPC part for the presentation XML (/ppt/presentation.xml).
 \subsection{Method \code{slide_id()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PresentationPart$slide_id(slide_part)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PresentationPart-duplicate_slide"></a>}}
+\if{latex}{\out{\hypertarget{method-PresentationPart-duplicate_slide}{}}}
+\subsection{Method \code{duplicate_slide()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PresentationPart$duplicate_slide(slide_part)}\if{html}{\out{</div>}}
 }
 
 }

@@ -127,3 +127,40 @@ describe(".parse_W3CDTF", {
     expect_null(result)
   })
 })
+
+
+# ============================================================================
+# Core property read/write via Presentation$core_properties
+# ============================================================================
+
+describe("Presentation$core_properties read/write", {
+  it("title is writable and readable", {
+    prs <- pptx_presentation()
+    prs$core_properties$title <- "My Deck"
+    expect_equal(prs$core_properties$title, "My Deck")
+  })
+
+  it("author is writable and readable", {
+    prs <- pptx_presentation()
+    prs$core_properties$author <- "Jane Doe"
+    expect_equal(prs$core_properties$author, "Jane Doe")
+  })
+
+  it("subject is writable and readable", {
+    prs <- pptx_presentation()
+    prs$core_properties$subject <- "Q1 Report"
+    expect_equal(prs$core_properties$subject, "Q1 Report")
+  })
+
+  it("round-trips through save/load", {
+    prs <- pptx_presentation()
+    prs$core_properties$title   <- "Save Test"
+    prs$core_properties$author  <- "Alice"
+    tmp <- tempfile(fileext = ".pptx")
+    on.exit(unlink(tmp))
+    prs$save(tmp)
+    prs2 <- pptx_presentation(tmp)
+    expect_equal(prs2$core_properties$title,  "Save Test")
+    expect_equal(prs2$core_properties$author, "Alice")
+  })
+})
