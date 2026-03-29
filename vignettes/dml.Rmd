@@ -200,8 +200,9 @@ shape$line$width     <- Pt(1.5)
 shape$line$color$rgb <- RGBColor(0xFF, 0xFF, 0xFF)
 
 # Text
-tf <- shape$text_frame
-tf$paragraphs[[1]]$add_run()$text <- "Styled shape"
+tf  <- shape$text_frame
+run <- tf$paragraphs[[1]]$add_run()
+run$text <- "Styled shape"
 tf$paragraphs[[1]]$runs[[1]]$font$color$rgb <- RGBColor(0xFF, 0xFF, 0xFF)
 tf$paragraphs[[1]]$runs[[1]]$font$bold      <- TRUE
 

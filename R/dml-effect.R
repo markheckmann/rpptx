@@ -2,10 +2,6 @@
 #
 # Ported from python-pptx/src/pptx/dml/effect.py.
 
-#' @include oxml-shapes.R
-#' @keywords internal
-
-
 # ============================================================================
 # ShadowFormat
 # ============================================================================
@@ -14,6 +10,8 @@
 #'
 #' Provides access to the shadow effect for a shape. Obtain via `shape$shadow`.
 #'
+#' @include oxml-shapes.R
+#' @keywords internal
 #' @export
 ShadowFormat <- R6::R6Class(
   "ShadowFormat",
