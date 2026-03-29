@@ -169,6 +169,7 @@ pat_box$fill$fore_color$rgb <- RGBColor(0x1F, 0x49, 0x7D)
 pat_box$fill$back_color$rgb <- RGBColor(0xCC, 0xDD, 0xFF)
 pat_box$line$width          <- Pt(1)
 
+
 # ── Slide 3: Table ────────────────────────────────────────────────────────────
 slide3 <- prs$slides$add_slide(blank_layout)
 

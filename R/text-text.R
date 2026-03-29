@@ -637,12 +637,12 @@ TextFrame <- R6::R6Class(
     word_wrap = function(value) {
       if (!missing(value)) {
         private$.txBody$bodyPr$wrap <-
-          if (isTRUE(value)) "sq" else if (identical(value, FALSE)) "none" else NULL
+          if (isTRUE(value)) "square" else if (identical(value, FALSE)) "none" else NULL
         return(invisible(value))
       }
       w <- private$.txBody$bodyPr$wrap
       if (is.null(w)) return(NULL)
-      if (w == "sq")   return(TRUE)
+      if (w == "square") return(TRUE)
       if (w == "none") return(FALSE)
       NULL
     },
