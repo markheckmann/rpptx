@@ -1,0 +1,346 @@
+# Working with Charts
+
+``` r
+library(rpptx)
+```
+
+## Overview
+
+Charts in rpptx embed a real Excel workbook inside the `.pptx` file —
+exactly as PowerPoint does. The workflow is:
+
+1.  Create a `CategoryChartData` (or `XyChartData` / `BubbleChartData`)
+    object
+2.  Add categories and series
+3.  Call `slide$shapes$add_chart()` with an `XL_CHART_TYPE` constant
+
+## Category charts (bar, column, line, pie, …)
+
+### Clustered column chart
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+
+cd <- CategoryChartData$new()
+cd$categories <- c("Q1", "Q2", "Q3", "Q4")
+cd$add_series("Revenue",  c(120, 145, 132, 178))
+cd$add_series("Expenses", c(95,  110, 105, 130))
+
+chart_shape <- slide$shapes$add_chart(
+  XL_CHART_TYPE$COLUMN_CLUSTERED,
+  left   = Inches(0.5),
+  top    = Inches(0.5),
+  width  = Inches(9),
+  height = Inches(6),
+  chart_data = cd
+)
+chart_shape$shape_type == MSO_SHAPE_TYPE$CHART
+#> [1] TRUE
+```
+
+### Bar chart (horizontal)
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+
+cd <- CategoryChartData$new()
+cd$categories <- c("Product A", "Product B", "Product C")
+cd$add_series("Units sold", c(450, 320, 580))
+
+slide$shapes$add_chart(
+  XL_CHART_TYPE$BAR_CLUSTERED,
+  Inches(0.5), Inches(0.5), Inches(9), Inches(6), cd
+)
+#> <Chart>  "Chart 2"  9.00×6.00 in  @ 0.50, 0.50 in
+```
+
+### Line chart
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+
+cd <- CategoryChartData$new()
+cd$categories <- month.abb
+cd$add_series("2023", c(40, 45, 55, 60, 70, 75, 80, 78, 65, 55, 48, 42))
+cd$add_series("2024", c(42, 48, 58, 65, 72, 80, 85, 82, 70, 60, 52, 45))
+
+slide$shapes$add_chart(
+  XL_CHART_TYPE$LINE,
+  Inches(0.5), Inches(0.5), Inches(9), Inches(6), cd
+)
+#> <Chart>  "Chart 2"  9.00×6.00 in  @ 0.50, 0.50 in
+```
+
+### Pie chart
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+
+cd <- CategoryChartData$new()
+cd$categories <- c("North", "South", "East", "West")
+cd$add_series("Market share", c(35, 25, 20, 20))
+
+slide$shapes$add_chart(
+  XL_CHART_TYPE$PIE,
+  Inches(1), Inches(0.5), Inches(8), Inches(6), cd
+)
+#> <Chart>  "Chart 2"  8.00×6.00 in  @ 1.00, 0.50 in
+```
+
+### Area chart
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+
+cd <- CategoryChartData$new()
+cd$categories <- paste0("Week ", 1:8)
+cd$add_series("Team A", c(10, 15, 13, 20, 18, 22, 25, 24))
+cd$add_series("Team B", c(8,  12, 10, 16, 14, 18, 20, 19))
+
+slide$shapes$add_chart(
+  XL_CHART_TYPE$AREA,
+  Inches(0.5), Inches(0.5), Inches(9), Inches(6), cd
+)
+#> <Chart>  "Chart 2"  9.00×6.00 in  @ 0.50, 0.50 in
+```
+
+## Available chart types
+
+Some commonly used `XL_CHART_TYPE` constants:
+
+| Constant             | Description                      |
+|----------------------|----------------------------------|
+| `COLUMN_CLUSTERED`   | Clustered column (vertical bars) |
+| `COLUMN_STACKED`     | Stacked column                   |
+| `COLUMN_STACKED_100` | 100% stacked column              |
+| `BAR_CLUSTERED`      | Clustered bar (horizontal)       |
+| `BAR_STACKED`        | Stacked bar                      |
+| `LINE`               | Line chart                       |
+| `LINE_MARKERS`       | Line with markers                |
+| `LINE_STACKED`       | Stacked line                     |
+| `PIE`                | Pie chart                        |
+| `PIE_EXPLODED`       | Exploded pie                     |
+| `AREA`               | Area chart                       |
+| `AREA_STACKED`       | Stacked area                     |
+| `XY_SCATTER`         | Scatter (XY)                     |
+| `BUBBLE`             | Bubble chart                     |
+| `DOUGHNUT`           | Doughnut                         |
+| `RADAR`              | Radar / spider                   |
+
+## XY (scatter) charts
+
+XY charts need `XyChartData` which accepts (x, y) pairs per series:
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+
+cd <- XyChartData$new()
+cd$add_series("Series 1",
+  x_values = c(1, 2, 3, 4, 5),
+  y_values = c(2.1, 3.8, 5.2, 7.1, 9.0)
+)
+cd$add_series("Series 2",
+  x_values = c(1, 2, 3, 4, 5),
+  y_values = c(1.5, 2.9, 4.1, 5.8, 7.3)
+)
+
+slide$shapes$add_chart(
+  XL_CHART_TYPE$XY_SCATTER,
+  Inches(0.5), Inches(0.5), Inches(9), Inches(6), cd
+)
+#> <Chart>  "Chart 2"  9.00×6.00 in  @ 0.50, 0.50 in
+```
+
+## Accessing chart properties
+
+After adding a chart, retrieve the `Chart` object to adjust its
+properties:
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+
+cd <- CategoryChartData$new()
+cd$categories <- c("A", "B", "C")
+cd$add_series("S1", c(1, 2, 3))
+
+chart_shape <- slide$shapes$add_chart(
+  XL_CHART_TYPE$COLUMN_CLUSTERED,
+  Inches(0.5), Inches(0.5), Inches(9), Inches(6), cd
+)
+
+chart <- chart_shape$chart
+class(chart)   # "Chart"
+#> [1] "Chart" "R6"
+```
+
+### Chart title
+
+``` r
+chart$has_title <- TRUE
+chart$chart_title$text_frame$text <- "My Chart Title"
+```
+
+### Legend
+
+``` r
+chart$has_legend <- TRUE
+chart$legend$position <- XL_LEGEND_POSITION$BOTTOM
+chart$legend$include_in_layout <- FALSE
+```
+
+Legend positions: `TOP`, `BOTTOM`, `LEFT`, `RIGHT`, `CORNER`.
+
+### Axes
+
+``` r
+cat_axis <- chart$category_axis
+val_axis  <- chart$value_axis
+
+# Axis visibility
+cat_axis$visible <- TRUE
+val_axis$visible <- TRUE
+
+# Tick label position
+cat_axis$tick_label_position <- "low"
+val_axis$tick_label_position <- "nextTo"
+
+# Scale
+val_axis$minimum_scale <- 0
+val_axis$maximum_scale <- 200
+```
+
+### Number format
+
+Axis tick labels can use any Excel number format string:
+
+``` r
+val_axis$tick_labels$number_format <- "0.0%"   # percentage
+val_axis$tick_labels$number_format <- "#,##0"  # thousands separator
+val_axis$tick_labels$number_format <- "General" # default
+```
+
+### Tick marks
+
+``` r
+val_axis$major_tick_mark <- XL_TICK_MARK$OUTSIDE
+val_axis$minor_tick_mark <- XL_TICK_MARK$NONE
+cat_axis$major_tick_mark <- XL_TICK_MARK$CROSS
+```
+
+Tick mark constants: `NONE`, `INSIDE`, `OUTSIDE`, `CROSS`.
+
+### Gridlines
+
+``` r
+val_axis$has_major_gridlines <- TRUE
+val_axis$has_minor_gridlines <- FALSE
+```
+
+### Reverse axis order
+
+``` r
+val_axis$reverse_order <- TRUE   # descending values
+cat_axis$reverse_order <- FALSE  # ascending categories
+```
+
+### Data labels
+
+``` r
+plot <- chart$plots[[1]]
+plot$has_data_labels <- TRUE
+dls <- plot$data_labels
+dls$show_value         <- TRUE
+dls$show_category_name <- FALSE
+dls$show_series_name   <- FALSE
+```
+
+### Series formatting
+
+Each series exposes a `format` property with `fill` and `line`
+sub-objects (same as shape formatting):
+
+``` r
+series <- chart$plots[[1]]$series[[1]]
+series$format$fill$solid()
+series$format$fill$fore_color$rgb <- RGBColor(0x4F, 0x81, 0xBD)
+series$format$line$width <- Pt(1.5)
+series$format$line$color$rgb <- RGBColor(0x1F, 0x49, 0x7D)
+```
+
+Individual data points can also be formatted:
+
+``` r
+pt <- series$data_points[[2]]   # second point
+pt$format$fill$solid()
+pt$format$fill$fore_color$rgb <- RGBColor(0xFF, 0x00, 0x00)
+```
+
+### Chart area formatting
+
+The chart and plot areas have a `format` property:
+
+``` r
+chart$format$fill$solid()
+chart$format$fill$fore_color$theme_color <- MSO_THEME_COLOR$ACCENT_1
+chart$format$line$width <- Pt(0.5)
+```
+
+## Chart type reference
+
+``` r
+# All available chart types
+length(XL_CHART_TYPE)   # 73+
+#> [1] 73
+```
+
+``` r
+# Common types
+XL_CHART_TYPE$COLUMN_CLUSTERED
+XL_CHART_TYPE$BAR_CLUSTERED
+XL_CHART_TYPE$LINE
+XL_CHART_TYPE$PIE
+XL_CHART_TYPE$AREA
+XL_CHART_TYPE$XY_SCATTER
+XL_CHART_TYPE$BUBBLE
+XL_CHART_TYPE$DOUGHNUT
+XL_CHART_TYPE$RADAR
+```
+
+## Full example
+
+``` r
+prs    <- pptx_presentation()
+layout <- prs$slide_layouts[[6]]
+slide  <- prs$slides$add_slide(layout)
+
+# Build chart data
+cd <- CategoryChartData$new()
+cd$categories <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun")
+cd$add_series("Actual",   c(120, 135, 128, 155, 162, 175))
+cd$add_series("Forecast", c(115, 130, 140, 150, 165, 180))
+
+# Add chart
+cs <- slide$shapes$add_chart(
+  XL_CHART_TYPE$LINE_MARKERS,
+  Inches(0.5), Inches(0.5),
+  Inches(9),   Inches(6.5),
+  cd
+)
+
+# Decorate
+ch <- cs$chart
+ch$has_title <- TRUE
+ch$chart_title$text_frame$text <- "H1 Performance"
+ch$has_legend <- TRUE
+ch$legend$position <- XL_LEGEND_POSITION$BOTTOM
+
+tmp <- tempfile(fileext = ".pptx")
+prs$save(tmp)
+```

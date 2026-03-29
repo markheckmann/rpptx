@@ -1,0 +1,327 @@
+# Working with Shapes
+
+``` r
+library(rpptx)
+```
+
+## Shape types
+
+Every shape on a slide has a `shape_type` that identifies it:
+
+| Constant                     | Value | Element                  |
+|------------------------------|-------|--------------------------|
+| `MSO_SHAPE_TYPE$AUTO_SHAPE`  | 1     | Autoshape (`p:sp`)       |
+| `MSO_SHAPE_TYPE$CHART`       | 3     | Chart (`p:graphicFrame`) |
+| `MSO_SHAPE_TYPE$GROUP`       | 6     | Group shape (`p:grpSp`)  |
+| `MSO_SHAPE_TYPE$PICTURE`     | 13    | Picture (`p:pic`)        |
+| `MSO_SHAPE_TYPE$PLACEHOLDER` | 14    | Placeholder (`p:sp`)     |
+| `MSO_SHAPE_TYPE$TABLE`       | 19    | Table (`p:graphicFrame`) |
+| `MSO_SHAPE_TYPE$TEXT_BOX`    | 17    | Text box (`p:sp`)        |
+| `MSO_SHAPE_TYPE$LINE`        | 9     | Connector (`p:cxnSp`)    |
+
+## Common shape properties
+
+All shapes share these properties:
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+shape <- slide$shapes$add_shape(
+  MSO_AUTO_SHAPE_TYPE$RECTANGLE,
+  left = Inches(1), top = Inches(1),
+  width = Inches(3), height = Inches(2)
+)
+
+shape$name         # "Rectangle 1"
+#> [1] "AutoShape 2"
+shape$shape_id     # integer ID unique within the slide
+#> [1] 3
+shape$left         # position in EMU
+#> <Length: 914400 EMU (1.00 in, 2.54 cm, 72.0 pt)>
+shape$top
+#> <Length: 914400 EMU (1.00 in, 2.54 cm, 72.0 pt)>
+shape$width
+#> <Length: 2743200 EMU (3.00 in, 7.62 cm, 216.0 pt)>
+shape$height
+#> <Length: 1828800 EMU (2.00 in, 5.08 cm, 144.0 pt)>
+shape$shape_type   # MSO_SHAPE_TYPE$AUTO_SHAPE
+#> [1] 1
+```
+
+Positions and sizes are read/write:
+
+``` r
+shape$left   <- Inches(2)
+shape$top    <- Inches(3)
+shape$width  <- Inches(4)
+shape$height <- Inches(1.5)
+```
+
+## Autoshapes
+
+`add_shape()` accepts any `MSO_AUTO_SHAPE_TYPE` constant:
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+
+rect  <- slide$shapes$add_shape(MSO_AUTO_SHAPE_TYPE$RECTANGLE,
+           Inches(0.5), Inches(0.5), Inches(2), Inches(1.5))
+oval  <- slide$shapes$add_shape(MSO_AUTO_SHAPE_TYPE$OVAL,
+           Inches(3),   Inches(0.5), Inches(2), Inches(1.5))
+arrow <- slide$shapes$add_shape(MSO_AUTO_SHAPE_TYPE$RIGHT_ARROW,
+           Inches(5.5), Inches(0.5), Inches(3), Inches(1.5))
+```
+
+Some commonly used shape types:
+
+``` r
+MSO_AUTO_SHAPE_TYPE$RECTANGLE
+#> $value
+#> [1] 1
+#> 
+#> $prst
+#> [1] "rect"
+MSO_AUTO_SHAPE_TYPE$ROUNDED_RECTANGLE
+#> $value
+#> [1] 5
+#> 
+#> $prst
+#> [1] "roundRect"
+MSO_AUTO_SHAPE_TYPE$OVAL
+#> $value
+#> [1] 9
+#> 
+#> $prst
+#> [1] "ellipse"
+MSO_AUTO_SHAPE_TYPE$DIAMOND
+#> $value
+#> [1] 4
+#> 
+#> $prst
+#> [1] "diamond"
+MSO_AUTO_SHAPE_TYPE$TRIANGLE
+#> NULL
+MSO_AUTO_SHAPE_TYPE$RIGHT_ARROW
+#> $value
+#> [1] 33
+#> 
+#> $prst
+#> [1] "rightArrow"
+MSO_AUTO_SHAPE_TYPE$STAR_5_POINT
+#> $value
+#> [1] 92
+#> 
+#> $prst
+#> [1] "star5"
+MSO_AUTO_SHAPE_TYPE$CLOUD
+#> $value
+#> [1] 179
+#> 
+#> $prst
+#> [1] "cloud"
+```
+
+## Text boxes
+
+A text box is a shape with no preset geometry:
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+
+tb <- slide$shapes$add_textbox(
+  Inches(1), Inches(1), Inches(5), Inches(1)
+)
+tb$text_frame$text <- "Hello from a text box"
+tb$shape_type == MSO_SHAPE_TYPE$TEXT_BOX
+#> [1] TRUE
+```
+
+## Pictures
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+
+pic <- slide$shapes$add_picture(
+  "photo.jpg",
+  left = Inches(1), top = Inches(1),
+  width = Inches(4), height = Inches(3)
+)
+pic$shape_type == MSO_SHAPE_TYPE$PICTURE
+```
+
+## Connectors
+
+Connectors link two points with a line:
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+
+conn <- slide$shapes$add_connector(
+  MSO_CONNECTOR_TYPE$STRAIGHT,
+  begin_x = Inches(1), begin_y = Inches(1),
+  end_x   = Inches(5), end_y   = Inches(4)
+)
+conn$shape_type == MSO_SHAPE_TYPE$LINE
+#> [1] TRUE
+```
+
+Connector types: `STRAIGHT`, `ELBOW`, `CURVE`.
+
+## Fill formatting
+
+Shapes (autoshapes, text boxes) expose a `fill` property:
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+shape <- slide$shapes$add_shape(
+  MSO_AUTO_SHAPE_TYPE$RECTANGLE,
+  Inches(1), Inches(1), Inches(3), Inches(2)
+)
+
+# Solid fill with RGB colour
+shape$fill$solid()
+shape$fill$fore_color$rgb <- RGBColor(0x4F, 0x81, 0xBD)
+
+# No fill (transparent)
+shape$fill$background()
+```
+
+Fill types:
+
+| Method              | Description                         |
+|---------------------|-------------------------------------|
+| `fill$solid()`      | Solid colour (set `fore_color$rgb`) |
+| `fill$background()` | No fill / transparent               |
+| `fill$patterned()`  | Pattern fill                        |
+| `fill$gradient()`   | Gradient fill                       |
+
+## Line formatting
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+shape <- slide$shapes$add_shape(
+  MSO_AUTO_SHAPE_TYPE$RECTANGLE,
+  Inches(1), Inches(1), Inches(3), Inches(2)
+)
+
+shape$line$width                  <- Pt(2)
+shape$line$color$rgb              <- RGBColor(0xFF, 0x00, 0x00)
+shape$line$dash_style             <- MSO_LINE_DASH_STYLE$DASH
+```
+
+## Iterating shapes
+
+`SlideShapes` supports 1-based index access and `to_list()`:
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+slide$shapes$add_shape(MSO_AUTO_SHAPE_TYPE$RECTANGLE,
+  Inches(0.5), Inches(0.5), Inches(2), Inches(1))
+#> <AutoShape>  "AutoShape 2"  2.00×1.00 in  @ 0.50, 0.50 in
+slide$shapes$add_textbox(
+  Inches(3), Inches(0.5), Inches(3), Inches(1))
+#> <TextBox>  "TextBox 3"  3.00×1.00 in  @ 3.00, 0.50 in
+
+length(slide$shapes)   # 2
+#> [1] 3
+slide$shapes[[1]]$name
+#> [1] "Title"
+
+for (shape in slide$shapes$to_list()) {
+  cat(shape$name, "—", shape$shape_type, "\n")
+}
+#> Title — 14 
+#> AutoShape 2 — 1 
+#> TextBox 3 — 17
+```
+
+## Group shapes
+
+Multiple shapes can be grouped:
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+s1 <- slide$shapes$add_shape(MSO_AUTO_SHAPE_TYPE$RECTANGLE,
+        Inches(1), Inches(1), Inches(2), Inches(1))
+s2 <- slide$shapes$add_shape(MSO_AUTO_SHAPE_TYPE$OVAL,
+        Inches(2), Inches(2), Inches(2), Inches(1))
+
+grp <- slide$shapes$add_group_shape(list(s1, s2))
+grp$shape_type == MSO_SHAPE_TYPE$GROUP
+#> [1] TRUE
+length(grp$shapes)   # 2
+#> [1] 2
+```
+
+## Placeholders
+
+Placeholder shapes (from a slide layout) are accessed via
+`placeholders`:
+
+``` r
+prs    <- pptx_presentation()
+layout <- prs$slide_layouts[[1]]   # "Title Slide" layout
+slide  <- prs$slides$add_slide(layout)
+
+# List placeholder indices and types
+for (ph in slide$placeholders$to_list()) {
+  cat(ph$placeholder_format$idx, "—", ph$placeholder_format$type, "\n")
+}
+#> 0 — ctrTitle 
+#> 1 — subTitle
+```
+
+Set placeholder text:
+
+``` r
+ph1 <- slide$placeholders[[1]]; ph1$text <- "My Title"
+ph2 <- slide$placeholders[[2]]; ph2$text <- "My Subtitle"
+```
+
+(`[[n]]` on `SlidePlaceholders` accepts a 1-based position, not the
+OOXML `idx`.)
+
+## Video (movie shapes)
+
+Embed a video file on a slide with `add_movie()`. The shape shows a
+poster frame image until the video plays.
+
+``` r
+mp4 <- system.file("test_files", "dummy.mp4", package = "rpptx")
+
+r     <- blank_slide()
+slide <- r$slide
+
+shape <- slide$shapes$add_movie(
+  movie_file = mp4,
+  left = Inches(1), top = Inches(1),
+  width = Inches(6), height = Inches(4)
+)
+shape$shape_type  # MSO_SHAPE_TYPE$PICTURE
+```
+
+By default the poster frame is a generic loudspeaker icon bundled with
+the package. Supply your own image with `poster_frame_image`:
+
+``` r
+img <- system.file("test_files", "monty-truth.png", package = "rpptx")
+slide$shapes$add_movie(mp4,
+  Inches(1), Inches(1), Inches(6), Inches(4),
+  poster_frame_image = img,
+  mime_type = "video/mp4"
+)
+```
+
+The video relationship uses the OOXML dual-relationship pattern required
+for Office 2007/2010 compatibility: one `RT.MEDIA` relationship and one
+`RT.VIDEO` relationship both pointing to the same media part. Multiple
+calls with the same file reuse a single media part (SHA-1
+deduplication).

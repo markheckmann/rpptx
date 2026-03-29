@@ -1,0 +1,263 @@
+# Working with Tables
+
+``` r
+library(rpptx)
+```
+
+## Creating a table
+
+`add_table()` adds an empty table with a given number of rows and
+columns:
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+
+tbl_shape <- slide$shapes$add_table(
+  rows   = 4,
+  cols   = 3,
+  left   = Inches(1),
+  top    = Inches(1),
+  width  = Inches(8),
+  height = Inches(3)
+)
+tbl <- tbl_shape$table
+class(tbl)   # "Table"
+#> [1] "Table" "R6"
+```
+
+## Dimensions
+
+``` r
+tbl$rows     # 4
+#> <TableRows>
+#>   Public:
+#>     clone: function (deep = FALSE) 
+#>     get: function (idx) 
+#>     initialize: function (tbl, parent) 
+#>     to_list: function () 
+#>   Private:
+#>     .parent: Table, R6
+#>     .tbl: CT_Table, BaseOxmlElement, R6
+tbl$columns  # 3
+#> <TableColumns>
+#>   Public:
+#>     clone: function (deep = FALSE) 
+#>     get: function (idx) 
+#>     initialize: function (tbl, parent) 
+#>     to_list: function () 
+#>   Private:
+#>     .parent: Table, R6
+#>     .tbl: CT_Table, BaseOxmlElement, R6
+```
+
+## Accessing cells
+
+`cell(row, col)` uses 1-based indices:
+
+``` r
+cell <- tbl$cell(1, 1)
+class(cell)   # "_Cell"
+#> [1] "TableCell" "R6"
+```
+
+## Writing cell text
+
+``` r
+cell_11 <- tbl$cell(1, 1); cell_11$text <- "Header A"
+cell_12 <- tbl$cell(1, 2); cell_12$text <- "Header B"
+cell_13 <- tbl$cell(1, 3); cell_13$text <- "Header C"
+
+cell_21 <- tbl$cell(2, 1); cell_21$text <- "Row 1"
+cell_22 <- tbl$cell(2, 2); cell_22$text <- "42"
+cell_23 <- tbl$cell(2, 3); cell_23$text <- "3.14"
+```
+
+## Filling a table from a data frame
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+
+df <- data.frame(
+  Name    = c("Alice", "Bob", "Carol"),
+  Score   = c(92, 85, 78),
+  Grade   = c("A", "B+", "B"),
+  stringsAsFactors = FALSE
+)
+
+nr   <- nrow(df) + 1L   # +1 for header
+nc   <- ncol(df)
+
+tbl_shape <- slide$shapes$add_table(
+  nr, nc,
+  Inches(1), Inches(1), Inches(8), Inches(3.5)
+)
+tbl <- tbl_shape$table
+
+# Write column headers
+for (j in seq_len(nc)) {
+  cell <- tbl$cell(1, j)
+  cell$text <- names(df)[j]
+}
+
+# Write data rows
+for (i in seq_len(nrow(df))) {
+  for (j in seq_len(nc)) {
+    cell <- tbl$cell(i + 1L, j)
+    cell$text <- as.character(df[i, j])
+  }
+}
+```
+
+## Cell fill
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+tbl_shape <- slide$shapes$add_table(3, 3, Inches(1), Inches(1), Inches(7), Inches(3))
+tbl <- tbl_shape$table
+
+# Blue header row
+for (j in 1:3) {
+  cell <- tbl$cell(1, j)
+  cell$fill$solid()
+  cell$fill$fore_color$rgb <- RGBColor(0x4F, 0x81, 0xBD)
+}
+
+# Alternating row shading
+for (i in 2:3) {
+  for (j in 1:3) {
+    cell <- tbl$cell(i, j)
+    if (i %% 2 == 0) {
+      cell$fill$solid()
+      cell$fill$fore_color$rgb <- RGBColor(0xDB, 0xE5, 0xF1)
+    } else {
+      cell$fill$background()
+    }
+  }
+}
+```
+
+## Cell text frame
+
+Each cell has a `text_frame` for rich text formatting:
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+tbl_shape <- slide$shapes$add_table(2, 2, Inches(1), Inches(1), Inches(6), Inches(2))
+tbl <- tbl_shape$table
+
+# Bold header
+cell <- tbl$cell(1, 1)
+cell$text <- "Total"
+cell$text_frame$paragraphs[[1]]$font$bold <- TRUE
+
+# Right-aligned number
+cell2 <- tbl$cell(2, 1)
+cell2$text <- "1,234"
+cell2$text_frame$paragraphs[[1]]$alignment <- PP_PARAGRAPH_ALIGNMENT$RIGHT
+```
+
+## Column widths and row heights
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+tbl_shape <- slide$shapes$add_table(3, 3, Inches(1), Inches(1), Inches(8), Inches(3))
+tbl <- tbl_shape$table
+
+# Set column widths
+tbl$columns[[1]]$width <- Inches(3)
+tbl$columns[[2]]$width <- Inches(2)
+tbl$columns[[3]]$width <- Inches(3)
+
+# Set row heights
+tbl$rows[[1]]$height <- Inches(0.6)
+tbl$rows[[2]]$height <- Inches(1.0)
+tbl$rows[[3]]$height <- Inches(1.0)
+```
+
+## Merging cells
+
+[`merge()`](https://rdrr.io/r/base/merge.html) spans a rectangular block
+of cells:
+
+``` r
+r <- blank_slide()
+slide <- r$slide
+tbl_shape <- slide$shapes$add_table(3, 4, Inches(0.5), Inches(1), Inches(9), Inches(3))
+tbl <- tbl_shape$table
+
+# Merge the top row across all 4 columns
+cell_11 <- tbl$cell(1, 1)
+cell_14 <- tbl$cell(1, 4)
+cell_11$merge(cell_14)
+cell_11$text <- "Merged Header"
+```
+
+## Full example
+
+``` r
+prs    <- pptx_presentation()
+layout <- prs$slide_layouts[[6]]
+slide  <- prs$slides$add_slide(layout)
+
+# Sample data
+sales <- data.frame(
+  Region  = c("North", "South", "East", "West", "Total"),
+  Q1      = c(234, 187, 312, 145, 878),
+  Q2      = c(256, 201, 298, 167, 922),
+  Q3      = c(289, 223, 341, 189, 1042),
+  stringsAsFactors = FALSE
+)
+
+nr <- nrow(sales) + 1L
+nc <- ncol(sales)
+
+ts <- slide$shapes$add_table(
+  nr, nc,
+  Inches(0.5), Inches(0.5),
+  Inches(9),   Inches(5)
+)
+tbl <- ts$table
+
+# Headers
+header_color <- RGBColor(0x17, 0x37, 0x5E)
+for (j in seq_len(nc)) {
+  cell <- tbl$cell(1, j)
+  cell$text <- names(sales)[j]
+  cell$fill$solid()
+  cell$fill$fore_color$rgb <- header_color
+  tf <- cell$text_frame
+  tf$paragraphs[[1]]$font$bold  <- TRUE
+  tf$paragraphs[[1]]$font$color$rgb <- RGBColor(0xFF, 0xFF, 0xFF)
+}
+
+# Data rows
+for (i in seq_len(nrow(sales))) {
+  row_color <- if (i %% 2 == 1) RGBColor(0xD6, 0xDC, 0xE4) else RGBColor(0xFF, 0xFF, 0xFF)
+  is_total  <- sales$Region[i] == "Total"
+  for (j in seq_len(nc)) {
+    cell <- tbl$cell(i + 1L, j)
+    cell$text <- as.character(sales[i, j])
+    cell$fill$solid()
+    cell$fill$fore_color$rgb <- if (is_total) header_color else row_color
+    if (is_total) {
+      cell$text_frame$paragraphs[[1]]$font$bold  <- TRUE
+      cell$text_frame$paragraphs[[1]]$font$color$rgb <- RGBColor(0xFF, 0xFF, 0xFF)
+    }
+    if (j > 1) {
+      cell$text_frame$paragraphs[[1]]$alignment <- PP_PARAGRAPH_ALIGNMENT$RIGHT
+    }
+  }
+}
+
+# Column widths
+tbl$columns[[1]]$width <- Inches(2)
+for (j in 2:nc) tbl$columns[[j]]$width <- Inches(7 / (nc - 1))
+
+tmp <- tempfile(fileext = ".pptx")
+prs$save(tmp)
+```
