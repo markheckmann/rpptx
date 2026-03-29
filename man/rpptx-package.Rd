@@ -6,10 +6,18 @@
 \alias{rpptx-package}
 \title{rpptx: Create, Read, and Update PowerPoint Presentations}
 \description{
-Create, read, and update PowerPoint (.pptx) files. An R port of the Python 'python-pptx' library. Provides an R6-based object model for manipulating presentations, slides, shapes, text, charts, tables, and formatting properties.
+Create, read, and update PowerPoint (.pptx) files. An R port of the Python 'python-pptx' library. Provides an R6-based object model for manipulating presentations, slides, shapes, text, charts, tables, and formatting properties. Supports autoshapes, text boxes, pictures, tables, charts (column, bar, line, pie, scatter, bubble, radar, doughnut), fills, lines, colors, freeform custom-geometry shapes, and placeholder inheritance.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/markheckmann/rpptx}
+  \item Report bugs at \url{https://github.com/markheckmann/rpptx/issues}
+}
+
 }
 \author{
-\strong{Maintainer}: Mark Heckmann \email{heckmann.mark@gmail.com}
+\strong{Maintainer}: Mark Heckmann \email{heckmann.mark@gmail.com} (\href{https://orcid.org/0000-0002-0736-7417}{ORCID})
 
 }
 \keyword{internal}

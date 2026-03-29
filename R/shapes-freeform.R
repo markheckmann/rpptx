@@ -4,20 +4,17 @@
 # Allows a freeform (custom-geometry) shape to be specified and added to a slide.
 
 #' @include oxml-shapes.R shapes-base.R
-#' @keywords internal
 
 
 # ============================================================================
 # FreeformBuilder
 # ============================================================================
 
-#' Build a freeform (custom-geometry) shape
+#' Freeform shape builder
 #'
-#' Obtained via `slide$shapes$build_freeform(...)`. Allows successive calls to
-#' `add_line_segments()` and `move_to()` to define the shape geometry, then
-#' `convert_to_shape()` to add it to the slide.
+#' Specifies and creates a freeform (custom-geometry) shape.
+#' Obtain via `slide$shapes$build_freeform()`.
 #'
-#' @keywords internal
 #' @export
 FreeformBuilder <- R6::R6Class(
   "FreeformBuilder",

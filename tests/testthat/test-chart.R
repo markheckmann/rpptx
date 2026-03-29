@@ -834,3 +834,61 @@ describe("XL_DATA_LABEL_POSITION / XL_LABEL_POSITION", {
     expect_identical(XL_LABEL_POSITION, XL_DATA_LABEL_POSITION)
   })
 })
+
+
+describe("Bubble / Radar / Doughnut chart round-trips", {
+  make_slide <- function() {
+    prs <- pptx_presentation()
+    list(prs = prs, slide = prs$slides$add_slide(prs$slide_layouts[[6]]))
+  }
+
+  it("bubble chart saves and reloads", {
+    e <- make_slide()
+    bd <- BubbleChartData$new()
+    s  <- bd$add_series("B1")
+    s$add_data_point(1, 2, 10)
+    s$add_data_point(2, 3, 20)
+    e$slide$shapes$add_chart(
+      XL_CHART_TYPE$BUBBLE, Inches(1), Inches(1), Inches(4), Inches(3), bd
+    )
+    tmp <- tempfile(fileext = ".pptx")
+    e$prs$save(tmp)
+    prs2 <- pptx_presentation(tmp)
+    gfs  <- Filter(function(s) inherits(s, "GraphicFrame"),
+                   prs2$slides[[1]]$shapes$to_list())
+    expect_equal(length(gfs), 1L)
+    expect_true(gfs[[1]]$has_chart)
+  })
+
+  it("radar chart saves and reloads", {
+    e <- make_slide()
+    cd <- CategoryChartData$new()
+    cd$categories <- c("A", "B", "C")
+    cd$add_series("R1", c(1, 2, 3))
+    e$slide$shapes$add_chart(
+      XL_CHART_TYPE$RADAR, Inches(1), Inches(1), Inches(4), Inches(3), cd
+    )
+    tmp <- tempfile(fileext = ".pptx")
+    e$prs$save(tmp)
+    prs2 <- pptx_presentation(tmp)
+    gfs  <- Filter(function(s) inherits(s, "GraphicFrame"),
+                   prs2$slides[[1]]$shapes$to_list())
+    expect_equal(length(gfs), 1L)
+  })
+
+  it("doughnut chart saves and reloads", {
+    e <- make_slide()
+    cd <- CategoryChartData$new()
+    cd$categories <- c("A", "B", "C")
+    cd$add_series("D1", c(40, 35, 25))
+    e$slide$shapes$add_chart(
+      XL_CHART_TYPE$DOUGHNUT, Inches(1), Inches(1), Inches(4), Inches(3), cd
+    )
+    tmp <- tempfile(fileext = ".pptx")
+    e$prs$save(tmp)
+    prs2 <- pptx_presentation(tmp)
+    gfs  <- Filter(function(s) inherits(s, "GraphicFrame"),
+                   prs2$slides[[1]]$shapes$to_list())
+    expect_equal(length(gfs), 1L)
+  })
+})

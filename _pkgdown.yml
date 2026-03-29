@@ -1,0 +1,116 @@
+url: ~
+
+template:
+  bootstrap: 5
+
+home:
+  title: rpptx — PowerPoint from R
+  description: Create, read, and update .pptx files from R. An R port of python-pptx.
+
+navbar:
+  structure:
+    left:  [intro, reference, articles]
+    right: [search, github]
+  components:
+    articles:
+      text: Vignettes
+      menu:
+        - text: Getting started
+          href: articles/getting-started.html
+        - text: Working with shapes
+          href: articles/shapes.html
+        - text: Text and fonts
+          href: articles/text.html
+        - text: Tables
+          href: articles/tables.html
+        - text: Charts
+          href: articles/charts.html
+
+reference:
+  - title: Open / save
+    contents:
+      - pptx_presentation
+
+  - title: Presentation
+    contents:
+      - Presentation
+
+  - title: Slides
+    contents:
+      - Slide
+      - SlideLayout
+      - SlideMaster
+      - Slides
+      - SlideLayouts
+      - SlideMasters
+
+  - title: Shapes — collections
+    contents:
+      - SlideShapes
+
+  - title: Shapes — proxies
+    contents:
+      - BaseShape
+      - Shape
+      - Picture
+      - GraphicFrame
+      - GroupShape
+      - Connector
+      - SlidePlaceholder
+      - LayoutPlaceholder
+      - MasterPlaceholder
+
+  - title: Freeform shapes
+    contents:
+      - FreeformBuilder
+
+  - title: Text
+    contents:
+      - TextFrame
+      - Paragraph
+      - Run
+      - Font
+
+  - title: Tables
+    contents:
+      - Table
+      - TableCell
+      - as.data.frame.Table
+
+  - title: Charts
+    contents:
+      - CategoryChartData
+      - XyChartData
+      - BubbleChartData
+
+  - title: Formatting
+    contents:
+      - FillFormat
+      - LineFormat
+      - ColorFormat
+      - RGBColor
+
+  - title: Enumerations
+    contents:
+      - MSO_AUTO_SHAPE_TYPE
+      - MSO_SHAPE_TYPE
+      - MSO_CONNECTOR_TYPE
+      - PP_PLACEHOLDER
+      - MSO_THEME_COLOR
+      - MSO_FILL
+      - MSO_LINE_DASH_STYLE
+      - PP_PARAGRAPH_ALIGNMENT
+      - PP_ALIGN
+      - MSO_AUTO_SIZE
+      - MSO_VERTICAL_ANCHOR
+      - XL_CHART_TYPE
+
+  - title: Units
+    contents:
+      - Inches
+      - Cm
+      - Pt
+      - Mm
+      - Emu
+      - Centipoints
+      - Length
