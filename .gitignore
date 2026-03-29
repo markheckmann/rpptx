@@ -8,3 +8,8 @@
 /Meta/
 vignettes/*.R
 vignettes/*.html
+/python-pptx/
+claude-auto-resume.sh
+claude-resume.txt
+*.Rcheck/
+*.tar.gz
