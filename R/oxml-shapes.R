@@ -203,6 +203,23 @@ CT_ShapeProperties <- define_oxml_element(
       "a:ln",
       successors = c("a:effectLst", "a:effectDag", "a:scene3d", "a:sp3d", "a:extLst")
     )
+  ),
+  active = list(
+    # <a:custGeom> child element or NULL
+    custGeom = function() {
+      nd <- xml2::xml_find_first(self$get_node(), "a:custGeom",
+                                 ns = c(a = .nsmap[["a"]]))
+      if (inherits(nd, "xml_missing")) return(NULL)
+      wrap_element(nd)
+    },
+
+    # <a:prstGeom> child element or NULL (read-only)
+    prstGeom = function() {
+      nd <- xml2::xml_find_first(self$get_node(), "a:prstGeom",
+                                 ns = c(a = .nsmap[["a"]]))
+      if (inherits(nd, "xml_missing")) return(NULL)
+      wrap_element(nd)
+    }
   )
 )
 
@@ -504,6 +521,51 @@ CT_Shape_new_placeholder_sp <- function(id, name, ph_type, orient, sz, idx) {
 }
 
 
+#' Create a new freeform <p:sp> element with custom geometry
+#' @keywords internal
+CT_Shape_new_freeform_sp <- function(id, name, x, y, cx, cy) {
+  xmlns_a <- .nsmap[["a"]]
+  xmlns_p <- .nsmap[["p"]]
+  xml_str <- sprintf(
+    paste0(
+      '<p:sp xmlns:p="%s" xmlns:a="%s">\n',
+      '  <p:nvSpPr>\n',
+      '    <p:cNvPr id="%d" name="%s"/>\n',
+      '    <p:cNvSpPr/>\n',
+      '    <p:nvPr/>\n',
+      '  </p:nvSpPr>\n',
+      '  <p:spPr>\n',
+      '    <a:xfrm><a:off x="%d" y="%d"/><a:ext cx="%d" cy="%d"/></a:xfrm>\n',
+      '    <a:custGeom>\n',
+      '      <a:avLst/>\n',
+      '      <a:gdLst/>\n',
+      '      <a:ahLst/>\n',
+      '      <a:cxnLst/>\n',
+      '      <a:rect l="l" t="t" r="r" b="b"/>\n',
+      '      <a:pathLst/>\n',
+      '    </a:custGeom>\n',
+      '  </p:spPr>\n',
+      '  <p:style>\n',
+      '    <a:lnRef idx="1"><a:schemeClr val="accent1"/></a:lnRef>\n',
+      '    <a:fillRef idx="3"><a:schemeClr val="accent1"/></a:fillRef>\n',
+      '    <a:effectRef idx="2"><a:schemeClr val="accent1"/></a:effectRef>\n',
+      '    <a:fontRef idx="minor"><a:schemeClr val="lt1"/></a:fontRef>\n',
+      '  </p:style>\n',
+      '  <p:txBody>\n',
+      '    <a:bodyPr rtlCol="0" anchor="ctr"/>\n',
+      '    <a:lstStyle/>\n',
+      '    <a:p><a:pPr algn="ctr"/></a:p>\n',
+      '  </p:txBody>\n',
+      '</p:sp>'
+    ),
+    xmlns_p, xmlns_a,
+    as.integer(id), .xml_attr_escape(as.character(name)),
+    as.integer(x), as.integer(y), as.integer(cx), as.integer(cy)
+  )
+  wrap_element(xml2::xml_root(xml2::read_xml(xml_str)))
+}
+
+
 #' Create a new <p:cxnSp> connector element
 #' @keywords internal
 CT_Connector_new_cxnSp <- function(shape_id, name, prst, x, y, cx, cy,
@@ -580,6 +642,178 @@ CT_Picture_new_pic <- function(shape_id, name, desc, rId, x, y, cx, cy) {
   doc <- xml2::read_xml(xml_str)
   wrap_element(xml2::xml_root(doc))
 }
+
+
+# ============================================================================
+# CT_AdjPoint2D — <a:pt>  (used inside moveTo / lnTo)
+# ============================================================================
+
+#' @keywords internal
+CT_AdjPoint2D <- define_oxml_element(
+  classname = "CT_AdjPoint2D",
+  tag = "a:pt",
+  attributes = list(
+    x = required_attribute("x", ST_Coordinate),
+    y = required_attribute("y", ST_Coordinate)
+  )
+)
+
+
+# ============================================================================
+# CT_Path2DClose — <a:close>
+# ============================================================================
+
+#' @keywords internal
+CT_Path2DClose <- R6::R6Class("CT_Path2DClose", inherit = BaseOxmlElement)
+
+
+# ============================================================================
+# CT_Path2DLineTo — <a:lnTo>
+# ============================================================================
+
+#' @keywords internal
+CT_Path2DLineTo <- define_oxml_element(
+  classname = "CT_Path2DLineTo",
+  tag = "a:lnTo",
+  children = list(
+    pt = zero_or_one("a:pt", successors = character(0))
+  )
+)
+
+
+# ============================================================================
+# CT_Path2DMoveTo — <a:moveTo>
+# ============================================================================
+
+#' @keywords internal
+CT_Path2DMoveTo <- define_oxml_element(
+  classname = "CT_Path2DMoveTo",
+  tag = "a:moveTo",
+  children = list(
+    pt = zero_or_one("a:pt", successors = character(0))
+  )
+)
+
+
+# ============================================================================
+# CT_Path2D — <a:path>
+# ============================================================================
+
+#' @keywords internal
+CT_Path2D <- R6::R6Class(
+  "CT_Path2D",
+  inherit = BaseOxmlElement,
+
+  public = list(
+    # Return newly appended <a:close> child
+    add_close = function() {
+      nd <- xml2::xml_add_child(self$get_node(), "a:close",
+                                xmlns = .nsmap[["a"]])
+      wrap_element(nd)
+    },
+
+    # Return newly appended <a:lnTo> with embedded <a:pt x y>
+    add_lnTo = function(x, y) {
+      nd <- xml2::xml_add_child(self$get_node(), "a:lnTo",
+                                xmlns = .nsmap[["a"]])
+      lnTo <- wrap_element(nd)
+      pt_nd <- xml2::xml_add_child(nd, "a:pt",
+                                   x = as.character(as.integer(x)),
+                                   y = as.character(as.integer(y)),
+                                   xmlns = .nsmap[["a"]])
+      lnTo
+    },
+
+    # Return newly appended <a:moveTo> with embedded <a:pt x y>
+    add_moveTo = function(x, y) {
+      nd <- xml2::xml_add_child(self$get_node(), "a:moveTo",
+                                xmlns = .nsmap[["a"]])
+      moveTo <- wrap_element(nd)
+      pt_nd <- xml2::xml_add_child(nd, "a:pt",
+                                   x = as.character(as.integer(x)),
+                                   y = as.character(as.integer(y)),
+                                   xmlns = .nsmap[["a"]])
+      moveTo
+    }
+  ),
+
+  active = list(
+    # Width of path bounding box (integer EMU or NULL)
+    w = function(value) {
+      if (!missing(value)) {
+        xml2::xml_set_attr(self$get_node(), "w", as.character(as.integer(value)))
+        return(invisible(value))
+      }
+      v <- xml2::xml_attr(self$get_node(), "w")
+      if (is.na(v)) NULL else Emu(as.integer(v))
+    },
+
+    # Height of path bounding box (integer EMU or NULL)
+    h = function(value) {
+      if (!missing(value)) {
+        xml2::xml_set_attr(self$get_node(), "h", as.character(as.integer(value)))
+        return(invisible(value))
+      }
+      v <- xml2::xml_attr(self$get_node(), "h")
+      if (is.na(v)) NULL else Emu(as.integer(v))
+    }
+  )
+)
+
+
+# ============================================================================
+# CT_Path2DList — <a:pathLst>
+# ============================================================================
+
+#' @keywords internal
+CT_Path2DList <- R6::R6Class(
+  "CT_Path2DList",
+  inherit = BaseOxmlElement,
+
+  public = list(
+    # Append a new <a:path w h> and return it wrapped
+    add_path = function(w, h) {
+      nd <- xml2::xml_add_child(self$get_node(), "a:path",
+                                w = as.character(as.integer(w)),
+                                h = as.character(as.integer(h)),
+                                xmlns = .nsmap[["a"]])
+      wrap_element(nd)
+    }
+  )
+)
+
+
+# ============================================================================
+# CT_CustomGeometry2D — <a:custGeom>
+# ============================================================================
+
+#' @keywords internal
+CT_CustomGeometry2D <- R6::R6Class(
+  "CT_CustomGeometry2D",
+  inherit = BaseOxmlElement,
+
+  public = list(
+    # Return existing <a:pathLst> or create one
+    get_or_add_pathLst = function() {
+      nd <- xml2::xml_find_first(self$get_node(), "a:pathLst",
+                                 ns = c(a = .nsmap[["a"]]))
+      if (inherits(nd, "xml_missing")) {
+        nd <- xml2::xml_add_child(self$get_node(), "a:pathLst",
+                                  xmlns = .nsmap[["a"]])
+      }
+      wrap_element(nd)
+    }
+  ),
+
+  active = list(
+    pathLst = function() {
+      nd <- xml2::xml_find_first(self$get_node(), "a:pathLst",
+                                 ns = c(a = .nsmap[["a"]]))
+      if (inherits(nd, "xml_missing")) return(NULL)
+      wrap_element(nd)
+    }
+  )
+)
 
 
 # ============================================================================
@@ -686,6 +920,15 @@ CT_GroupShape <- R6::R6Class(
       cxnSp
     },
 
+    # Append a new freeform p:sp with custom geometry at (x, y, cx, cy)
+    add_freeform_sp = function(x, y, cx, cy) {
+      shape_id <- self$next_shape_id()
+      name     <- sprintf("Freeform %d", shape_id - 1L)
+      sp <- CT_Shape_new_freeform_sp(shape_id, name, x, y, cx, cy)
+      self$insert_element_before(sp, "p:extLst")
+      sp
+    },
+
     # Create a p:grpSp containing shape_elms (list of wrapped elements).
     # Each shape_elm node is removed from its current parent and added to the group.
     add_grpSp = function(id, name, shape_elms) {
@@ -734,6 +977,20 @@ CT_Shape <- define_oxml_element(
 
 # Override auto-generated _new_txBody to produce a properly structured <p:txBody>.
 CT_Shape$set("public", "_new_txBody", function() .CT_TextBody_new_p_txBody(), overwrite = TRUE)
+
+# Add freeform-related methods to CT_Shape
+CT_Shape$set("public", "add_path", function(w, h) {
+  custGeom <- self$spPr$custGeom
+  if (is.null(custGeom)) stop("shape must be freeform (no custGeom)", call. = FALSE)
+  pathLst <- custGeom$get_or_add_pathLst()
+  pathLst$add_path(w = w, h = h)
+}, overwrite = TRUE)
+
+CT_Shape$set("active", "has_custom_geometry", function() {
+  spPr <- self$spPr
+  if (is.null(spPr)) return(FALSE)
+  !is.null(spPr$custGeom)
+}, overwrite = TRUE)
 
 #' CT_Picture XML element
 #' @keywords internal
@@ -843,4 +1100,12 @@ CT_GroupShape_new_grpSp <- function(id, name, x, y, cx, cy) {
   register_element_cls("p:pic",          CT_Picture)
   register_element_cls("p:cxnSp",        CT_Connector)
   register_element_cls("p:graphicFrame", CT_GraphicalObjectFrame)
+  # Freeform path elements
+  register_element_cls("a:custGeom",     CT_CustomGeometry2D)
+  register_element_cls("a:pathLst",      CT_Path2DList)
+  register_element_cls("a:path",         CT_Path2D)
+  register_element_cls("a:pt",           CT_AdjPoint2D)
+  register_element_cls("a:close",        CT_Path2DClose)
+  register_element_cls("a:lnTo",         CT_Path2DLineTo)
+  register_element_cls("a:moveTo",       CT_Path2DMoveTo)
 }

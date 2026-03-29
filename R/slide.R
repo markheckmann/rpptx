@@ -756,6 +756,19 @@ SlideShapes <- R6::R6Class(
       shape_factory(grpSp, self)
     },
 
+    # Return a FreeformBuilder to specify a freeform shape.
+    # start_x / start_y: initial pen position in local coordinates (default 0).
+    # scale: local-to-EMU scale; either a single number or c(x_scale, y_scale).
+    # Returns a FreeformBuilder object.
+    build_freeform = function(start_x = 0, start_y = 0, scale = 1.0) {
+      if (length(scale) == 2L) {
+        x_scale <- scale[[1L]]; y_scale <- scale[[2L]]
+      } else {
+        x_scale <- scale; y_scale <- scale
+      }
+      FreeformBuilder$new(private$.spTree, self, start_x, start_y, x_scale, y_scale)
+    },
+
     # Clone layout placeholders onto this slide.
     # Excluded: date (dt), footer (ftr), slide number (sldNum) — latent placeholders.
     clone_layout_placeholders = function(slide_layout) {

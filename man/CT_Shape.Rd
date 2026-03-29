@@ -16,6 +16,7 @@ CT_Shape XML element
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-CT_Shape-_new_txBody}{\code{CT_Shape$_new_txBody()}}
+\item \href{#method-CT_Shape-add_path}{\code{CT_Shape$add_path()}}
 \item \href{#method-CT_Shape-_insert_txBody}{\code{CT_Shape$_insert_txBody()}}
 \item \href{#method-CT_Shape-_add_txBody}{\code{CT_Shape$_add_txBody()}}
 \item \href{#method-CT_Shape-get_or_add_txBody}{\code{CT_Shape$get_or_add_txBody()}}
@@ -52,6 +53,15 @@ CT_Shape XML element
 \subsection{Method \code{_new_txBody()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CT_Shape$_new_txBody()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CT_Shape-add_path"></a>}}
+\if{latex}{\out{\hypertarget{method-CT_Shape-add_path}{}}}
+\subsection{Method \code{add_path()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CT_Shape$add_path(w, h)}\if{html}{\out{</div>}}
 }
 
 }

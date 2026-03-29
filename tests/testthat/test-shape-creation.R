@@ -430,3 +430,55 @@ describe("SlideShapes$add_picture", {
     expect_equal(length(pics), 1L)
   })
 })
+
+
+describe("FreeformBuilder", {
+  it("creates a shape via build_freeform + add_line_segments + convert_to_shape", {
+    prs   <- pptx_presentation()
+    slide <- prs$slides$add_slide(prs$slide_layouts[[6]])
+    scale <- Inches(1) / 100
+    ff    <- slide$shapes$build_freeform(0, 0, scale)
+    expect_s3_class(ff, "FreeformBuilder")
+    ff$add_line_segments(list(c(100, 0), c(50, 87), c(0, 0)))
+    shp <- ff$convert_to_shape(Inches(1), Inches(1))
+    expect_s3_class(shp, "Shape")
+    expect_match(shp$name, "Freeform")
+    expect_equal(shp$left, as.integer(Inches(1)))
+  })
+
+  it("round-trips through save/reload with custom geometry", {
+    prs   <- pptx_presentation()
+    slide <- prs$slides$add_slide(prs$slide_layouts[[6]])
+    ff    <- slide$shapes$build_freeform(0, 0, Inches(1) / 100)
+    ff$add_line_segments(list(c(100, 0), c(50, 87), c(0, 0)))
+    invisible(ff$convert_to_shape(Inches(1), Inches(1)))
+    tmp <- tempfile(fileext = ".pptx")
+    prs$save(tmp)
+    prs2   <- pptx_presentation(tmp)
+    shapes <- prs2$slides[[1]]$shapes$to_list()
+    # Find the freeform shape
+    ff_shp <- Filter(function(s) grepl("Freeform", s$name), shapes)
+    expect_equal(length(ff_shp), 1L)
+    elm <- ff_shp[[1]]$.__enclos_env__$private$.element
+    expect_true(elm$has_custom_geometry)
+  })
+
+  it("returns self from add_line_segments and move_to for chaining", {
+    prs   <- pptx_presentation()
+    slide <- prs$slides$add_slide(prs$slide_layouts[[6]])
+    ff    <- slide$shapes$build_freeform()
+    ret   <- ff$add_line_segments(list(c(100, 0), c(0, 100)), close = FALSE)
+    expect_identical(ret, ff)
+    ret2  <- ff$move_to(50, 50)
+    expect_identical(ret2, ff)
+  })
+
+  it("shape_offset_x and shape_offset_y return min extents", {
+    prs   <- pptx_presentation()
+    slide <- prs$slides$add_slide(prs$slide_layouts[[6]])
+    ff    <- slide$shapes$build_freeform(100, 200)
+    ff$add_line_segments(list(c(300, 400), c(50, 600)), close = FALSE)
+    expect_equal(as.integer(ff$shape_offset_x()), 50L)
+    expect_equal(as.integer(ff$shape_offset_y()), 200L)
+  })
+})
