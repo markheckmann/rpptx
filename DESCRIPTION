@@ -11,7 +11,7 @@ Description: Create, read, and update PowerPoint (.pptx) files. An R port of
     formatting properties. Supports autoshapes, text boxes, pictures, tables,
     charts (column, bar, line, pie, scatter, bubble, radar, doughnut), fills,
     lines, colors, freeform custom-geometry shapes, and placeholder inheritance.
-URL: https://github.com/markheckmann/rpptx
+URL: https://markheckmann.github.io/rpptx, https://github.com/markheckmann/rpptx
 BugReports: https://github.com/markheckmann/rpptx/issues
 License: MIT + file LICENSE
 Encoding: UTF-8

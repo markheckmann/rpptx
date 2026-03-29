@@ -71,7 +71,7 @@ Marker <- R6::R6Class(
       if (!missing(value)) {
         m <- private$.element$get_or_add_marker()
         m$.remove_size()
-        if (!is.null(value)) m$.add_size()$val <- value
+        if (!is.null(value)) { sz <- m$.add_size(); sz$val <- value }
         return(invisible(value))
       }
       if (is.null(marker)) return(NULL)
@@ -83,7 +83,7 @@ Marker <- R6::R6Class(
       if (!missing(value)) {
         m <- private$.element$get_or_add_marker()
         m$.remove_symbol()
-        if (!is.null(value)) m$.add_symbol()$val <- value
+        if (!is.null(value)) { sy <- m$.add_symbol(); sy$val <- value }
         return(invisible(value))
       }
       if (is.null(marker)) return(NULL)
@@ -1312,7 +1312,7 @@ TickLabels <- R6::R6Class(
         if (tag != "c:catAx") stop("only a category axis has an offset", call. = FALSE)
         private$.element$.remove_lblOffset()
         if (value != 100L) {
-          private$.element$.add_lblOffset()$val <- value
+          { lo_elm <- private$.element$.add_lblOffset(); lo_elm$val <- value }
         }
         return(invisible(value))
       }

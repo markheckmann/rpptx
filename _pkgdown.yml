@@ -33,96 +33,25 @@ reference:
     contents:
       - pptx_presentation
 
-  - title: Presentation
-    contents:
-      - Presentation
-
-  - title: Slides
-    contents:
-      - Slide
-      - SlideLayout
-      - SlideMaster
-      - Slides
-      - SlideLayouts
-      - SlideMasters
-
-  - title: Shapes — collections
-    contents:
-      - SlideShapes
-
-  - title: Shapes — proxies
-    contents:
-      - BaseShape
-      - Shape
-      - Picture
-      - GraphicFrame
-      - GroupShape
-      - Connector
-      - SlidePlaceholder
-      - LayoutPlaceholder
-      - MasterPlaceholder
-
-  - title: Freeform shapes
+  - title: Shapes
     contents:
       - FreeformBuilder
 
-  - title: Text
-    contents:
-      - TextFrame
-      - Paragraph
-      - Run
-      - Font
-
   - title: Tables
     contents:
-      - Table
-      - TableCell
       - as.data.frame.Table
-
-  - title: Charts
-    contents:
-      - CategoryChartData
-      - ChartData
-      - XyChartData
-      - BubbleChartData
-
-  - title: Formatting
-    contents:
-      - FillFormat
-      - GradientStop
-      - GradientStops
-      - LineFormat
-      - ColorFormat
-      - RGBColor
-      - ShadowFormat
-
-  - title: Actions / hyperlinks
-    contents:
-      - ActionSetting
-      - ShapeHyperlink
-
-  - title: Enumerations
-    contents:
-      - MSO_AUTO_SHAPE_TYPE
-      - MSO_SHAPE_TYPE
-      - MSO_CONNECTOR_TYPE
-      - PP_PLACEHOLDER
-      - MSO_THEME_COLOR
-      - MSO_FILL
-      - MSO_LINE_DASH_STYLE
-      - PP_PARAGRAPH_ALIGNMENT
-      - MSO_AUTO_SIZE
-      - MSO_VERTICAL_ANCHOR
-      - XL_CHART_TYPE
 
   - title: Units
     contents:
-      - Inches
-      - Cm
-      - Pt
-      - Mm
-      - Emu
-      - Centipoints
       - Length
       - as_inches
+      - Inches
+      - Cm
+      - Mm
+      - Pt
+      - Emu
+      - Centipoints
+
+  - title: Utilities
+    contents:
       - qn
