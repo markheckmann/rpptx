@@ -82,6 +82,7 @@ reference:
   - title: Charts
     contents:
       - CategoryChartData
+      - ChartData
       - XyChartData
       - BubbleChartData
 
@@ -110,7 +111,6 @@ reference:
       - MSO_FILL
       - MSO_LINE_DASH_STYLE
       - PP_PARAGRAPH_ALIGNMENT
-      - PP_ALIGN
       - MSO_AUTO_SIZE
       - MSO_VERTICAL_ANCHOR
       - XL_CHART_TYPE
@@ -124,3 +124,5 @@ reference:
       - Emu
       - Centipoints
       - Length
+      - as_inches
+      - qn

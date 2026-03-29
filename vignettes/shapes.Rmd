@@ -249,3 +249,39 @@ ph2 <- slide$placeholders[[2]]; ph2$text <- "My Subtitle"
 ```
 
 (`[[n]]` on `SlidePlaceholders` accepts a 1-based position, not the OOXML `idx`.)
+
+## Video (movie shapes)
+
+Embed a video file on a slide with `add_movie()`. The shape shows a poster
+frame image until the video plays.
+
+```{r eval=FALSE}
+mp4 <- system.file("test_files", "dummy.mp4", package = "rpptx")
+
+r     <- blank_slide()
+slide <- r$slide
+
+shape <- slide$shapes$add_movie(
+  movie_file = mp4,
+  left = Inches(1), top = Inches(1),
+  width = Inches(6), height = Inches(4)
+)
+shape$shape_type  # MSO_SHAPE_TYPE$PICTURE
+```
+
+By default the poster frame is a generic loudspeaker icon bundled with the
+package. Supply your own image with `poster_frame_image`:
+
+```{r eval=FALSE}
+img <- system.file("test_files", "monty-truth.png", package = "rpptx")
+slide$shapes$add_movie(mp4,
+  Inches(1), Inches(1), Inches(6), Inches(4),
+  poster_frame_image = img,
+  mime_type = "video/mp4"
+)
+```
+
+The video relationship uses the OOXML dual-relationship pattern required for
+Office 2007/2010 compatibility: one `RT.MEDIA` relationship and one `RT.VIDEO`
+relationship both pointing to the same media part. Multiple calls with the same
+file reuse a single media part (SHA-1 deduplication).

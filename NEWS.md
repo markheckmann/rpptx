@@ -13,10 +13,14 @@
 
 ### Slides
 * `Slides$add_slide()` — add a new slide from a layout
+* `Slides$delete()` — remove a slide from the presentation
+* `Slides$move()` — reorder slides by moving a slide to a target position
 * `Slide$shapes` — shape collection for a slide
 * `Slide$placeholders` — placeholder collection
+* `Slide$notes_slide` — access (or lazily create) the notes slide for a slide
+* `Slide$has_notes_slide` — TRUE if a notes slide exists for this slide
 * `SlideLayout$placeholders`, `SlideMaster$placeholders` — layout/master placeholders
-* Placeholder inheritance: slides inherit from layout from master
+* Placeholder inheritance: slides inherit position/size from layout from master
 
 ### Shapes — read
 * All shape types supported: `Shape`, `Picture`, `GraphicFrame`, `GroupShape`,
@@ -33,6 +37,7 @@
 * `slide$shapes$add_connector()` — connector
 * `slide$shapes$add_group_shape()` — group existing shapes
 * `slide$shapes$build_freeform()` — custom-geometry freeform shapes
+* `slide$shapes$add_movie()` — embed a video file (OOXML dual-relationship pattern)
 
 ### Text
 * `shape$text_frame` — `TextFrame` with `$paragraphs`, `$text`, `$word_wrap`,
