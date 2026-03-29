@@ -59,7 +59,6 @@
 
 #' Gradient stop proxy
 #' @noRd
-#' @export
 GradientStop <- R6::R6Class(
   "GradientStop",
 
@@ -100,7 +99,6 @@ GradientStop <- R6::R6Class(
 
 #' Gradient stops collection
 #' @noRd
-#' @export
 GradientStops <- R6::R6Class(
   "GradientStops",
 
@@ -147,7 +145,6 @@ length.GradientStops <- function(x) {
 #' Access via `shape$fill`.
 #'
 #' @noRd
-#' @export
 FillFormat <- R6::R6Class(
   "FillFormat",
 

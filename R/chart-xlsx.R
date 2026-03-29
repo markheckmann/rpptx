@@ -84,7 +84,6 @@
 
 #' Workbook writer for category (bar, column, line, pie, etc.) charts
 #' @noRd
-#' @export
 CategoryWorkbookWriter <- R6::R6Class(
   "CategoryWorkbookWriter",
   inherit = .BaseWorkbookWriter,
@@ -174,7 +173,6 @@ CategoryWorkbookWriter <- R6::R6Class(
 
 #' Workbook writer for XY (scatter) charts
 #' @noRd
-#' @export
 XyWorkbookWriter <- R6::R6Class(
   "XyWorkbookWriter",
   inherit = .BaseWorkbookWriter,
@@ -237,7 +235,6 @@ XyWorkbookWriter <- R6::R6Class(
 
 #' Workbook writer for bubble charts
 #' @noRd
-#' @export
 BubbleWorkbookWriter <- R6::R6Class(
   "BubbleWorkbookWriter",
   inherit = XyWorkbookWriter,

@@ -13,7 +13,6 @@
 #' properties. Access via `shape$line`.
 #'
 #' @noRd
-#' @export
 LineFormat <- R6::R6Class(
   "LineFormat",
 

@@ -87,7 +87,6 @@ CT_TableCellProperties <- define_oxml_element(
 
 #' CT_TableCell XML element
 #' @noRd
-#' @export
 CT_TableCell <- R6::R6Class(
   "CT_TableCell",
   inherit = BaseOxmlElement,
@@ -213,7 +212,6 @@ CT_TableCell <- R6::R6Class(
 
 #' CT_TableRow XML element
 #' @noRd
-#' @export
 CT_TableRow <- R6::R6Class(
   "CT_TableRow",
   inherit = BaseOxmlElement,
@@ -256,7 +254,6 @@ CT_TableRow <- R6::R6Class(
 
 #' CT_Table XML element
 #' @noRd
-#' @export
 CT_Table <- R6::R6Class(
   "CT_Table",
   inherit = BaseOxmlElement,

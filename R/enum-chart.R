@@ -7,7 +7,6 @@
 #'
 #' Integer constants specifying chart types, mirroring XlChartType.
 #'
-#' @noRd
 #' @export
 XL_CHART_TYPE <- list(
   THREE_D_AREA                 =  -4098L,
@@ -90,7 +89,6 @@ XL_CHART_TYPE <- list(
 #'
 #' XML string values for `c:crosses/@val`. Use with axis `crosses` property.
 #'
-#' @noRd
 #' @export
 XL_AXIS_CROSSES <- list(
   AUTOMATIC = "autoZero",
@@ -104,7 +102,6 @@ XL_AXIS_CROSSES <- list(
 #'
 #' Integer constants (read-only identifiers, not XML-encoded directly).
 #'
-#' @noRd
 #' @export
 XL_CATEGORY_TYPE <- list(
   AUTOMATIC_SCALE =  -4105L,
@@ -117,7 +114,6 @@ XL_CATEGORY_TYPE <- list(
 #'
 #' XML string values for `c:dLblPos/@val`.
 #'
-#' @noRd
 #' @export
 XL_DATA_LABEL_POSITION <- list(
   ABOVE       = "t",
@@ -132,8 +128,7 @@ XL_DATA_LABEL_POSITION <- list(
   RIGHT       = "r"
 )
 
-#' XL_LABEL_POSITION — alias for XL_DATA_LABEL_POSITION
-#' @noRd
+#' @rdname XL_DATA_LABEL_POSITION
 #' @export
 XL_LABEL_POSITION <- XL_DATA_LABEL_POSITION
 
@@ -142,7 +137,6 @@ XL_LABEL_POSITION <- XL_DATA_LABEL_POSITION
 #'
 #' XML string values for `c:legendPos/@val`.
 #'
-#' @noRd
 #' @export
 XL_LEGEND_POSITION <- list(
   BOTTOM = "b",
@@ -158,7 +152,6 @@ XL_LEGEND_POSITION <- list(
 #'
 #' XML string values for `c:symbol/@val`.
 #'
-#' @noRd
 #' @export
 XL_MARKER_STYLE <- list(
   AUTOMATIC = "auto",
@@ -180,7 +173,6 @@ XL_MARKER_STYLE <- list(
 #'
 #' XML string values for `c:tickLblPos/@val`.
 #'
-#' @noRd
 #' @export
 XL_TICK_LABEL_POSITION <- list(
   HIGH         = "high",
@@ -194,7 +186,6 @@ XL_TICK_LABEL_POSITION <- list(
 #'
 #' XML string values for `c:majorTickMark/@val` and `c:minorTickMark/@val`.
 #'
-#' @noRd
 #' @export
 XL_TICK_MARK <- list(
   CROSS   = "cross",

@@ -14,7 +14,6 @@
 #'
 #' @include oxml-text.R
 #' @noRd
-#' @export
 Font <- R6::R6Class(
   "Font",
 
@@ -303,7 +302,6 @@ Font <- R6::R6Class(
 #' Access via `run$hyperlink`.
 #'
 #' @noRd
-#' @export
 Hyperlink <- R6::R6Class(
   "Hyperlink",
 
@@ -370,7 +368,6 @@ Hyperlink <- R6::R6Class(
 #' Text run object corresponding to an `a:r` element.
 #'
 #' @noRd
-#' @export
 Run <- R6::R6Class(
   "Run",
 
@@ -420,7 +417,6 @@ Run <- R6::R6Class(
 #' Paragraph object corresponding to an `a:p` element.
 #'
 #' @noRd
-#' @export
 Paragraph <- R6::R6Class(
   "Paragraph",
 
@@ -550,7 +546,6 @@ Paragraph <- R6::R6Class(
 #' Contains the text of a shape. Access via `shape$text_frame`.
 #'
 #' @noRd
-#' @export
 TextFrame <- R6::R6Class(
   "TextFrame",
 

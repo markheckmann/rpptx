@@ -44,7 +44,6 @@
 #' sha1, size (pixels) and dpi.
 #'
 #' @noRd
-#' @export
 Image <- R6::R6Class(
   "Image",
 
@@ -249,7 +248,6 @@ Image_from_file <- function(image_file) {
 #' Stores the raw bytes of an image and provides dimension scaling.
 #'
 #' @noRd
-#' @export
 ImagePart <- R6::R6Class(
   "ImagePart",
   inherit = Part,

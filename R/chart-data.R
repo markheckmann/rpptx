@@ -11,7 +11,6 @@
 
 #' A single chart category label
 #' @noRd
-#' @export
 Category <- R6::R6Class(
   "Category",
 
@@ -95,7 +94,6 @@ Category <- R6::R6Class(
 
 #' Ordered collection of category labels for a chart
 #' @noRd
-#' @export
 Categories <- R6::R6Class(
   "Categories",
 
@@ -200,7 +198,6 @@ length.Categories <- function(x) length(x$.__enclos_env__$private$.cats)
 
 #' Base class for chart data objects
 #' @noRd
-#' @export
 BaseChartData <- R6::R6Class(
   "BaseChartData",
 
@@ -270,7 +267,6 @@ length.BaseChartData <- function(x) length(x$.__enclos_env__$private$.series)
 
 #' Base class for series data objects
 #' @noRd
-#' @export
 BaseSeriesData <- R6::R6Class(
   "BaseSeriesData",
 
@@ -331,7 +327,6 @@ BaseSeriesData <- R6::R6Class(
 #' cd$categories <- c("Q1", "Q2", "Q3")
 #' cd$add_series("Sales", c(100, 200, 150))
 #'
-#' @noRd
 #' @export
 CategoryChartData <- R6::R6Class(
   "CategoryChartData",
@@ -375,13 +370,11 @@ CategoryChartData <- R6::R6Class(
 )
 
 #' @noRd
-#' @export
 ChartData <- CategoryChartData
 
 
 #' Series data for a category chart
 #' @noRd
-#' @export
 CategorySeriesData <- R6::R6Class(
   "CategorySeriesData",
   inherit = BaseSeriesData,
@@ -441,7 +434,11 @@ CategoryDataPoint <- R6::R6Class(
 # ============================================================================
 
 #' Chart data container for XY (scatter) charts
-#' @noRd
+#'
+#' @description
+#' Holds series and XY data points. Use `add_series()` to add a series, then
+#' call `add_data_point()` on each returned series object.
+#'
 #' @export
 XyChartData <- R6::R6Class(
   "XyChartData",
@@ -466,7 +463,6 @@ XyChartData <- R6::R6Class(
 
 #' Series data for an XY chart
 #' @noRd
-#' @export
 XySeriesData <- R6::R6Class(
   "XySeriesData",
   inherit = BaseSeriesData,
@@ -518,7 +514,11 @@ XyDataPoint <- R6::R6Class(
 # ============================================================================
 
 #' Chart data container for bubble charts
-#' @noRd
+#'
+#' @description
+#' Holds series and bubble data points (x, y, bubble size). Use `add_series()`
+#' to add a series, then call `add_data_point()` on each returned series object.
+#'
 #' @export
 BubbleChartData <- R6::R6Class(
   "BubbleChartData",
@@ -539,7 +539,6 @@ BubbleChartData <- R6::R6Class(
 
 #' Series data for a bubble chart
 #' @noRd
-#' @export
 BubbleSeriesData <- R6::R6Class(
   "BubbleSeriesData",
   inherit = XySeriesData,

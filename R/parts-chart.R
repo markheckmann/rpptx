@@ -13,7 +13,6 @@
 #' Stores the raw xlsx bytes for a chart's data workbook.
 #'
 #' @noRd
-#' @export
 EmbeddedXlsxPart <- R6::R6Class(
   "EmbeddedXlsxPart",
   inherit = Part,
@@ -30,7 +29,6 @@ EmbeddedXlsxPart <- R6::R6Class(
 #' @param package The OPC package.
 #' @return An EmbeddedXlsxPart.
 #' @noRd
-#' @export
 EmbeddedXlsxPart_new <- function(blob, package) {
   partname <- package$next_partname("/ppt/embeddings/Microsoft_Excel_Sheet%d.xlsx")
   EmbeddedXlsxPart$new(partname, CT$SML_SHEET, package, blob)
@@ -43,7 +41,6 @@ EmbeddedXlsxPart_new <- function(blob, package) {
 
 #' Manages the embedded Excel workbook for a chart
 #' @noRd
-#' @export
 ChartWorkbook <- R6::R6Class(
   "ChartWorkbook",
 
@@ -121,7 +118,6 @@ ChartWorkbook <- R6::R6Class(
 #' Wraps a c:chartSpace XML document. Created via `ChartPart_new()`.
 #'
 #' @noRd
-#' @export
 ChartPart <- R6::R6Class(
   "ChartPart",
   inherit = XmlPart,
@@ -161,7 +157,6 @@ ChartPart <- R6::R6Class(
 #' @param package The OPC package.
 #' @return A ChartPart.
 #' @noRd
-#' @export
 ChartPart_new <- function(chart_type, chart_data, package) {
   partname  <- package$next_partname("/ppt/charts/chart%d.xml")
   xml_str   <- chart_xml_writer(chart_type, chart_data)$xml

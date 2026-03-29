@@ -10,7 +10,6 @@
 #'
 #' @include opc-package.R oxml-slide.R
 #' @noRd
-#' @export
 BaseSlidePart <- R6::R6Class(
   "BaseSlidePart",
   inherit = XmlPart,
@@ -32,7 +31,6 @@ BaseSlidePart <- R6::R6Class(
 #' Slide part
 #'
 #' @noRd
-#' @export
 SlidePart <- R6::R6Class(
   "SlidePart",
   inherit = BaseSlidePart,
@@ -131,7 +129,6 @@ SlidePart_new <- function(partname, package, slide_layout_part) {
 #' Slide layout part
 #'
 #' @noRd
-#' @export
 SlideLayoutPart <- R6::R6Class(
   "SlideLayoutPart",
   inherit = BaseSlidePart,
@@ -171,7 +168,6 @@ SlideLayoutPart <- R6::R6Class(
 #' Slide master part
 #'
 #' @noRd
-#' @export
 SlideMasterPart <- R6::R6Class(
   "SlideMasterPart",
   inherit = BaseSlidePart,
@@ -206,7 +202,6 @@ SlideMasterPart <- R6::R6Class(
 #' Notes master part
 #'
 #' @noRd
-#' @export
 NotesMasterPart <- R6::R6Class(
   "NotesMasterPart",
   inherit = BaseSlidePart,
@@ -251,7 +246,6 @@ NotesMasterPart_create_default <- function(package) {
 #' Notes slide part
 #'
 #' @noRd
-#' @export
 NotesSlidePart <- R6::R6Class(
   "NotesSlidePart",
   inherit = BaseSlidePart,

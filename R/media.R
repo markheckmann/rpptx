@@ -21,7 +21,6 @@
 #'
 #' @importFrom digest digest
 #' @noRd
-#' @export
 Video <- R6::R6Class(
   "Video",
 

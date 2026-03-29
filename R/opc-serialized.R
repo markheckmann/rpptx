@@ -13,7 +13,6 @@
 #'
 #' @include opc-packuri.R opc-oxml.R opc-constants.R opc-spec.R
 #' @noRd
-#' @export
 PackageReader <- R6::R6Class(
   "PackageReader",
 
@@ -74,7 +73,6 @@ PackageReader <- R6::R6Class(
 #' Write an OPC package (ZIP file)
 #'
 #' @noRd
-#' @export
 PackageWriter <- R6::R6Class(
   "PackageWriter",
 

@@ -253,7 +253,6 @@ CT_GroupShapeProperties <- define_oxml_element(
 #' via active bindings that delegate through the element's shape properties.
 #'
 #' @noRd
-#' @export
 BaseShapeElement <- R6::R6Class(
   "BaseShapeElement",
   inherit = BaseOxmlElement,
@@ -829,7 +828,6 @@ CT_CustomGeometry2D <- R6::R6Class(
 #' Custom element class for p:spTree and p:grpSp elements
 #'
 #' @noRd
-#' @export
 CT_GroupShape <- R6::R6Class(
   "CT_GroupShape",
   inherit = BaseShapeElement,
@@ -965,7 +963,6 @@ CT_GroupShape <- R6::R6Class(
 
 #' CT_Shape XML element
 #' @noRd
-#' @export
 CT_Shape <- define_oxml_element(
   classname = "CT_Shape",
   tag = "p:sp",
@@ -1092,7 +1089,6 @@ CT_BlipFill <- R6::R6Class(
 
 #' CT_Picture XML element
 #' @noRd
-#' @export
 CT_Picture <- R6::R6Class(
   "CT_Picture",
   inherit = BaseShapeElement,
@@ -1109,7 +1105,6 @@ CT_Picture <- R6::R6Class(
 
 #' CT_Connector XML element
 #' @noRd
-#' @export
 CT_Connector <- R6::R6Class(
   "CT_Connector",
   inherit = BaseShapeElement,
@@ -1195,7 +1190,6 @@ CT_Connector <- R6::R6Class(
 
 #' CT_GraphicalObjectFrame XML element
 #' @noRd
-#' @export
 CT_GraphicalObjectFrame <- R6::R6Class("CT_GraphicalObjectFrame", inherit = BaseShapeElement)
 
 

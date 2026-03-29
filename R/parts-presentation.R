@@ -8,7 +8,6 @@
 #'
 #' @include opc-package.R oxml-presentation.R presentation.R parts-slide.R
 #' @noRd
-#' @export
 PresentationPart <- R6::R6Class(
   "PresentationPart",
   inherit = XmlPart,

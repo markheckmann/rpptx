@@ -18,7 +18,6 @@
 #' @return An R6 shape proxy.
 #' @include enum-shapes.R oxml-shapes.R
 #' @noRd
-#' @export
 shape_factory <- function(shape_elm, parent) {
   if (inherits(shape_elm, "CT_Picture"))              return(Picture$new(shape_elm, parent))
   if (inherits(shape_elm, "CT_Connector"))            return(Connector$new(shape_elm, parent))
@@ -71,7 +70,6 @@ shape_factory <- function(shape_elm, parent) {
 #' Accessed via `shape$placeholder_format` on a placeholder shape.
 #'
 #' @noRd
-#' @export
 PlaceholderFormat <- R6::R6Class(
   "PlaceholderFormat",
 
@@ -107,7 +105,6 @@ PlaceholderFormat <- R6::R6Class(
 #' Subclasses include Shape, Picture, Connector, GroupShape, GraphicFrame.
 #'
 #' @noRd
-#' @export
 BaseShape <- R6::R6Class(
   "BaseShape",
 
@@ -247,7 +244,6 @@ BaseShape <- R6::R6Class(
 #' Covers autoshapes, text boxes, and placeholders.
 #'
 #' @noRd
-#' @export
 Shape <- R6::R6Class(
   "Shape",
   inherit = BaseShape,
@@ -346,7 +342,6 @@ Shape <- R6::R6Class(
 #' explicitly set on the slide element.
 #'
 #' @noRd
-#' @export
 SlidePlaceholder <- R6::R6Class(
   "SlidePlaceholder",
   inherit = Shape
@@ -365,7 +360,6 @@ SlidePlaceholder <- R6::R6Class(
 #' explicitly set on the layout element.
 #'
 #' @noRd
-#' @export
 LayoutPlaceholder <- R6::R6Class(
   "LayoutPlaceholder",
   inherit = Shape,
@@ -399,7 +393,6 @@ LayoutPlaceholder <- R6::R6Class(
 #' element; no further inheritance.
 #'
 #' @noRd
-#' @export
 MasterPlaceholder <- R6::R6Class(
   "MasterPlaceholder",
   inherit = Shape,
@@ -426,7 +419,6 @@ MasterPlaceholder <- R6::R6Class(
 #' Access via `picture$crop`.
 #'
 #' @noRd
-#' @export
 PictureCrop <- R6::R6Class(
   "PictureCrop",
 
@@ -509,7 +501,6 @@ PictureCrop <- R6::R6Class(
 #' Shape proxy for p:pic elements
 #'
 #' @noRd
-#' @export
 Picture <- R6::R6Class(
   "Picture",
   inherit = BaseShape,
@@ -536,7 +527,6 @@ Picture <- R6::R6Class(
 #' Shape proxy for p:cxnSp elements
 #'
 #' @noRd
-#' @export
 Connector <- R6::R6Class(
   "Connector",
   inherit = BaseShape,
@@ -619,7 +609,6 @@ Connector <- R6::R6Class(
 #' Shape proxy for p:grpSp (group shape) elements
 #'
 #' @noRd
-#' @export
 GroupShape <- R6::R6Class(
   "GroupShape",
   inherit = BaseShape,
@@ -649,7 +638,6 @@ GroupShape <- R6::R6Class(
 #' Shape proxy for p:graphicFrame elements
 #'
 #' @noRd
-#' @export
 GraphicFrame <- R6::R6Class(
   "GraphicFrame",
   inherit = BaseShape,
@@ -717,7 +705,6 @@ GraphicFrame <- R6::R6Class(
 #' Shape collection for a group shape
 #'
 #' @noRd
-#' @export
 GroupShapes <- R6::R6Class(
   "GroupShapes",
   inherit = ParentedElementProxy,

@@ -22,7 +22,6 @@
 
 #' Boolean chart element (val defaults to TRUE)
 #' @noRd
-#' @export
 CT_Boolean <- R6::R6Class(
   "CT_Boolean",
   inherit = BaseOxmlElement,
@@ -46,7 +45,6 @@ CT_Boolean <- R6::R6Class(
 
 #' Numeric val chart element
 #' @noRd
-#' @export
 CT_Double <- R6::R6Class(
   "CT_Double",
   inherit = BaseOxmlElement,
@@ -68,7 +66,6 @@ CT_Double <- R6::R6Class(
 
 #' Unsigned integer val chart element
 #' @noRd
-#' @export
 CT_UnsignedInt <- R6::R6Class(
   "CT_UnsignedInt",
   inherit = BaseOxmlElement,
@@ -90,7 +87,6 @@ CT_UnsignedInt <- R6::R6Class(
 
 #' Axis unit element (numeric val)
 #' @noRd
-#' @export
 CT_AxisUnit <- R6::R6Class(
   "CT_AxisUnit",
   inherit = BaseOxmlElement,
@@ -112,7 +108,6 @@ CT_AxisUnit <- R6::R6Class(
 
 #' Number format element
 #' @noRd
-#' @export
 CT_NumFmt <- R6::R6Class(
   "CT_NumFmt",
   inherit = BaseOxmlElement,
@@ -143,7 +138,6 @@ CT_NumFmt <- R6::R6Class(
 
 #' Axis scaling element
 #' @noRd
-#' @export
 CT_Scaling <- R6::R6Class(
   "CT_Scaling",
   inherit = BaseOxmlElement,
@@ -233,7 +227,6 @@ CT_Scaling <- R6::R6Class(
 
 #' Axis orientation element
 #' @noRd
-#' @export
 CT_Orientation <- R6::R6Class(
   "CT_Orientation",
   inherit = BaseOxmlElement,
@@ -257,7 +250,6 @@ CT_Orientation <- R6::R6Class(
 
 #' Label offset element (default 100)
 #' @noRd
-#' @export
 CT_LblOffset <- R6::R6Class(
   "CT_LblOffset",
   inherit = BaseOxmlElement,
@@ -281,7 +273,6 @@ CT_LblOffset <- R6::R6Class(
 
 #' Tick label position element
 #' @noRd
-#' @export
 CT_TickLblPos <- R6::R6Class(
   "CT_TickLblPos",
   inherit = BaseOxmlElement,
@@ -303,7 +294,6 @@ CT_TickLblPos <- R6::R6Class(
 
 #' Tick mark element (cross/in/none/out)
 #' @noRd
-#' @export
 CT_TickMark <- R6::R6Class(
   "CT_TickMark",
   inherit = BaseOxmlElement,
@@ -327,7 +317,6 @@ CT_TickMark <- R6::R6Class(
 
 #' Axis crossing element
 #' @noRd
-#' @export
 CT_Crosses <- R6::R6Class(
   "CT_Crosses",
   inherit = BaseOxmlElement,
@@ -349,7 +338,6 @@ CT_Crosses <- R6::R6Class(
 
 #' Axis crosses-at element (numeric)
 #' @noRd
-#' @export
 CT_CrossesAt <- R6::R6Class(
   "CT_CrossesAt",
   inherit = BaseOxmlElement,
@@ -371,7 +359,6 @@ CT_CrossesAt <- R6::R6Class(
 
 #' Base class for chart axis XML elements
 #' @noRd
-#' @export
 BaseAxisElement <- R6::R6Class(
   "BaseAxisElement",
   inherit = BaseOxmlElement,
@@ -635,7 +622,6 @@ BaseAxisElement <- R6::R6Class(
 
 #' Category axis XML element
 #' @noRd
-#' @export
 CT_CatAx <- R6::R6Class(
   "CT_CatAx",
   inherit = BaseAxisElement,
@@ -676,7 +662,6 @@ CT_CatAx <- R6::R6Class(
 
 #' Date axis XML element
 #' @noRd
-#' @export
 CT_DateAx <- R6::R6Class(
   "CT_DateAx",
   inherit = BaseAxisElement
@@ -689,7 +674,6 @@ CT_DateAx <- R6::R6Class(
 
 #' Value axis XML element
 #' @noRd
-#' @export
 CT_ValAx <- R6::R6Class(
   "CT_ValAx",
   inherit = BaseAxisElement,
@@ -740,7 +724,6 @@ CT_ValAx <- R6::R6Class(
 
 #' Chart gridlines XML element
 #' @noRd
-#' @export
 CT_ChartLines <- R6::R6Class(
   "CT_ChartLines",
   inherit = BaseOxmlElement,
@@ -758,7 +741,6 @@ CT_ChartLines <- R6::R6Class(
 
 #' Chart text element
 #' @noRd
-#' @export
 CT_Tx <- R6::R6Class(
   "CT_Tx",
   inherit = BaseOxmlElement,
@@ -805,7 +787,6 @@ CT_Tx <- R6::R6Class(
 
 #' Chart title element
 #' @noRd
-#' @export
 CT_Title <- R6::R6Class(
   "CT_Title",
   inherit = BaseOxmlElement,
@@ -857,7 +838,6 @@ CT_Title <- R6::R6Class(
 
 #' Legend position element
 #' @noRd
-#' @export
 CT_LegendPos <- R6::R6Class(
   "CT_LegendPos",
   inherit = BaseOxmlElement,
@@ -881,7 +861,6 @@ CT_LegendPos <- R6::R6Class(
 
 #' Chart legend XML element
 #' @noRd
-#' @export
 CT_Legend <- R6::R6Class(
   "CT_Legend",
   inherit = BaseOxmlElement,
@@ -954,7 +933,6 @@ CT_Legend <- R6::R6Class(
 
 #' Chart layout XML element
 #' @noRd
-#' @export
 CT_Layout <- R6::R6Class(
   "CT_Layout",
   inherit = BaseOxmlElement,
@@ -990,7 +968,6 @@ CT_Layout <- R6::R6Class(
 
 #' Chart manual layout XML element
 #' @noRd
-#' @export
 CT_ManualLayout <- R6::R6Class(
   "CT_ManualLayout",
   inherit = BaseOxmlElement,
@@ -1031,7 +1008,6 @@ CT_ManualLayout <- R6::R6Class(
 
 #' XML element wrapper for c:layoutMode
 #' @noRd
-#' @export
 CT_LayoutMode <- R6::R6Class(
   "CT_LayoutMode",
   inherit = BaseOxmlElement,
@@ -1055,7 +1031,6 @@ CT_LayoutMode <- R6::R6Class(
 
 #' Data label position element
 #' @noRd
-#' @export
 CT_DLblPos <- R6::R6Class(
   "CT_DLblPos",
   inherit = BaseOxmlElement,
@@ -1077,7 +1052,6 @@ CT_DLblPos <- R6::R6Class(
 
 #' Data labels container element
 #' @noRd
-#' @export
 CT_DLbls <- R6::R6Class(
   "CT_DLbls",
   inherit = BaseOxmlElement,
@@ -1197,7 +1171,6 @@ CT_DLbls <- R6::R6Class(
 
 #' Individual data label element
 #' @noRd
-#' @export
 CT_DLbl <- R6::R6Class(
   "CT_DLbl",
   inherit = BaseOxmlElement,
@@ -1274,7 +1247,6 @@ CT_DLbl <- R6::R6Class(
 
 #' Marker element for line/xy/radar charts
 #' @noRd
-#' @export
 CT_Marker <- R6::R6Class(
   "CT_Marker",
   inherit = BaseOxmlElement,
@@ -1332,7 +1304,6 @@ CT_Marker <- R6::R6Class(
 
 #' Marker style element
 #' @noRd
-#' @export
 CT_MarkerStyle <- R6::R6Class(
   "CT_MarkerStyle",
   inherit = BaseOxmlElement,
@@ -1349,7 +1320,6 @@ CT_MarkerStyle <- R6::R6Class(
 
 #' Marker size element
 #' @noRd
-#' @export
 CT_MarkerSize <- R6::R6Class(
   "CT_MarkerSize",
   inherit = BaseOxmlElement,
@@ -1371,7 +1341,6 @@ CT_MarkerSize <- R6::R6Class(
 
 #' Data point element
 #' @noRd
-#' @export
 CT_DPt <- R6::R6Class(
   "CT_DPt",
   inherit = BaseOxmlElement,
@@ -1410,7 +1379,6 @@ CT_DPt <- R6::R6Class(
 
 #' Chart series element (composite; all series use the same c:ser tag)
 #' @noRd
-#' @export
 CT_SeriesComposite <- R6::R6Class(
   "CT_SeriesComposite",
   inherit = BaseOxmlElement,
@@ -1548,7 +1516,6 @@ CT_SeriesComposite <- R6::R6Class(
 
 #' Numeric data source element
 #' @noRd
-#' @export
 CT_NumDataSource <- R6::R6Class(
   "CT_NumDataSource",
   inherit = BaseOxmlElement,
@@ -1596,7 +1563,6 @@ CT_NumDataSource <- R6::R6Class(
 
 #' Plot area XML element
 #' @noRd
-#' @export
 CT_PlotArea <- R6::R6Class(
   "CT_PlotArea",
   inherit = BaseOxmlElement,
@@ -1662,7 +1628,6 @@ CT_PlotArea <- R6::R6Class(
 
 #' Chart element
 #' @noRd
-#' @export
 CT_Chart <- R6::R6Class(
   "CT_Chart",
   inherit = BaseOxmlElement,
@@ -1727,7 +1692,6 @@ CT_Chart <- R6::R6Class(
 
 #' Chart space XML element (root of chart part)
 #' @noRd
-#' @export
 CT_ChartSpace <- R6::R6Class(
   "CT_ChartSpace",
   inherit = BaseOxmlElement,
@@ -1778,7 +1742,6 @@ CT_ChartSpace <- R6::R6Class(
 
 #' Chart style element
 #' @noRd
-#' @export
 CT_Style <- R6::R6Class(
   "CT_Style",
   inherit = BaseOxmlElement,
@@ -1800,7 +1763,6 @@ CT_Style <- R6::R6Class(
 
 #' Generic xChart element (barChart, lineChart, etc.)
 #' @noRd
-#' @export
 CT_xChart <- R6::R6Class(
   "CT_xChart",
   inherit = BaseOxmlElement,
@@ -1904,7 +1866,6 @@ CT_xChart <- R6::R6Class(
 
 #' Gap width / overlap integer element
 #' @noRd
-#' @export
 CT_IntegerElement <- R6::R6Class(
   "CT_IntegerElement",
   inherit = BaseOxmlElement,
@@ -1926,7 +1887,6 @@ CT_IntegerElement <- R6::R6Class(
 
 #' Bar direction element
 #' @noRd
-#' @export
 CT_BarDir <- R6::R6Class(
   "CT_BarDir",
   inherit = BaseOxmlElement,

@@ -12,7 +12,6 @@
 #'
 #' @include oxml-shapes.R
 #' @noRd
-#' @export
 ShadowFormat <- R6::R6Class(
   "ShadowFormat",
 

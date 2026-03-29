@@ -13,7 +13,6 @@
 #'
 #' @include opc-package.R oxml-coreprops.R
 #' @noRd
-#' @export
 CorePropertiesPart <- R6::R6Class(
   "CorePropertiesPart",
   inherit = XmlPart,

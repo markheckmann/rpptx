@@ -16,7 +16,6 @@
 #'
 #' @include opc-oxml.R opc-serialized.R opc-constants.R opc-packuri.R opc-spec.R
 #' @noRd
-#' @export
 OpcPackage <- R6::R6Class(
   "OpcPackage",
 
@@ -166,7 +165,6 @@ OpcPackage <- R6::R6Class(
 #' @param pkg_file Path to a .pptx file.
 #' @return An OpcPackage instance.
 #' @noRd
-#' @export
 OpcPackage_open <- function(pkg_file) {
   pkg <- OpcPackage$new(pkg_file)
   pkg$.__enclos_env__$private$.load()
@@ -304,7 +302,6 @@ PackageLoader <- R6::R6Class(
 #' Provides common properties and methods for all part types.
 #'
 #' @noRd
-#' @export
 Part <- R6::R6Class(
   "Part",
 
@@ -429,7 +426,6 @@ Part <- R6::R6Class(
 #' relationships. Most package parts are XmlParts.
 #'
 #' @noRd
-#' @export
 XmlPart <- R6::R6Class(
   "XmlPart",
   inherit = Part,
@@ -512,7 +508,6 @@ XmlPart_load <- function(cls, partname, content_type, package, blob) {
 #' @param content_type Content type string.
 #' @param part_cls An R6 class generator.
 #' @noRd
-#' @export
 register_part_type <- function(content_type, part_cls) {
   .part_type_registry[[content_type]] <- part_cls
 }
@@ -524,7 +519,6 @@ register_part_type <- function(content_type, part_cls) {
 #' @param blob Raw bytes.
 #' @return A Part instance.
 #' @noRd
-#' @export
 PartFactory_create <- function(partname, content_type, package, blob) {
   part_cls <- .part_type_registry[[content_type]]
   if (is.null(part_cls)) {
@@ -617,7 +611,6 @@ ContentTypeMap$from_xml <- function(content_types_xml) {
 #' Keyed by rId. Supports dict-like access.
 #'
 #' @noRd
-#' @export
 Relationships <- R6::R6Class(
   "Relationships",
 
@@ -795,7 +788,6 @@ length.Relationships <- function(x) {
 
 #' Value object describing a link from a part or package to another part
 #' @noRd
-#' @export
 Relationship <- R6::R6Class(
   "Relationship",
   cloneable = FALSE,

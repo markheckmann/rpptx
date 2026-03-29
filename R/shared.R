@@ -12,7 +12,6 @@
 #' Base proxy wrapping an XML element
 #'
 #' @noRd
-#' @export
 ElementProxy <- R6::R6Class(
   "ElementProxy",
 
@@ -45,7 +44,6 @@ ElementProxy <- R6::R6Class(
 #' The parent is used to resolve the `part` property by delegation.
 #'
 #' @noRd
-#' @export
 ParentedElementProxy <- R6::R6Class(
   "ParentedElementProxy",
   inherit = ElementProxy,
@@ -87,7 +85,6 @@ ParentedElementProxy <- R6::R6Class(
 #' (e.g. Presentation wraps the root element of PresentationPart).
 #'
 #' @noRd
-#' @export
 PartElementProxy <- R6::R6Class(
   "PartElementProxy",
   inherit = ElementProxy,

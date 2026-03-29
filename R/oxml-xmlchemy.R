@@ -16,7 +16,6 @@
 #'
 #' @include oxml-ns.R
 #' @noRd
-#' @export
 BaseOxmlElement <- R6::R6Class(
   "BaseOxmlElement",
 
@@ -260,7 +259,6 @@ BaseOxmlElement <- R6::R6Class(
 #' @param nsmap Optional named character vector of additional namespace mappings.
 #' @return A wrapped BaseOxmlElement (or appropriate subclass).
 #' @noRd
-#' @export
 OxmlElement <- function(nsptag_str, nsmap = NULL) {
   parts <- strsplit(nsptag_str, ":", fixed = TRUE)[[1]]
   pfx <- parts[1]
@@ -288,7 +286,6 @@ OxmlElement <- function(nsptag_str, nsmap = NULL) {
 #' @param successors Character vector of successor tag names for ordering.
 #' @return A list describing the child element spec.
 #' @noRd
-#' @export
 zero_or_one <- function(nsptagname, successors = character(0)) {
   list(type = "zero_or_one", nsptagname = nsptagname, successors = successors)
 }
@@ -297,7 +294,6 @@ zero_or_one <- function(nsptagname, successors = character(0)) {
 #' @inheritParams zero_or_one
 #' @return A list describing the child element spec.
 #' @noRd
-#' @export
 zero_or_more <- function(nsptagname, successors = character(0)) {
   list(type = "zero_or_more", nsptagname = nsptagname, successors = successors)
 }
@@ -306,7 +302,6 @@ zero_or_more <- function(nsptagname, successors = character(0)) {
 #' @inheritParams zero_or_one
 #' @return A list describing the child element spec.
 #' @noRd
-#' @export
 one_or_more <- function(nsptagname, successors = character(0)) {
   list(type = "one_or_more", nsptagname = nsptagname, successors = successors)
 }
@@ -315,7 +310,6 @@ one_or_more <- function(nsptagname, successors = character(0)) {
 #' @param nsptagname Namespace-prefixed tag.
 #' @return A list describing the child element spec.
 #' @noRd
-#' @export
 one_and_only_one <- function(nsptagname) {
   list(type = "one_and_only_one", nsptagname = nsptagname, successors = character(0))
 }
@@ -326,7 +320,6 @@ one_and_only_one <- function(nsptagname) {
 #' @param default Default value when attribute is absent (default NULL).
 #' @return A list describing the attribute spec.
 #' @noRd
-#' @export
 optional_attribute <- function(attr_name, simple_type, default = NULL) {
   list(
     type = "optional_attribute",
@@ -341,7 +334,6 @@ optional_attribute <- function(attr_name, simple_type, default = NULL) {
 #' @param simple_type A list with `from_xml` and `to_xml` functions.
 #' @return A list describing the attribute spec.
 #' @noRd
-#' @export
 required_attribute <- function(attr_name, simple_type) {
   list(
     type = "required_attribute",
@@ -372,7 +364,6 @@ required_attribute <- function(attr_name, simple_type) {
 #' @param inherit R6 class to inherit from (default: BaseOxmlElement).
 #' @return An R6ClassGenerator.
 #' @noRd
-#' @export
 define_oxml_element <- function(classname,
                                  tag,
                                  children = list(),

@@ -8,7 +8,6 @@
 
 #' CT_CoreProperties XML element
 #' @noRd
-#' @export
 CT_CoreProperties <- R6::R6Class(
   "CT_CoreProperties",
   inherit = BaseOxmlElement,

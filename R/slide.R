@@ -11,7 +11,6 @@
 #'
 #' @include shared.R
 #' @noRd
-#' @export
 .BaseSlide <- R6::R6Class(
   ".BaseSlide",
   inherit = PartElementProxy,
@@ -72,7 +71,6 @@
 #' Provides access to slide properties.
 #'
 #' @noRd
-#' @export
 Slide <- R6::R6Class(
   "Slide",
   inherit = .BaseSlide,
@@ -139,7 +137,6 @@ Slide <- R6::R6Class(
 #' Provides access to notes content for a slide, including the notes text frame.
 #'
 #' @noRd
-#' @export
 NotesSlide <- R6::R6Class(
   "NotesSlide",
   inherit = .BaseSlide,
@@ -187,7 +184,6 @@ NotesSlide <- R6::R6Class(
 #' Notes master proxy object
 #'
 #' @noRd
-#' @export
 NotesMaster <- R6::R6Class(
   "NotesMaster",
   inherit = .BaseSlide,
@@ -225,7 +221,6 @@ NotesMaster <- R6::R6Class(
 #' by placeholder `idx` via `[[`, `length()`, and `to_list()`.
 #'
 #' @noRd
-#' @export
 SlidePlaceholders <- R6::R6Class(
   "SlidePlaceholders",
   inherit = ParentedElementProxy,
@@ -291,7 +286,6 @@ length.SlidePlaceholders <- function(x) {
 #' (e.g. "title", "body") rather than an integer idx.
 #'
 #' @noRd
-#' @export
 SlideMasterPlaceholders <- R6::R6Class(
   "SlideMasterPlaceholders",
   inherit = SlidePlaceholders,
@@ -326,7 +320,6 @@ length.SlideMasterPlaceholders <- function(x) length(x$to_list())
 #' Slide layout object
 #'
 #' @noRd
-#' @export
 SlideLayout <- R6::R6Class(
   "SlideLayout",
   inherit = .BaseSlide,
@@ -380,7 +373,6 @@ SlideLayout <- R6::R6Class(
 #' Slide master object
 #'
 #' @noRd
-#' @export
 SlideMaster <- R6::R6Class(
   "SlideMaster",
   inherit = .BaseSlide,
@@ -427,7 +419,6 @@ SlideMaster <- R6::R6Class(
 #' Supports indexed access (1-based), `length()`, and iteration via `to_list()`.
 #'
 #' @noRd
-#' @export
 Slides <- R6::R6Class(
   "Slides",
   inherit = ParentedElementProxy,
@@ -565,7 +556,6 @@ length.Slides <- function(x) {
 #' Sequence of slide layouts for a slide master
 #'
 #' @noRd
-#' @export
 SlideLayouts <- R6::R6Class(
   "SlideLayouts",
   inherit = ParentedElementProxy,
@@ -646,7 +636,6 @@ length.SlideLayouts <- function(x) {
 #' Sequence of slide masters in a presentation
 #'
 #' @noRd
-#' @export
 SlideMasters <- R6::R6Class(
   "SlideMasters",
   inherit = ParentedElementProxy,
@@ -817,7 +806,6 @@ length.SlideMasters <- function(x) {
 #'
 #' @include shapes-base.R
 #' @noRd
-#' @export
 SlideShapes <- R6::R6Class(
   "SlideShapes",
   inherit = ParentedElementProxy,

@@ -10,7 +10,6 @@
 #'
 #' @include opc-package.R parts-coreprops.R parts-image.R
 #' @noRd
-#' @export
 Package <- R6::R6Class(
   "Package",
   inherit = OpcPackage,
@@ -130,7 +129,6 @@ Package <- R6::R6Class(
 #' @param pkg_file Path to a .pptx file.
 #' @return A Package instance.
 #' @noRd
-#' @export
 Package_open <- function(pkg_file) {
   pkg <- Package$new(pkg_file)
   pkg$.__enclos_env__$private$.load()

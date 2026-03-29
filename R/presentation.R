@@ -8,7 +8,6 @@
 #'
 #' @include shared.R slide.R
 #' @noRd
-#' @export
 Presentation <- R6::R6Class(
   "Presentation",
   inherit = PartElementProxy,

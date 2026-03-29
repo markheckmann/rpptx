@@ -12,7 +12,6 @@
 #' @param uri_str A string starting with "/", e.g. `"/ppt/slides/slide1.xml"`.
 #' @return A PackURI (character with S3 class).
 #' @noRd
-#' @export
 PackURI <- function(uri_str) {
   if (!is.character(uri_str) || length(uri_str) != 1) {
     stop("PackURI must be a single character string", call. = FALSE)
@@ -29,7 +28,6 @@ PackURI <- function(uri_str) {
 #' @param relative_ref The relative reference string.
 #' @return A PackURI.
 #' @noRd
-#' @export
 pack_uri_from_rel_ref <- function(base_uri, relative_ref) {
   # Use POSIX-style path joining and normalization
   joined <- paste0(base_uri, "/", relative_ref)
@@ -47,7 +45,6 @@ print.PackURI <- function(x, ...) {
 #' @param uri A PackURI.
 #' @return A character string.
 #' @noRd
-#' @export
 pack_uri_base <- function(uri) {
   dirname(as.character(uri))
 }
@@ -56,7 +53,6 @@ pack_uri_base <- function(uri) {
 #' @param uri A PackURI.
 #' @return A character string.
 #' @noRd
-#' @export
 pack_uri_ext <- function(uri) {
   ext <- tools::file_ext(as.character(uri))
   ext
@@ -66,7 +62,6 @@ pack_uri_ext <- function(uri) {
 #' @param uri A PackURI.
 #' @return A character string.
 #' @noRd
-#' @export
 pack_uri_filename <- function(uri) {
   basename(as.character(uri))
 }
@@ -79,7 +74,6 @@ pack_uri_filename <- function(uri) {
 #' @param uri A PackURI.
 #' @return An integer or NULL.
 #' @noRd
-#' @export
 pack_uri_idx <- function(uri) {
   filename <- pack_uri_filename(uri)
   if (filename == "" || filename == "/") return(NULL)
@@ -93,7 +87,6 @@ pack_uri_idx <- function(uri) {
 #' @param uri A PackURI.
 #' @return A character string.
 #' @noRd
-#' @export
 pack_uri_membername <- function(uri) {
   sub("^/", "", as.character(uri))
 }
@@ -103,7 +96,6 @@ pack_uri_membername <- function(uri) {
 #' @param base_uri The base URI to compute the relative reference from.
 #' @return A character string.
 #' @noRd
-#' @export
 pack_uri_relative_ref <- function(uri, base_uri) {
   uri_str <- as.character(uri)
   if (base_uri == "/") {
@@ -117,7 +109,6 @@ pack_uri_relative_ref <- function(uri, base_uri) {
 #' @param uri A PackURI.
 #' @return A PackURI for the .rels part.
 #' @noRd
-#' @export
 pack_uri_rels_uri <- function(uri) {
   filename <- pack_uri_filename(uri)
   rels_filename <- paste0(filename, ".rels")

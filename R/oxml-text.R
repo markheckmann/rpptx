@@ -59,7 +59,6 @@ CT_TextCharacterProperties <- define_oxml_element(
 
 #' CT_Hyperlink XML element
 #' @noRd
-#' @export
 CT_Hyperlink <- R6::R6Class(
   "CT_Hyperlink",
   inherit = BaseOxmlElement,
@@ -442,7 +441,6 @@ CT_TextBodyProperties <- R6::R6Class(
 #' Custom element class for p:txBody and a:txBody elements.
 #'
 #' @noRd
-#' @export
 CT_TextBody <- R6::R6Class(
   "CT_TextBody",
   inherit = BaseOxmlElement,

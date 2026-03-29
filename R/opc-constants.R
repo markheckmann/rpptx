@@ -9,7 +9,6 @@
 
 #' Content type URIs (like MIME-types) that specify a part's format.
 #' @noRd
-#' @export
 CT <- list(
   ASF = "video/x-ms-asf",
   AVI = "video/avi",
@@ -123,7 +122,6 @@ CT <- list(
 
 #' Constant values for OPC XML namespaces.
 #' @noRd
-#' @export
 NS <- list(
   DML_WORDPROCESSING_DRAWING = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing",
   OFC_RELATIONSHIPS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
@@ -138,7 +136,6 @@ NS <- list(
 
 #' Open XML relationship target modes.
 #' @noRd
-#' @export
 RTM <- list(
   EXTERNAL = "External",
   INTERNAL = "Internal"
@@ -150,7 +147,6 @@ RTM <- list(
 
 #' Open XML relationship type URIs.
 #' @noRd
-#' @export
 RT <- list(
   AUDIO = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/audio",
   A_F_CHUNK = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/aFChunk",

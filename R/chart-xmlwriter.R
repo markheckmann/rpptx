@@ -23,7 +23,6 @@
 #' @param chart_data A `CategoryChartData`, `XyChartData`, or `BubbleChartData` object.
 #' @return An R6 writer object with an `$xml` active binding returning the XML string.
 #' @noRd
-#' @export
 chart_xml_writer <- function(chart_type, chart_data) {
   XL <- XL_CHART_TYPE
   dispatch <- list(

@@ -14,7 +14,6 @@
 #' Access via `shape$click_action$hyperlink`.
 #'
 #' @noRd
-#' @export
 ShapeHyperlink <- R6::R6Class(
   "ShapeHyperlink",
 
@@ -95,7 +94,6 @@ ShapeHyperlink <- R6::R6Class(
 #' hyperlink URL and action type. Access via `shape$click_action`.
 #'
 #' @noRd
-#' @export
 ActionSetting <- R6::R6Class(
   "ActionSetting",
 

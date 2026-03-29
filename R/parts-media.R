@@ -5,7 +5,6 @@
 #' Media part (audio/video OPC part)
 #'
 #' @noRd
-#' @export
 MediaPart <- R6::R6Class(
   "MediaPart",
   inherit = Part,
