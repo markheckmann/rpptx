@@ -399,7 +399,7 @@ chart_xy$category_axis$has_major_gridlines <- TRUE
 out_path <- tempfile(fileext = ".pptx")
 prs$save(out_path)
 cat("Saved presentation to:", out_path, "\n")
-#> Saved presentation to: /tmp/Rtmp8Jh5PH/file1e5011e2da5c.pptx 
+#> Saved presentation to: /tmp/RtmplAuXca/file1e456610248c.pptx 
 cat("Slides:", length(prs$slides), "\n")
 #> Slides: 5 
 ```
