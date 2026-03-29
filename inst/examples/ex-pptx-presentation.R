@@ -171,7 +171,6 @@ pat_box$fill$back_color$rgb <- RGBColor(0xCC, 0xDD, 0xFF)
 pat_box$line$width          <- Pt(1)
 
 
-
 # ── Slide 3: Table ────────────────────────────────────────────────────────────
 slide3 <- prs$slides$add_slide(blank_layout)
 
@@ -191,15 +190,6 @@ gf_tbl <- slide3$shapes$add_table(
   Inches(0.4), Inches(1.0), Inches(9.2), Inches(3.6)
 )
 tbl <- gf_tbl$table
-
-# ── Save ──────────────────────────────────────────────────────────────────────
-out_path <- tempfile(fileext = ".pptx")
-prs$save(out_path)
-cat("Saved presentation to:", out_path, "\n")
-cat("Slides:", length(prs$slides), "\n")
-
-file_open(out_path)
-
 
 # Column widths
 tbl$columns[[1]]$width <- Inches(3.2)
@@ -309,6 +299,7 @@ chart_line <- gf_line$chart
 chart_line$has_title  <- TRUE
 chart_line$has_legend <- FALSE
 chart_line$chart_title$text_frame$text <- "Trend"
+
 
 # ── Slide 5: Pie chart + XY scatter ──────────────────────────────────────────
 slide5 <- prs$slides$add_slide(blank_layout)

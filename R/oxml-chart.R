@@ -377,9 +377,24 @@ BaseAxisElement <- R6::R6Class(
   inherit = BaseOxmlElement,
 
   public = list(
-    # Get or create txPr child
+    # Get or create txPr child — must appear before c:crossAx per schema
     get_or_add_txPr = function() {
-      .get_or_add_child(self$get_node(), "c:txPr", .nsmap[["c"]])
+      c_ns <- .nsmap[["c"]]
+      nd <- xml2::xml_find_first(self$get_node(), "c:txPr", ns = c(c = c_ns))
+      if (!inherits(nd, "xml_missing")) return(nd)
+      # Insert before c:crossAx to satisfy OOXML schema ordering
+      crossAx_nd <- xml2::xml_find_first(self$get_node(), "c:crossAx", ns = c(c = c_ns))
+      a_ns <- .nsmap[["a"]]
+      new_nd <- xml2::read_xml(sprintf(
+        '<c:txPr xmlns:c="%s" xmlns:a="%s"><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr/></a:pPr></a:p></c:txPr>',
+        c_ns, a_ns
+      ))
+      if (!inherits(crossAx_nd, "xml_missing")) {
+        xml2::xml_add_sibling(crossAx_nd, new_nd, .where = "before")
+      } else {
+        xml2::xml_add_child(self$get_node(), new_nd)
+      }
+      xml2::xml_find_first(self$get_node(), "c:txPr", ns = c(c = c_ns))
     },
     get_or_add_title = function() {
       nd <- .get_or_add_child(self$get_node(), "c:title", .nsmap[["c"]])
