@@ -15,6 +15,8 @@ presentation-specific behavior.
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-Package-next_image_partname}{\code{Package$next_image_partname()}}
+\item \href{#method-Package-next_media_partname}{\code{Package$next_media_partname()}}
+\item \href{#method-Package-get_or_add_media_part}{\code{Package$get_or_add_media_part()}}
 \item \href{#method-Package-get_or_add_image_part}{\code{Package$get_or_add_image_part()}}
 \item \href{#method-Package-iter_parts}{\code{Package$iter_parts()}}
 \item \href{#method-Package-clone}{\code{Package$clone()}}
@@ -41,6 +43,24 @@ presentation-specific behavior.
 \subsection{Method \code{next_image_partname()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Package$next_image_partname(ext)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Package-next_media_partname"></a>}}
+\if{latex}{\out{\hypertarget{method-Package-next_media_partname}{}}}
+\subsection{Method \code{next_media_partname()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Package$next_media_partname(ext)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Package-get_or_add_media_part"></a>}}
+\if{latex}{\out{\hypertarget{method-Package-get_or_add_media_part}{}}}
+\subsection{Method \code{get_or_add_media_part()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Package$get_or_add_media_part(video)}\if{html}{\out{</div>}}
 }
 
 }

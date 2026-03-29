@@ -20,7 +20,8 @@ RoxygenNote: 7.3.3
 Imports:
     R6,
     xml2,
-    openxlsx2
+    openxlsx2,
+    digest
 Suggests:
     knitr,
     magick,
@@ -69,6 +70,7 @@ Collate:
     'enum-dml.R'
     'enum-text.R'
     'exceptions.R'
+    'media.R'
     'oxml-chart.R'
     'oxml-dml-color.R'
     'oxml-dml-fill.R'
@@ -78,6 +80,7 @@ Collate:
     'oxml-text.R'
     'oxml-theme.R'
     'parts-chart.R'
+    'parts-media.R'
     'rpptx-package.R'
     'shapes-freeform.R'
     'table.R'

@@ -33,6 +33,35 @@ Package <- R6::R6Class(
       PackURI(sprintf("/ppt/media/image%d.%s", idx, ext))
     },
 
+    # Return the next available media partname (ppt/media/mediaN.ext).
+    next_media_partname = function(ext) {
+      existing <- Filter(
+        function(p) grepl("^/ppt/media/media[0-9]+\\.", p$partname),
+        self$iter_parts()
+      )
+      idxs <- if (length(existing) == 0L) integer(0L) else
+        as.integer(regmatches(
+          sapply(existing, function(p) p$partname),
+          regexpr("[0-9]+(?=\\.)", sapply(existing, function(p) p$partname), perl = TRUE)
+        ))
+      idx <- 1L
+      for (candidate in seq_len(length(idxs) + 1L)) {
+        if (!(candidate %in% idxs)) { idx <- candidate; break }
+      }
+      PackURI(sprintf("/ppt/media/media%d.%s", idx, ext))
+    },
+
+    # Return a MediaPart for the given Video; reuse if same content already exists.
+    get_or_add_media_part = function(video) {
+      hash <- video$sha1
+      for (p in self$iter_parts()) {
+        if (inherits(p, "MediaPart")) {
+          if (identical(p$sha1, hash)) return(p)
+        }
+      }
+      MediaPart_new(self, video)
+    },
+
     # Return an ImagePart for the given image file; reuse if same image already exists.
     get_or_add_image_part = function(image_file) {
       image <- Image_from_file(image_file)

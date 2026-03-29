@@ -24,6 +24,7 @@ Supports indexed access (1-based), \code{length()}, and iteration via \code{to_l
 \item \href{#method-SlideShapes-add_picture}{\code{SlideShapes$add_picture()}}
 \item \href{#method-SlideShapes-add_group_shape}{\code{SlideShapes$add_group_shape()}}
 \item \href{#method-SlideShapes-build_freeform}{\code{SlideShapes$build_freeform()}}
+\item \href{#method-SlideShapes-add_movie}{\code{SlideShapes$add_movie()}}
 \item \href{#method-SlideShapes-add_shape_copy}{\code{SlideShapes$add_shape_copy()}}
 \item \href{#method-SlideShapes-clone_layout_placeholders}{\code{SlideShapes$clone_layout_placeholders()}}
 \item \href{#method-SlideShapes-clone}{\code{SlideShapes$clone()}}
@@ -125,6 +126,23 @@ Supports indexed access (1-based), \code{length()}, and iteration via \code{to_l
 \subsection{Method \code{build_freeform()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SlideShapes$build_freeform(start_x = 0, start_y = 0, scale = 1)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-SlideShapes-add_movie"></a>}}
+\if{latex}{\out{\hypertarget{method-SlideShapes-add_movie}{}}}
+\subsection{Method \code{add_movie()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SlideShapes$add_movie(
+  movie_file,
+  left,
+  top,
+  width,
+  height,
+  poster_frame_image = NULL,
+  mime_type = "video/unknown"
+)}\if{html}{\out{</div>}}
 }
 
 }

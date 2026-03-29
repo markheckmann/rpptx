@@ -65,6 +65,15 @@ SlidePart <- R6::R6Class(
       # relate_to returns existing rId if image_part is already related
       rId <- self$relate_to(image_part, RT$IMAGE)
       list(image_part = image_part, rId = rId)
+    },
+
+    # Return (media_rId, video_rId) pair for a video.
+    # Two relationships to the same part (RT.MEDIA + RT.VIDEO) for legacy support.
+    get_or_add_video_media_part = function(video) {
+      media_part <- self$package$get_or_add_media_part(video)
+      media_rId  <- self$relate_to(media_part, RT$MEDIA)
+      video_rId  <- self$relate_to(media_part, RT$VIDEO)
+      list(media_rId = media_rId, video_rId = video_rId)
     }
   ),
 

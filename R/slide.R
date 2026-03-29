@@ -676,6 +676,123 @@ length.SlideMasters <- function(x) {
 
 
 # ============================================================================
+# Video helpers (used by SlideShapes$add_movie)
+# ============================================================================
+
+# Build a <p:pic> XML node for a video shape.
+.new_video_pic_xml <- function(shape_id, shape_name, video_rId, media_rId,
+                                poster_frame_rId, x, y, cx, cy) {
+  p  <- .nsmap[["p"]]
+  a  <- .nsmap[["a"]]
+  r  <- .nsmap[["r"]]
+  p14 <- "http://schemas.microsoft.com/office/powerpoint/2010/main"
+  ext_uri <- "{DAA4B4D4-6D71-4841-9C94-3DE7FCFB9230}"
+  xml_str <- sprintf(
+    paste0(
+      '<p:pic xmlns:p="%s" xmlns:a="%s" xmlns:r="%s">\n',
+      '  <p:nvPicPr>\n',
+      '    <p:cNvPr id="%d" name="%s">\n',
+      '      <a:hlinkClick r:id="" action="ppaction://media"/>\n',
+      '    </p:cNvPr>\n',
+      '    <p:cNvPicPr>\n',
+      '      <a:picLocks noChangeAspect="1"/>\n',
+      '    </p:cNvPicPr>\n',
+      '    <p:nvPr>\n',
+      '      <a:videoFile r:link="%s"/>\n',
+      '      <p:extLst>\n',
+      '        <p:ext uri="%s">\n',
+      '          <p14:media xmlns:p14="%s" r:embed="%s"/>\n',
+      '        </p:ext>\n',
+      '      </p:extLst>\n',
+      '    </p:nvPr>\n',
+      '  </p:nvPicPr>\n',
+      '  <p:blipFill>\n',
+      '    <a:blip r:embed="%s"/>\n',
+      '    <a:stretch><a:fillRect/></a:stretch>\n',
+      '  </p:blipFill>\n',
+      '  <p:spPr>\n',
+      '    <a:xfrm>\n',
+      '      <a:off x="%d" y="%d"/>\n',
+      '      <a:ext cx="%d" cy="%d"/>\n',
+      '    </a:xfrm>\n',
+      '    <a:prstGeom prst="rect"><a:avLst/></a:prstGeom>\n',
+      '  </p:spPr>\n',
+      '</p:pic>'
+    ),
+    p, a, r,
+    shape_id, .xml_escape_attr(shape_name),
+    video_rId,
+    ext_uri, p14, media_rId,
+    poster_frame_rId,
+    as.integer(x), as.integer(y), as.integer(cx), as.integer(cy)
+  )
+  xml2::xml_root(xml2::read_xml(xml_str))
+}
+
+# Escape XML attribute value special characters
+.xml_escape_attr <- function(s) {
+  s <- gsub("&", "&amp;", as.character(s), fixed = TRUE)
+  s <- gsub("\"", "&quot;", s, fixed = TRUE)
+  s <- gsub("<", "&lt;", s, fixed = TRUE)
+  s
+}
+
+# Add <p:video> timing element to the slide so play controls appear.
+.add_video_timing <- function(spTree, shape_id) {
+  p <- .nsmap[["p"]]
+  # Get or create <p:sld> root
+  sld_node <- xml2::xml_root(spTree$get_node())
+
+  # Get or add <p:timing>/<p:tnLst>/<p:par>/<p:cTn>/<p:childTnLst>
+  childTnLst_node <- xml2::xml_find_first(
+    sld_node, "p:timing/p:tnLst/p:par/p:cTn/p:childTnLst",
+    ns = c(p = p)
+  )
+  if (inherits(childTnLst_node, "xml_missing")) {
+    # Remove any existing timing and build the full timing subtree
+    timing_existing <- xml2::xml_find_first(sld_node, "p:timing", ns = c(p = p))
+    if (!inherits(timing_existing, "xml_missing")) xml2::xml_remove(timing_existing)
+    timing_xml <- sprintf(paste0(
+      '<p:timing xmlns:p="%s">',
+        '<p:tnLst>',
+          '<p:par>',
+            '<p:cTn id="1" dur="indefinite" restart="never" nodeType="tmRoot">',
+              '<p:childTnLst/>',
+            '</p:cTn>',
+          '</p:par>',
+        '</p:tnLst>',
+      '</p:timing>'
+    ), p)
+    timing_node <- xml2::xml_root(xml2::read_xml(timing_xml))
+    xml2::xml_add_child(sld_node, timing_node)
+    childTnLst_node <- xml2::xml_find_first(
+      sld_node, "p:timing/p:tnLst/p:par/p:cTn/p:childTnLst",
+      ns = c(p = p)
+    )
+  }
+
+  # Next cTn id = max existing + 1
+  id_strs <- xml2::xml_find_all(sld_node, ".//p:cTn/@id", ns = c(p = p))
+  ids <- as.integer(vapply(id_strs, xml2::xml_text, character(1)))
+  next_id <- if (length(ids) == 0L) 2L else max(ids) + 1L
+
+  video_xml <- sprintf(paste0(
+    '<p:video xmlns:p="%s">',
+      '<p:cMediaNode vol="80000">',
+        '<p:cTn id="%d" fill="hold" display="0">',
+          '<p:stCondLst><p:cond delay="indefinite"/></p:stCondLst>',
+        '</p:cTn>',
+        '<p:tgtEl><p:spTgt spid="%d"/></p:tgtEl>',
+      '</p:cMediaNode>',
+    '</p:video>'
+  ), p, next_id, shape_id)
+  video_node <- xml2::xml_root(xml2::read_xml(video_xml))
+  xml2::xml_add_child(childTnLst_node, video_node)
+  invisible(NULL)
+}
+
+
+# ============================================================================
 # SlideShapes — shape collection for a slide
 # ============================================================================
 
@@ -805,6 +922,43 @@ SlideShapes <- R6::R6Class(
         x_scale <- scale; y_scale <- scale
       }
       FreeformBuilder$new(private$.spTree, self, start_x, start_y, x_scale, y_scale)
+    },
+
+    # Add a video/movie shape to the slide.
+    # movie_file: path to the video file (e.g. "video.mp4").
+    # mime_type: MIME type string (e.g. "video/mp4"); "video/unknown" by default.
+    # poster_frame_image: path to a poster frame image shown before playback;
+    #   if NULL the default media loudspeaker image is used.
+    # Returns a Picture shape proxy.
+    add_movie = function(movie_file, left, top, width, height,
+                         poster_frame_image = NULL, mime_type = "video/unknown") {
+      # Load video
+      video <- Video_from_file(movie_file, mime_type)
+
+      # Get or create media part + two relationships
+      rIds       <- self$part$get_or_add_video_media_part(video)
+      media_rId  <- rIds$media_rId
+      video_rId  <- rIds$video_rId
+
+      # Poster frame
+      if (is.null(poster_frame_image)) poster_frame_image <- .speaker_image_path()
+      pf_info         <- self$part$get_or_add_image_part(poster_frame_image)
+      poster_frame_rId <- pf_info$rId
+
+      # Build video pic XML
+      id   <- private$.spTree$next_shape_id()
+      name <- video$filename
+      pic_node <- .new_video_pic_xml(id, name, video_rId, media_rId, poster_frame_rId,
+                                     left, top, width, height)
+      xml2::xml_add_child(private$.spTree$get_node(), pic_node)
+
+      # Add timing element (play controls)
+      .add_video_timing(private$.spTree, id)
+
+      # Return shape proxy
+      last_child <- xml2::xml_child(private$.spTree$get_node(),
+                                    xml2::xml_length(private$.spTree$get_node()))
+      shape_factory(wrap_element(last_child), self)
     },
 
     # Copy a shape (possibly from another slide) into this slide.
