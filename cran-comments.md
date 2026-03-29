@@ -1,20 +1,23 @@
-# CRAN submission comments
+# CRAN submission comments — rpptx 0.1.0
 
 ## Test environments
 
-* local macOS 15 (aarch64), R 4.4.x
+* macOS 15 (arm64), R 4.5.x (local) — `devtools::check(cran = TRUE)`: Status OK
 * GitHub Actions: ubuntu-latest (R devel, release, oldrel-1), windows-latest (release), macos-latest (release)
 
 ## R CMD check results
 
-Local check: 0 errors | 0 warnings | 0 notes (when pdflatex is available).
+0 errors | 0 warnings | 0 notes
 
-### Local machine notes
-- **PDF manual ERROR/WARNING**: `pdflatex is not available` on this development
-  machine. The PDF manual builds successfully on CRAN (Linux with TeXLive).
-- **URL 404 NOTEs**: `https://github.com/markheckmann/rpptx` returns 404 until
-  the GitHub repository is made public. These will resolve upon publication.
-
-## Reverse dependencies
+## Downstream dependencies
 
 None — this is a new package.
+
+## Notes for CRAN reviewers
+
+* R port of the Python `python-pptx` library (MIT). No Python required at runtime.
+* `inst/templates/` contains a default `.pptx` template and XML fragments used
+  at runtime; these are not test fixtures.
+* `tests/test_files/` contains `.pptx` fixture files for the read-path tests.
+* All temporary `.pptx` files written during tests use `tempfile()` and are
+  cleaned up automatically.

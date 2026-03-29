@@ -550,6 +550,49 @@ describe("chart$plots", {
     expect_equal(pl$gap_width, 150L)
   })
 
+  it("BarPlot gap_width setter changes the value", {
+    ch <- .make_cat_chart(XL_CHART_TYPE$COLUMN_CLUSTERED)
+    pl <- ch$plots[[1]]
+    pl$gap_width <- 200L
+    expect_equal(pl$gap_width, 200L)
+  })
+
+  it("BarPlot overlap setter changes the value", {
+    ch <- .make_cat_chart(XL_CHART_TYPE$COLUMN_STACKED)
+    pl <- ch$plots[[1]]
+    pl$overlap <- 50L
+    expect_equal(pl$overlap, 50L)
+    pl$overlap <- 0L
+    expect_equal(pl$overlap, 0L)
+  })
+
+  it("BarPlot vary_by_categories setter changes the value", {
+    ch <- .make_cat_chart(XL_CHART_TYPE$COLUMN_CLUSTERED)
+    pl <- ch$plots[[1]]
+    pl$vary_by_categories <- TRUE
+    expect_true(pl$vary_by_categories)
+    pl$vary_by_categories <- FALSE
+    expect_false(pl$vary_by_categories)
+  })
+
+  it("LineSeries smooth setter changes the value", {
+    ch <- .make_cat_chart(XL_CHART_TYPE$LINE)
+    ser <- ch$plots[[1]]$series[[1]]
+    ser$smooth <- FALSE
+    expect_false(ser$smooth)
+    ser$smooth <- TRUE
+    expect_true(ser$smooth)
+  })
+
+  it("BarSeries invert_if_negative setter changes the value", {
+    ch <- .make_cat_chart(XL_CHART_TYPE$COLUMN_CLUSTERED)
+    ser <- ch$plots[[1]]$series[[1]]
+    ser$invert_if_negative <- FALSE
+    expect_false(ser$invert_if_negative)
+    ser$invert_if_negative <- TRUE
+    expect_true(ser$invert_if_negative)
+  })
+
   it("LinePlot is returned for a line chart", {
     ch <- .make_cat_chart(XL_CHART_TYPE$LINE)
     pl <- ch$plots[[1]]
@@ -747,6 +790,40 @@ describe("chart$value_axis", {
     ax <- ch$value_axis
     ax$visible <- FALSE
     expect_false(ax$visible)
+  })
+
+  it("tick_labels$number_format defaults to General", {
+    ch <- .make_cat_chart()
+    ax <- ch$value_axis
+    expect_equal(ax$tick_labels$number_format, "General")
+  })
+
+  it("tick_labels$number_format can be set and read back", {
+    ch <- .make_cat_chart()
+    ax <- ch$value_axis
+    ax$tick_labels$number_format <- "0.0%"
+    expect_equal(ax$tick_labels$number_format, "0.0%")
+  })
+
+  it("tick_labels$number_format setter updates number_format_is_linked to FALSE", {
+    ch <- .make_cat_chart()
+    ax <- ch$value_axis
+    ax$tick_labels$number_format <- "#,##0"
+    expect_false(ax$tick_labels$number_format_is_linked)
+  })
+
+  it("major_tick_mark can be set and read", {
+    ch <- .make_cat_chart()
+    ax <- ch$value_axis
+    ax$major_tick_mark <- XL_TICK_MARK$OUTSIDE
+    expect_equal(ax$major_tick_mark, XL_TICK_MARK$OUTSIDE)
+  })
+
+  it("minor_tick_mark can be set and read", {
+    ch <- .make_cat_chart()
+    ax <- ch$value_axis
+    ax$minor_tick_mark <- XL_TICK_MARK$INSIDE
+    expect_equal(ax$minor_tick_mark, XL_TICK_MARK$INSIDE)
   })
 })
 
