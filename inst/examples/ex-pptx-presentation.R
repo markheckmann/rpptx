@@ -63,6 +63,7 @@ r1$font$bold  <- TRUE
 r1$font$size  <- Pt(22)
 r1$font$color$rgb <- RGBColor(0x1F, 0x49, 0x7D)
 
+
 # Second paragraph: mixed runs
 p2 <- tf$add_paragraph()
 p2$space_before <- Pt(6)
@@ -170,6 +171,7 @@ pat_box$fill$back_color$rgb <- RGBColor(0xCC, 0xDD, 0xFF)
 pat_box$line$width          <- Pt(1)
 
 
+
 # ── Slide 3: Table ────────────────────────────────────────────────────────────
 slide3 <- prs$slides$add_slide(blank_layout)
 
@@ -189,6 +191,15 @@ gf_tbl <- slide3$shapes$add_table(
   Inches(0.4), Inches(1.0), Inches(9.2), Inches(3.6)
 )
 tbl <- gf_tbl$table
+
+# ── Save ──────────────────────────────────────────────────────────────────────
+out_path <- tempfile(fileext = ".pptx")
+prs$save(out_path)
+cat("Saved presentation to:", out_path, "\n")
+cat("Slides:", length(prs$slides), "\n")
+
+file_open(out_path)
+
 
 # Column widths
 tbl$columns[[1]]$width <- Inches(3.2)
@@ -243,6 +254,7 @@ for (i in seq_along(rows_data)) {
 # Enable alternating row banding flag
 tbl$horz_banding <- FALSE   # we applied manual banding above
 
+
 # ── Slide 4: Clustered column chart + line chart ──────────────────────────────
 slide4 <- prs$slides$add_slide(blank_layout)
 
@@ -276,8 +288,8 @@ va <- chart_col$value_axis
 va$minimum_scale         <- 0
 va$maximum_scale         <- 250
 va$has_major_gridlines   <- TRUE
-va$minor_tick_mark       <- "none"
-va$major_tick_mark       <- "outside"
+va$minor_tick_mark       <- XL_TICK_MARK$NONE
+va$major_tick_mark       <- XL_TICK_MARK$OUTSIDE
 
 ca <- chart_col$category_axis
 ca$tick_labels$font$size <- Pt(10)
