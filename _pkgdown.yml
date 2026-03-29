@@ -41,6 +41,17 @@ reference:
     contents:
       - as.data.frame.Table
 
+  - title: Chart data
+    contents:
+      - CategoryChartData
+      - XyChartData
+      - BubbleChartData
+
+  - title: Colors
+    contents:
+      - RGBColor
+      - RGBColor_from_str
+
   - title: Units
     contents:
       - Length
@@ -51,6 +62,36 @@ reference:
       - Pt
       - Emu
       - Centipoints
+
+  - title: Shape enumerations
+    contents:
+      - MSO_AUTO_SHAPE_TYPE
+      - MSO_SHAPE_TYPE
+      - MSO_CONNECTOR_TYPE
+      - PP_PLACEHOLDER
+
+  - title: Formatting enumerations
+    contents:
+      - MSO_THEME_COLOR
+      - MSO_COLOR_TYPE
+      - MSO_FILL
+      - MSO_PATTERN_TYPE
+      - MSO_LINE_DASH_STYLE
+      - MSO_AUTO_SIZE
+      - MSO_VERTICAL_ANCHOR
+      - PP_PARAGRAPH_ALIGNMENT
+      - PP_ACTION_TYPE
+
+  - title: Chart enumerations
+    contents:
+      - XL_CHART_TYPE
+      - XL_AXIS_CROSSES
+      - XL_CATEGORY_TYPE
+      - XL_DATA_LABEL_POSITION
+      - XL_LEGEND_POSITION
+      - XL_MARKER_STYLE
+      - XL_TICK_LABEL_POSITION
+      - XL_TICK_MARK
 
   - title: Utilities
     contents:
