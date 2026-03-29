@@ -331,3 +331,113 @@ describe("BaseShape$click_action and $hover_action", {
     expect_identical(shape$click_action$action, PP_ACTION_TYPE$NONE)
   })
 })
+
+
+# ============================================================================
+# ShapeHyperlink — address read/write on a real shape
+# ============================================================================
+
+describe("ShapeHyperlink$address on a real shape", {
+  it("address is NULL for a plain new shape", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[6]]
+    slide  <- prs$slides$add_slide(layout)
+    shape  <- slide$shapes$add_shape(
+      MSO_AUTO_SHAPE_TYPE$RECTANGLE,
+      Inches(1), Inches(1), Inches(2), Inches(2)
+    )
+    expect_null(shape$click_action$hyperlink$address)
+  })
+
+  it("address can be set to a URL string", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[6]]
+    slide  <- prs$slides$add_slide(layout)
+    shape  <- slide$shapes$add_shape(
+      MSO_AUTO_SHAPE_TYPE$RECTANGLE,
+      Inches(1), Inches(1), Inches(2), Inches(2)
+    )
+    shape$click_action$hyperlink$address <- "https://example.com"
+    expect_equal(shape$click_action$hyperlink$address, "https://example.com")
+  })
+
+  it("action type becomes HYPERLINK after setting address", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[6]]
+    slide  <- prs$slides$add_slide(layout)
+    shape  <- slide$shapes$add_shape(
+      MSO_AUTO_SHAPE_TYPE$RECTANGLE,
+      Inches(1), Inches(1), Inches(2), Inches(2)
+    )
+    shape$click_action$hyperlink$address <- "https://example.com"
+    expect_identical(shape$click_action$action, PP_ACTION_TYPE$HYPERLINK)
+  })
+
+  it("address can be removed by setting to NULL", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[6]]
+    slide  <- prs$slides$add_slide(layout)
+    shape  <- slide$shapes$add_shape(
+      MSO_AUTO_SHAPE_TYPE$RECTANGLE,
+      Inches(1), Inches(1), Inches(2), Inches(2)
+    )
+    shape$click_action$hyperlink$address <- "https://example.com"
+    shape$click_action$hyperlink$address <- NULL
+    expect_null(shape$click_action$hyperlink$address)
+    expect_identical(shape$click_action$action, PP_ACTION_TYPE$NONE)
+  })
+
+  it("address round-trips through save/load", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[6]]
+    slide  <- prs$slides$add_slide(layout)
+    shape  <- slide$shapes$add_shape(
+      MSO_AUTO_SHAPE_TYPE$RECTANGLE,
+      Inches(1), Inches(1), Inches(2), Inches(2)
+    )
+    shape$name <- "ClickableRect"
+    shape$click_action$hyperlink$address <- "https://example.com/test"
+
+    tmp <- tempfile(fileext = ".pptx")
+    on.exit(unlink(tmp))
+    prs$save(tmp)
+    prs2    <- pptx_presentation(tmp)
+    slide2  <- prs2$slides[[1]]
+    shapes2 <- slide2$shapes$to_list()
+    s2      <- Filter(function(s) isTRUE(s$name == "ClickableRect"), shapes2)[[1]]
+
+    expect_equal(s2$click_action$hyperlink$address, "https://example.com/test")
+    expect_identical(s2$click_action$action, PP_ACTION_TYPE$HYPERLINK)
+  })
+})
+
+
+# ============================================================================
+# ActionSetting$target_slide
+# ============================================================================
+
+describe("ActionSetting$target_slide", {
+  it("target_slide is NULL for a plain shape", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[6]]
+    slide  <- prs$slides$add_slide(layout)
+    shape  <- slide$shapes$add_shape(
+      MSO_AUTO_SHAPE_TYPE$RECTANGLE,
+      Inches(1), Inches(1), Inches(2), Inches(2)
+    )
+    expect_null(shape$click_action$target_slide)
+  })
+
+  it("can assign a target slide for slide-jump action", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[6]]
+    s1 <- prs$slides$add_slide(layout)
+    s2 <- prs$slides$add_slide(layout)
+    shape  <- s1$shapes$add_shape(
+      MSO_AUTO_SHAPE_TYPE$RECTANGLE,
+      Inches(1), Inches(1), Inches(2), Inches(2)
+    )
+    shape$click_action$target_slide <- s2
+    expect_identical(shape$click_action$action, PP_ACTION_TYPE$NAMED_SLIDE)
+  })
+})

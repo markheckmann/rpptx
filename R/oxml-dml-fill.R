@@ -102,6 +102,30 @@ CT_PatternFillProperties <- R6::R6Class(
       if (inherits(result, "xml_missing")) return(NULL)
       wrap_element(result)
     }
+  ),
+
+  public = list(
+    # Return existing <a:fgClr> or create a new one with a default srgbClr
+    get_or_add_fgClr = function() {
+      fg <- self$fgClr
+      if (!is.null(fg)) return(fg)
+      a <- .nsmap[["a"]]
+      nd <- xml2::read_xml(sprintf(
+        '<a:fgClr xmlns:a="%s"><a:srgbClr val="000000"/></a:fgClr>', a))
+      xml2::xml_add_child(private$.node, xml2::xml_root(nd), .where = 0L)
+      self$fgClr
+    },
+
+    # Return existing <a:bgClr> or create a new one with a default srgbClr
+    get_or_add_bgClr = function() {
+      bg <- self$bgClr
+      if (!is.null(bg)) return(bg)
+      a <- .nsmap[["a"]]
+      nd <- xml2::read_xml(sprintf(
+        '<a:bgClr xmlns:a="%s"><a:srgbClr val="FFFFFF"/></a:bgClr>', a))
+      xml2::xml_add_child(private$.node, xml2::xml_root(nd))
+      self$bgClr
+    }
   )
 )
 

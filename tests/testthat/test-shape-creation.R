@@ -493,7 +493,7 @@ describe("Picture$crop", {
     prs    <- pptx_presentation()
     layout <- prs$slide_layouts[[1]]
     slide  <- prs$slides$add_slide(layout)
-    img    <- system.file("test_files/python-pptx.png", package = "rpptx")
+    img    <- system.file("test_files/python-powered.png", package = "rpptx")
     if (img == "") skip("test image not found")
     pic    <- slide$shapes$add_picture(img, Inches(1), Inches(1))
     crop   <- pic$crop
@@ -504,7 +504,7 @@ describe("Picture$crop", {
     prs    <- pptx_presentation()
     layout <- prs$slide_layouts[[1]]
     slide  <- prs$slides$add_slide(layout)
-    img    <- system.file("test_files/python-pptx.png", package = "rpptx")
+    img    <- system.file("test_files/python-powered.png", package = "rpptx")
     if (img == "") skip("test image not found")
     pic  <- slide$shapes$add_picture(img, Inches(1), Inches(1))
     crop <- pic$crop
@@ -518,7 +518,7 @@ describe("Picture$crop", {
     prs    <- pptx_presentation()
     layout <- prs$slide_layouts[[1]]
     slide  <- prs$slides$add_slide(layout)
-    img    <- system.file("test_files/python-pptx.png", package = "rpptx")
+    img    <- system.file("test_files/python-powered.png", package = "rpptx")
     if (img == "") skip("test image not found")
     pic  <- slide$shapes$add_picture(img, Inches(1), Inches(1))
     pic$crop$left <- 0.1
@@ -529,7 +529,7 @@ describe("Picture$crop", {
     prs    <- pptx_presentation()
     layout <- prs$slide_layouts[[1]]
     slide  <- prs$slides$add_slide(layout)
-    img    <- system.file("test_files/python-pptx.png", package = "rpptx")
+    img    <- system.file("test_files/python-powered.png", package = "rpptx")
     if (img == "") skip("test image not found")
     pic  <- slide$shapes$add_picture(img, Inches(1), Inches(1))
     pic$crop$left   <- 0.10
@@ -546,7 +546,7 @@ describe("Picture$crop", {
     prs    <- pptx_presentation()
     layout <- prs$slide_layouts[[1]]
     slide  <- prs$slides$add_slide(layout)
-    img    <- system.file("test_files/python-pptx.png", package = "rpptx")
+    img    <- system.file("test_files/python-powered.png", package = "rpptx")
     if (img == "") skip("test image not found")
     pic  <- slide$shapes$add_picture(img, Inches(1), Inches(1))
     pic$crop$left <- 0.25

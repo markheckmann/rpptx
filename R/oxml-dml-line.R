@@ -73,10 +73,14 @@ CT_LineProperties <- R6::R6Class(
   ),
 
   active = list(
-    # Line width in EMU (read/write)
+    # Line width in EMU (read/write). NULL removes the attribute (theme default).
     w = function(value) {
       if (!missing(value)) {
-        xml2::xml_set_attr(private$.node, "w", ST_LineWidth$to_xml(value))
+        if (is.null(value)) {
+          xml2::xml_set_attr(private$.node, "w", NULL)
+        } else {
+          xml2::xml_set_attr(private$.node, "w", ST_LineWidth$to_xml(value))
+        }
         return(invisible(value))
       }
       w_str <- xml2::xml_attr(private$.node, "w")

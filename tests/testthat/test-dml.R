@@ -392,9 +392,121 @@ describe("FillFormat$patterned()", {
 })
 
 describe("FillFormat — fore_color errors on non-solid", {
-  it("errors when fill is not solid", {
+  it("errors when there is no fill at all", {
     shape <- new_shape_with_empty_spPr()
-    expect_error(shape$fill$fore_color, "solid")
+    expect_error(shape$fill$fore_color, "no fill")
+  })
+})
+
+
+# ============================================================================
+# FillFormat — pattern fill fore_color / back_color
+# ============================================================================
+
+describe("FillFormat pattern fore_color and back_color", {
+  it("fore_color returns ColorFormat for a pattern fill", {
+    shape <- new_shape_with_empty_spPr()
+    shape$fill$patterned()
+    expect_true(inherits(shape$fill$fore_color, "ColorFormat"))
+  })
+
+  it("fore_color$rgb can be set on a pattern fill", {
+    shape <- new_shape_with_empty_spPr()
+    shape$fill$patterned()
+    shape$fill$fore_color$rgb <- RGBColor(0xFF, 0, 0)
+    expect_equal(shape$fill$fore_color$rgb, RGBColor(0xFF, 0, 0))
+  })
+
+  it("back_color returns ColorFormat for a pattern fill", {
+    shape <- new_shape_with_empty_spPr()
+    shape$fill$patterned()
+    expect_true(inherits(shape$fill$back_color, "ColorFormat"))
+  })
+
+  it("back_color$rgb can be set on a pattern fill", {
+    shape <- new_shape_with_empty_spPr()
+    shape$fill$patterned()
+    shape$fill$back_color$rgb <- RGBColor(0, 0, 0xFF)
+    expect_equal(shape$fill$back_color$rgb, RGBColor(0, 0, 0xFF))
+  })
+
+  it("back_color errors on non-pattern fill", {
+    shape <- new_shape_with_empty_spPr()
+    shape$fill$solid()
+    expect_error(shape$fill$back_color, "pattern")
+  })
+
+  it("pattern fore/back colors round-trip through save/load", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    shape  <- slide$shapes$add_shape(
+      MSO_AUTO_SHAPE_TYPE$RECTANGLE, Inches(1), Inches(1), Inches(2), Inches(2))
+    shape$fill$patterned()
+    shape$fill$pattern <- "diagBkgnd"
+    shape$fill$fore_color$rgb <- RGBColor(0xFF, 0, 0)
+    shape$fill$back_color$rgb <- RGBColor(0, 0, 0xFF)
+    tmp <- tempfile(fileext = ".pptx")
+    on.exit(unlink(tmp))
+    prs$save(tmp)
+    prs2   <- pptx_presentation(tmp)
+    shapes <- prs2$slides[[1]]$shapes$to_list()
+    s2     <- shapes[[length(shapes)]]
+    expect_equal(s2$fill$type, MSO_FILL$PATTERNED)
+    expect_equal(s2$fill$pattern, "diagBkgnd")
+    expect_equal(s2$fill$fore_color$rgb, RGBColor(0xFF, 0, 0))
+    expect_equal(s2$fill$back_color$rgb, RGBColor(0, 0, 0xFF))
+  })
+})
+
+
+# ============================================================================
+# FillFormat — gradient stop color
+# ============================================================================
+
+describe("GradientStop$color", {
+  it("returns a ColorFormat for a gradient stop", {
+    shape <- new_shape_with_empty_spPr()
+    shape$fill$gradient()
+    stop1 <- shape$fill$gradient_stops[[1]]
+    expect_true(inherits(stop1$color, "ColorFormat"))
+  })
+
+  it("stop color rgb can be set and read back", {
+    shape <- new_shape_with_empty_spPr()
+    shape$fill$gradient()
+    stop1 <- shape$fill$gradient_stops[[1]]
+    stop1$color$rgb <- RGBColor(0xFF, 0, 0)
+    expect_equal(shape$fill$gradient_stops[[1]]$color$rgb, RGBColor(0xFF, 0, 0))
+  })
+
+  it("gradient_angle can be set and read back", {
+    shape <- new_shape_with_empty_spPr()
+    shape$fill$gradient()
+    shape$fill$gradient_angle <- 45.0
+    expect_equal(shape$fill$gradient_angle, 45.0)
+  })
+
+  it("gradient colors and angle round-trip through save/load", {
+    prs    <- pptx_presentation()
+    layout <- prs$slide_layouts[[1]]
+    slide  <- prs$slides$add_slide(layout)
+    shape  <- slide$shapes$add_shape(
+      MSO_AUTO_SHAPE_TYPE$RECTANGLE, Inches(1), Inches(1), Inches(2), Inches(2))
+    shape$fill$gradient()
+    shape$fill$gradient_angle <- 270.0
+    shape$fill$gradient_stops[[1]]$color$rgb <- RGBColor(0xFF, 0, 0)
+    shape$fill$gradient_stops[[2]]$color$rgb <- RGBColor(0, 0, 0xFF)
+    tmp <- tempfile(fileext = ".pptx")
+    on.exit(unlink(tmp))
+    prs$save(tmp)
+    prs2   <- pptx_presentation(tmp)
+    shapes <- prs2$slides[[1]]$shapes$to_list()
+    s2     <- shapes[[length(shapes)]]
+    expect_equal(s2$fill$type, MSO_FILL$GRADIENT)
+    expect_equal(s2$fill$gradient_angle, 270.0)
+    expect_equal(s2$fill$gradient_stops[[1]]$color$rgb, RGBColor(0xFF, 0, 0))
+    expect_equal(s2$fill$gradient_stops[[2]]$color$rgb, RGBColor(0, 0, 0xFF))
   })
 })
 

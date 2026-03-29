@@ -117,10 +117,12 @@ BaseOxmlElement <- R6::R6Class(
       invisible(self)
     },
 
-    # Remove an attribute.
-    # @param attr_name Attribute name to remove.
+    # Remove an attribute. xml2::xml_set_attr(node, name, NULL) removes it.
     remove_attr = function(attr_name) {
-      xml2::xml_set_attr(private$.node, attr_name, NULL)
+      # Extract local name from Clark notation if needed
+      m <- regmatches(attr_name, regexec("^\\{([^}]+)\\}(.+)$", attr_name))[[1]]
+      local_name <- if (length(m) == 3) m[3] else attr_name
+      xml2::xml_set_attr(private$.node, local_name, NULL)
       invisible(self)
     },
 

@@ -79,8 +79,10 @@ GradientStop <- R6::R6Class(
       private$.gs$position
     },
 
-    # ColorFormat for this stop's color
-    color = function() {
+    # ColorFormat for this stop's color.
+    # No-op setter allows chaining: stop$color$rgb <- RGBColor(...)
+    color = function(value) {
+      if (!missing(value)) return(invisible(NULL))
       if (is.null(private$.color_cache)) {
         private$.color_cache <- ColorFormat$new(private$.gs)
       }
@@ -130,6 +132,9 @@ length.GradientStops <- function(x) {
 
 #' @export
 `[[.GradientStops` <- function(x, i) x$get(i)
+
+#' @export
+`[[<-.GradientStops` <- function(x, i, value) x
 
 
 # ============================================================================
@@ -199,16 +204,37 @@ FillFormat <- R6::R6Class(
       NULL
     },
 
-    # ColorFormat for the foreground (solid fill) color.
+    # ColorFormat for the foreground color.
+    # For solid fills: wraps the solidFill element itself.
+    # For pattern fills: wraps the fgClr child, creating it if absent.
     # No-op setter allows chaining: shape$fill$fore_color$rgb <- RGBColor(...)
     fore_color = function(value) {
       if (!missing(value)) return(invisible(NULL))
       fill_elm <- .get_fill_elm(private$.spPr)
-      if (is.null(fill_elm) || !inherits(fill_elm, "CT_SolidColorFillProperties")) {
-        stop("fore_color only available on solid fills; call fill$solid() first",
+      if (is.null(fill_elm)) {
+        stop("fore_color not available: no fill; call fill$solid() or fill$patterned() first",
              call. = FALSE)
       }
-      ColorFormat$new(fill_elm)
+      if (inherits(fill_elm, "CT_SolidColorFillProperties")) {
+        return(ColorFormat$new(fill_elm))
+      }
+      if (inherits(fill_elm, "CT_PatternFillProperties")) {
+        return(ColorFormat$new(fill_elm$get_or_add_fgClr()))
+      }
+      stop("fore_color only available on solid or pattern fills", call. = FALSE)
+    },
+
+    # ColorFormat for the background (pattern fill) color.
+    # For pattern fills: wraps the bgClr child, creating it if absent.
+    # No-op setter allows chaining: shape$fill$back_color$rgb <- RGBColor(...)
+    back_color = function(value) {
+      if (!missing(value)) return(invisible(NULL))
+      fill_elm <- .get_fill_elm(private$.spPr)
+      if (is.null(fill_elm) || !inherits(fill_elm, "CT_PatternFillProperties")) {
+        stop("back_color only available on pattern fills; call fill$patterned() first",
+             call. = FALSE)
+      }
+      ColorFormat$new(fill_elm$get_or_add_bgClr())
     },
 
     # Pattern fill type string (prst attribute), or NULL if not a pattern fill

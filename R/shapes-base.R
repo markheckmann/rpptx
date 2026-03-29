@@ -441,7 +441,7 @@ PictureCrop <- R6::R6Class(
         if (value == 0.0 && private$.all_zero_except("l")) {
           private$.blipFill$remove_srcRect()
         } else {
-          private$.blipFill$get_or_add_srcRect()$l <- value
+          sr <- private$.blipFill$get_or_add_srcRect(); sr$l <- value
         }
         return(invisible(value))
       }
@@ -455,7 +455,7 @@ PictureCrop <- R6::R6Class(
         if (value == 0.0 && private$.all_zero_except("r")) {
           private$.blipFill$remove_srcRect()
         } else {
-          private$.blipFill$get_or_add_srcRect()$r <- value
+          sr <- private$.blipFill$get_or_add_srcRect(); sr$r <- value
         }
         return(invisible(value))
       }
@@ -469,7 +469,7 @@ PictureCrop <- R6::R6Class(
         if (value == 0.0 && private$.all_zero_except("t")) {
           private$.blipFill$remove_srcRect()
         } else {
-          private$.blipFill$get_or_add_srcRect()$t <- value
+          sr <- private$.blipFill$get_or_add_srcRect(); sr$t <- value
         }
         return(invisible(value))
       }
@@ -483,7 +483,7 @@ PictureCrop <- R6::R6Class(
         if (value == 0.0 && private$.all_zero_except("b")) {
           private$.blipFill$remove_srcRect()
         } else {
-          private$.blipFill$get_or_add_srcRect()$b <- value
+          sr <- private$.blipFill$get_or_add_srcRect(); sr$b <- value
         }
         return(invisible(value))
       }

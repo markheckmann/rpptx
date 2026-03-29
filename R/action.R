@@ -152,7 +152,7 @@ ActionSetting <- R6::R6Class(
     # The target Slide if this is a slide-jump action, else NULL.
     target_slide = function(value) {
       if (!missing(value)) {
-        private$.clear_click_action()
+        private$clear_click_action()
         if (!is.null(value)) {
           hlink <- private$.get_or_add_hlink()
           hlink$action <- "ppaction://hlinksldjump"
